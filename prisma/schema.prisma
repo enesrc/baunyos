@@ -11,12 +11,14 @@ datasource db {
 }
 
 model Page {
-  id         Int    @id @default(autoincrement())
-  slug       String @unique
+  id         Int      @id @default(autoincrement())
+  slug       String   @unique
   title_tr   String
   title_en   String
   content_tr String
   content_en String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
 }
 
 model NavItem {

@@ -11,7 +11,7 @@ const navItems = [
   { href: "/admin/slider", label: "Slider" },
   { href: "/admin/quick-access", label: "Hızlı Erişim" },
   { href: "/admin/navbar", label: "Navbar" },
-  { href: "/admin/pages", label: "Sayfalar" },
+  { href: "/admin/content-pages", label: "Sayfalar" },
   { href: "/admin/site-settings", label: "Site Ayarları" },
 ];
 
@@ -36,11 +36,10 @@ export default function AdminSidebar() {
           <Link
             key={item.href}
             href={item.href}
-            className={`rounded-lg px-3 py-2 text-sm transition hover:bg-surface1 ${
-              pathname === item.href
+            className={`rounded-lg px-3 py-2 text-sm transition hover:bg-surface1 ${pathname === item.href
                 ? "bg-accent/10 font-medium text-accent"
                 : "opacity-70 hover:opacity-100"
-            }`}
+              }`}
           >
             {item.label}
           </Link>
