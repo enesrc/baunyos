@@ -1,0 +1,32 @@
+{
+  "site": {
+    "title": "BAUN YÖS",
+    "tagline": "Balıkesir Üniversitesi Uluslararası Öğrenci Sınavı ve Başvuru Ofisi"
+  },
+  "nav": {
+    "students": "Öğrenciler",
+    "about": "Hakkımızda",
+    "departments": "Bölümler",
+    "candidates": "Adayların Dikkatine",
+    "tuitionFees": "Ücretler",
+    "faq": "SSS",
+    "diplomaSupplement": "Diploma Eki",
+    "announcements": "Duyurular",
+    "apply": "Başvur"
+  },
+  "home": {
+    "badge": "BAUN YÖS • Uluslararası Portal",
+    "title": "BAUN YÖS için premium uluslararası bilgi ve yönlendirme merkezi.",
+    "desc": "Sınav bilgileri, başvuru rehberi ve resmi duyurular — uluslararası adaylar için sinematik bir yönlendirme deneyimi.",
+    "cta": {
+      "apply": "Başvur",
+      "process": "Başvuru Süreci",
+      "programs": "Programlar",
+      "tuition": "Ücretler"
+    },
+    "quick": {
+      "title": "Hızlı Erişim",
+      "desc": "En çok aranan bilgilere ve resmi kaynaklara hızlı erişim."
+    }
+  }
+}

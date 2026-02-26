@@ -1,0 +1,46 @@
+:root {
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Surfaces */
+  --bg: 255 255 255;
+  --fg: 10 10 12;
+
+  --surface-1: 255 255 255;
+  --surface-2: 245 246 250;
+
+  --border: 220 224 232;
+
+  /* Accent */
+  --accent: 0 92 255;
+
+  /* Glass */
+  --glass: 255 255 255 / 0.55;
+  --glass-border: 255 255 255 / 0.25;
+
+  /* Radii */
+  --r-xl: 24px;
+  --r-lg: 18px;
+  --r-md: 14px;
+
+  /* Shadow (soft, premium) */
+  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: 5 8 16;
+  --fg: 244 245 248;
+
+  --surface-1: 10 14 26;
+  --surface-2: 14 18 34;
+
+  --border: 34 42 66;
+
+  --accent: 80 140 255;
+
+  --glass: 10 14 26 / 0.55;
+  --glass-border: 255 255 255 / 0.10;
+
+  --shadow-soft: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
