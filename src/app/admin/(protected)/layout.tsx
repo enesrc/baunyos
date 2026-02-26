@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import AdminSidebar from "@/components/sections/admin/AdminSidebar";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProtectedLayout({
   children,
 }: {
@@ -13,6 +15,7 @@ export default async function ProtectedLayout({
   });
 
   if (!session) {
+    // Admin locale dışında → prefix'siz
     redirect("/admin/login");
   }
 

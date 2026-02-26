@@ -28,7 +28,12 @@ export async function createAnnouncement(_: unknown, formData: FormData) {
 
   await prisma.announcement.create({ data: parsed.data });
 
+  // Admin sayfasını + her iki dildeki public sayfaları revalidate et
   revalidatePath("/admin/announcements");
+  revalidatePath("/en/announcements");
+  revalidatePath("/tr/announcements");
+
+  // Admin locale dışında → prefix'siz redirect
   redirect("/admin/announcements");
 }
 
@@ -53,10 +58,15 @@ export async function updateAnnouncement(_: unknown, formData: FormData) {
   });
 
   revalidatePath("/admin/announcements");
+  revalidatePath("/en/announcements");
+  revalidatePath("/tr/announcements");
+
   redirect("/admin/announcements");
 }
 
 export async function deleteAnnouncement(id: number) {
   await prisma.announcement.delete({ where: { id } });
   revalidatePath("/admin/announcements");
+  revalidatePath("/en/announcements");
+  revalidatePath("/tr/announcements");
 }
