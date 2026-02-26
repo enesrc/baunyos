@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Page {
+  id         Int    @id @default(autoincrement())
+  slug       String @unique
+  title_tr   String
+  title_en   String
+  content_tr String
+  content_en String
+}
+
+model NavItem {
+  id        Int       @id @default(autoincrement())
+  label_tr  String
+  label_en  String
+  href      String?
+  parent_id Int?
+  order     Int       @default(0)
+  is_active Boolean   @default(true)
+  parent    NavItem?  @relation("children", fields: [parent_id], references: [id])
+  children  NavItem[] @relation("children")
+}
+
+model Announcement {
+  id           Int      @id @default(autoincrement())
+  title_tr     String
+  title_en     String
+  content_tr   String
+  content_en   String
+  published_at DateTime @default(now())
+  is_active    Boolean  @default(true)
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+
+model SiteSettings {
+  id           Int    @id @default(autoincrement())
+  phone        String
+  email        String
+  logo_text_tr String
+  logo_text_en String
+}
+
+model Slider {
+  id         Int      @id @default(autoincrement())
+  image_url  String
+  title_tr   String
+  title_en   String
+  order      Int      @default(0)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+}
+
+model QuickAccess {
+  id          Int     @id @default(autoincrement())
+  icon        String
+  title_tr    String
+  title_en    String
+  desc_tr     String
+  desc_en     String
+  href        String
+  order       Int     @default(0)
+  is_active   Boolean @default(true)
+}
