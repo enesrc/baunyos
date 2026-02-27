@@ -1,8 +1,67 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
+import { useState, useRef, useEffect, useCallback } from "react";
+import dynamic from "next/dynamic";
+import ReactQuill from "react-quill-new";
+import ImageViewer from "./ImageViewer";
+import type Quill from "quill";
+
+type QuillWrapperProps = React.ComponentProps<typeof ReactQuill> & {
+    forwardedRef: React.RefObject<ReactQuill | null>;
+};
+
+const QuillEditor = dynamic(
+    async () => {
+        const { default: Wrapper } = await import("./QuillWrapper");
+        return Wrapper;
+    },
+    {
+        ssr: false,
+        loading: () => <div className="h-64 animate-pulse rounded-b-lg bg-surface1" />,
+    }
+) as React.ComponentType<QuillWrapperProps>;
+
+const TOOLBAR = [
+    [{ font: [] }, { size: ["small", false, "large", "huge"] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ["bold", "italic", "underline", "strike"],
+    ["blockquote"],
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ direction: "rtl" }],
+    ["link", "image", "video"],
+    ["clean"],
+];
+
+function renderContentWithViewer(html: string) {
+    const parts = html.split(/(<img[^>]*\/?>)/gi);
+    return parts.map((part, i) => {
+        const srcMatch = part.match(/src="([^"]+)"/i);
+        const altMatch = part.match(/alt="([^"]*)"/i);
+        if (srcMatch) {
+            return (
+                <ImageViewer
+                    key={i}
+                    src={srcMatch[1]}
+                    alt={altMatch?.[1] ?? ""}
+                    className="my-3"
+                />
+            );
+        }
+        if (part.trim()) {
+            return (
+                <div
+                    key={i}
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: part }}
+                />
+            );
+        }
+        return null;
+    });
+}
 
 export default function RichTextEditor({
     name,
@@ -11,56 +70,87 @@ export default function RichTextEditor({
     name: string;
     defaultValue?: string;
 }) {
-    const editor = useEditor({
-        extensions: [StarterKit, Link.configure({ openOnClick: false })],
-        content: defaultValue ?? "",
-        immediatelyRender: false,
-        onUpdate: ({ editor }) => {
-            const input = document.querySelector<HTMLInputElement>(
-                `input[name="${name}"]`
-            );
-            if (input) input.value = editor.getHTML();
+    const [value, setValue] = useState(defaultValue ?? "");
+    const [bounds, setBounds] = useState<HTMLElement | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const quillRef = useRef<ReactQuill>(null);
+
+    useEffect(() => {
+        if (containerRef.current) setBounds(containerRef.current);
+    }, []);
+
+    const getEditor = useCallback((): Quill | null => {
+        return (quillRef.current?.getEditor() as Quill) ?? null;
+    }, []);
+
+    const imageHandler = useCallback(() => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files?.[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body: formData });
+            if (!res.ok) return;
+            const { url } = (await res.json()) as { url: string };
+            const editor = getEditor();
+            if (!editor) return;
+            const range = editor.getSelection(true);
+            editor.insertEmbed(range.index, "image", url);
+            editor.setSelection({ index: range.index + 1, length: 0 });
+        };
+    }, [getEditor]);
+
+    const modules = {
+        toolbar: {
+            container: TOOLBAR,
+            handlers: { image: imageHandler },
         },
-    });
+    };
+
+    const formats = [
+        "font", "size",
+        "header",
+        "bold", "italic", "underline", "strike",
+        "blockquote",
+        "color", "background",
+        "align",
+        "list", "indent",
+        "direction",
+        "link", "image", "video",
+    ];
+
+    const hasContent = value && value !== "<p><br></p>" && value.trim() !== "";
 
     return (
-        <div className="rounded-lg border border-border">
-            {/* Toolbar */}
-            <div className="flex flex-wrap gap-1 border-b border-border p-2">
-                {[
-                    { label: "B", action: () => editor?.chain().focus().toggleBold().run(), active: editor?.isActive("bold") },
-                    { label: "I", action: () => editor?.chain().focus().toggleItalic().run(), active: editor?.isActive("italic") },
-                    { label: "H1", action: () => editor?.chain().focus().toggleHeading({ level: 1 }).run(), active: editor?.isActive("heading", { level: 1 }) },
-                    { label: "H2", action: () => editor?.chain().focus().toggleHeading({ level: 2 }).run(), active: editor?.isActive("heading", { level: 2 }) },
-                    { label: "• Liste", action: () => editor?.chain().focus().toggleBulletList().run(), active: editor?.isActive("bulletList") },
-                    { label: "1. Liste", action: () => editor?.chain().focus().toggleOrderedList().run(), active: editor?.isActive("orderedList") },
-                ].map((btn) => (
-                    <button
-                        key={btn.label}
-                        type="button"
-                        onClick={btn.action}
-                        className={`rounded px-2 py-1 text-xs font-medium transition ${btn.active
-                                ? "bg-accent text-white"
-                                : "bg-surface1 opacity-70 hover:opacity-100"
-                            }`}
-                    >
-                        {btn.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* Editör */}
-            <EditorContent
-                editor={editor}
-                className="prose prose-sm max-w-none p-4 focus:outline-none"
+        <div ref={containerRef} className="rounded-lg border border-border">
+            <QuillEditor
+                forwardedRef={quillRef}
+                theme="snow"
+                value={value}
+                onChange={setValue}
+                modules={modules}
+                formats={formats}
+                bounds={bounds ?? undefined}
+                className="[&_.ql-container]:min-h-64 [&_.ql-container]:rounded-b-lg [&_.ql-container]:border-0 [&_.ql-container]:border-t [&_.ql-container]:border-border [&_.ql-toolbar]:rounded-t-lg [&_.ql-toolbar]:border-0 [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-border"
             />
 
-            {/* Hidden input — form submit için */}
-            <input
-                type="hidden"
-                name={name}
-                value={editor?.getHTML() ?? ""}
-            />
+            <input type="hidden" name={name} value={value} />
+
+            {hasContent && (
+                <div className="border-t border-border">
+                    <div className="border-b border-border bg-surface1/30 px-3 py-1.5">
+                        <span className="text-xs opacity-50">Önizleme</span>
+                    </div>
+                    <div className="space-y-2 p-4">
+                        {renderContentWithViewer(value)}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

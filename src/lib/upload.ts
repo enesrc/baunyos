@@ -29,3 +29,16 @@ export async function deleteImage(url: string): Promise<void> {
     // dosya zaten yoksa sessizce geç
   }
 }
+
+export async function uploadFile(file: File): Promise<string> {
+  await fs.mkdir(UPLOAD_DIR, { recursive: true });
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const filepath = path.join(UPLOAD_DIR, filename);
+
+  await fs.writeFile(filepath, buffer);
+
+  return `/uploads/${filename}`;
+}
