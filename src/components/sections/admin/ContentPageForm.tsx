@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { createPage, updatePage } from "@/features/content-pages/actions";
-import RichTextEditor from "./RichTextEditor";
+import RichTextEditor from "@/components/sections/admin/rich-text-editor/RichTextEditor";
 import type { Page } from "@/generated/prisma/client";
 
-export default function PageForm({ page }: { page?: Page }) {
+export default function ContentPageForm({ page }: { page?: Page }) {
   const action = page ? updatePage : createPage;
   const [error, formAction, pending] = useActionState(action, null);
 

@@ -1,4 +1,4 @@
-import PageForm from "@/components/sections/admin/PageForm";
+import PageForm from "@/components/sections/admin/ContentPageForm";
 import { getPageById } from "@/features/content-pages/queries";
 import { notFound } from "next/navigation";
 

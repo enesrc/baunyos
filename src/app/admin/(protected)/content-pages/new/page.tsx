@@ -1,4 +1,4 @@
-import PageForm from "@/components/sections/admin/PageForm";
+import PageForm from "@/components/sections/admin/ContentPageForm";
 
 export default function NewContentPagePage() {
   return (
