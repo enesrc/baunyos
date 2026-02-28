@@ -8,7 +8,7 @@ import { z } from "zod";
 const navItemSchema = z.object({
   label_tr: z.string().min(1, "Türkçe label gerekli."),
   label_en: z.string().min(1, "İngilizce label gerekli."),
-  href: z.string().optional(),
+  href: z.string().nullable().optional(),
   order: z.number().default(0),
   is_active: z.boolean().default(true),
   parent_id: z.number().nullable().default(null),
@@ -41,7 +41,7 @@ export async function updateNavItem(_: unknown, formData: FormData) {
   const parsed = navItemSchema.safeParse({
     label_tr: formData.get("label_tr"),
     label_en: formData.get("label_en"),
-    href: formData.get("href") || undefined,
+    href: formData.get("href") || null,
     order: Number(formData.get("order") ?? 0),
     is_active: formData.get("is_active") === "on",
     parent_id: parentId ? Number(parentId) : null,

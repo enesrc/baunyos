@@ -1,32 +1,6 @@
 {
-  "site": {
-    "title": "BAUN YÖS",
-    "tagline": "Balıkesir University International Student Exam & Application Office"
-  },
-  "nav": {
-    "students": "For Students",
-    "about": "About Us",
-    "departments": "Departments",
-    "candidates": "To the Attention of Candidates",
-    "tuitionFees": "Tuition Fees",
-    "faq": "FAQ",
-    "diplomaSupplement": "Diploma Supplement",
+  "sections": {
     "announcements": "Announcements",
-    "apply": "Apply"
-  },
-  "home": {
-    "badge": "BAUN YÖS • International Portal",
-    "title": "A premium international gateway for BAUN YÖS.",
-    "desc": "Exam information, application guidance, and official announcements — designed as a cinematic orientation hub for international candidates.",
-    "cta": {
-      "apply": "Apply",
-      "process": "Application Process",
-      "programs": "Programs",
-      "tuition": "Tuition Fees"
-    },
-    "quick": {
-      "title": "Quick Access",
-      "desc": "Fast navigation to the most requested information and official resources."
-    }
+    "quickAccess": "Quick Access"
   }
 }

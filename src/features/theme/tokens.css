@@ -1,46 +1,54 @@
+@import "tailwindcss";
+
 :root {
-  /* Typography */
   --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
     "Apple Color Emoji", "Segoe UI Emoji";
 
-  /* Surfaces */
-  --bg: 255 255 255;
-  --fg: 10 10 12;
+  /* ─── Light ──────────────────────────────────────────── */
+  --light-1: rgb(255, 255, 255);
+  --light-2: rgb(247, 249, 252);
+  --light-3: rgb(237, 241, 248);
+  --light-4: rgb(220, 226, 238);
 
-  --surface-1: 255 255 255;
-  --surface-2: 245 246 250;
+  /* ─── Dark ───────────────────────────────────────────── */
+  --dark-1: rgb(44, 58, 88);
+  --dark-2: rgb(24, 34, 60);
+  --dark-3: rgb(12, 18, 36);
+  --dark-4: rgb(4, 6, 16);
 
-  --border: 220 224 232;
+  /* ─── Gray ───────────────────────────────────────────── */
+  --gray-1: rgb(200, 208, 224);
+  --gray-2: rgb(148, 162, 186);
+  --gray-3: rgb(90, 104, 128);
+  --gray-4: rgb(48, 58, 78);
 
-  /* Accent */
-  --accent: 0 92 255;
+  /* ─── Teal — BAU ana rengi ───────────────────────────── */
+  --teal-1: rgb(210, 238, 248);
+  --teal-2: rgb(0, 148, 192);
+  --teal-3: rgb(0, 108, 145);
+  --teal-4: rgb(0, 76, 105);
 
-  /* Glass */
-  --glass: 255 255 255 / 0.55;
-  --glass-border: 255 255 255 / 0.25;
+  /* ─── Amber — ikincil vurgu ──────────────────────────── */
+  --amber-1: rgb(255, 244, 204);
+  --amber-2: rgb(240, 168, 32);
+  --amber-3: rgb(214, 140, 0);
+  --amber-4: rgb(168, 108, 0);
 
-  /* Radii */
-  --r-xl: 24px;
-  --r-lg: 18px;
-  --r-md: 14px;
+  /* ─── Green — success ────────────────────────────────── */
+  --green-1: rgb(220, 252, 231);
+  --green-2: rgb(34, 197, 94);
+  --green-3: rgb(22, 163, 74);
+  --green-4: rgb(15, 118, 54);
 
-  /* Shadow (soft, premium) */
-  --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.08);
-}
+  /* ─── Orange — warning ───────────────────────────────── */
+  --orange-1: rgb(255, 243, 200);
+  --orange-2: rgb(251, 146, 60);
+  --orange-3: rgb(217, 119, 6);
+  --orange-4: rgb(161, 88, 0);
 
-[data-theme="dark"] {
-  --bg: 5 8 16;
-  --fg: 244 245 248;
-
-  --surface-1: 10 14 26;
-  --surface-2: 14 18 34;
-
-  --border: 34 42 66;
-
-  --accent: 80 140 255;
-
-  --glass: 10 14 26 / 0.55;
-  --glass-border: 255 255 255 / 0.10;
-
-  --shadow-soft: 0 18px 60px rgba(0, 0, 0, 0.45);
+  /* ─── Red — danger ───────────────────────────────────── */
+  --red-1: rgb(254, 226, 226);
+  --red-2: rgb(248, 113, 113);
+  --red-3: rgb(220, 38, 38);
+  --red-4: rgb(153, 27, 27);
 }

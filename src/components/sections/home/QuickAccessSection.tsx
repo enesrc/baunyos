@@ -1,50 +1,62 @@
 "use client";
 
-import { lpath, EXTERNAL_LINKS } from "@/lib/links";
+import { localePath, EXTERNAL_LINKS } from "@/lib/links";
 import Container from "@/components/ui/Container";
 import GlassCard from "@/components/ui/GlassCard";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 
 export default function QuickAccessSection() {
-  const { dict, locale } = useI18n();
+  const { locale } = useI18n();
 
   return (
-    <section id="quick" className="border-t border-border">
-      <Container className="py-12">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">{dict.home.quick.title}</h2>
-          <p className="mt-2 text-sm opacity-75">
-            {dict.home.quick.desc}
-          </p>
+    <section id="quick" className="border-t border-light-3 bg-light-2 dark:border-dark-2 dark:bg-dark-3">
+      <Container className="py-14">
+        <div className="mb-8">
+          <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-3 dark:text-teal-2">
+            Quick Access
+          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-dark-2 dark:text-light-1">
+            title
+          </h2>
+          <p className="mt-2 text-sm text-gray-3 dark:text-gray-2">desc</p>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <GlassCard
             title="Online Application"
             description="Redirect to the official application system."
             href={EXTERNAL_LINKS.apply}
             external
           />
-
           <GlassCard
             title="Application Process"
             description="Steps, timeline, and required documents."
-            href={lpath(locale, "/candidates")}
+            href={localePath(locale, "/candidates")}
           />
-
           <GlassCard
             title="Tuition Fees"
             description="Updated tuition tables and payment guidance."
-            href={lpath(locale, "/tuition-fees")}
+            href={localePath(locale, "/tuition-fees")}
           />
-
-          <GlassCard title="FAQ" description="Most common questions answered clearly." href={lpath(locale, "/faq")} />
-          <GlassCard title="Accommodation" description="Housing options and dormitory information." href={lpath(locale, "/students")} />
-          <GlassCard title="Living in Balıkesir" description="City guide for international students." href={lpath(locale, "/students")} />
+          <GlassCard
+            title="FAQ"
+            description="Most common questions answered clearly."
+            href={localePath(locale, "/faq")}
+          />
+          <GlassCard
+            title="Accommodation"
+            description="Housing options and dormitory information."
+            href={localePath(locale, "/students")}
+          />
+          <GlassCard
+            title="Living in Balıkesir"
+            description="City guide for international students."
+            href={localePath(locale, "/students")}
+          />
           <GlassCard
             title="Diploma Supplement"
             description="Official diploma supplement information."
-            href={lpath(locale, "/diploma-supplement")}
+            href={localePath(locale, "/diploma-supplement")}
           />
         </div>
       </Container>

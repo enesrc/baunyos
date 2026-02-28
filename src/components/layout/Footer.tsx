@@ -1,11 +1,8 @@
-import { useI18n } from "@/features/i18n/I18nContextValue";
-
 export default function Footer() {
-  const { locale } = useI18n()
   return (
-    <footer className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-4 py-8 text-sm opacity-75">
-        © {new Date().getFullYear()} BAUN YÖS • /{locale}
+    <footer className="border-t border-light-4 dark:border-dark-1">
+      <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-gray-3 dark:text-gray-2">
+        © {new Date().getFullYear()} BAUN YÖS •
       </div>
     </footer>
   );

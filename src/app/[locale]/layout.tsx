@@ -4,6 +4,8 @@ import { I18nProvider } from "@/features/i18n/I18nContextValue";
 import { isLocale, type Locale } from "@/features/i18n/config";
 import LocaleClientSync from "@/features/i18n/LocaleClientSync";
 import SiteShell from "@/components/layout/SiteShell";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export default async function LocaleLayout({
   children,
@@ -20,10 +22,14 @@ export default async function LocaleLayout({
     <ThemeProvider>
       <LocaleClientSync locale={locale} />
       <I18nProvider dict={dict} locale={locale}>
-        <SiteShell isHomePage={true}>
+        <SiteShell
+          header={<Header locale={locale} />}
+          footer={<Footer />}
+          isHomePage={true}
+        >
           {children}
         </SiteShell>
       </I18nProvider>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 }

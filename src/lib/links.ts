@@ -1,11 +1,12 @@
-import type { Locale } from "@/features/i18n/config";
+import { DEFAULT_LOCALE, type Locale } from "@/features/i18n/config";
 
 export const EXTERNAL_LINKS = {
   apply: "https://example.com", // TODO: gerçek başvuru linki
 };
 
-export function lpath(locale: Locale, path: string) {
-  // path: "/about" veya "about" gibi gelirse normalize eder
+
+export function localePath(locale: Locale, path: string = "/") {
   const p = path.startsWith("/") ? path : `/${path}`;
+  if (locale === DEFAULT_LOCALE) return p;
   return `/${locale}${p}`;
 }
