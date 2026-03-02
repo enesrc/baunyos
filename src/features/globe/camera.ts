@@ -1,1 +1,0 @@
-export const BALIKESIR = { lat: 39.6484, lng: 27.8826 };

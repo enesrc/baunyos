@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, startTransition } from "react";
-import { GlobeIntroOverlay } from "@/components/sections/home/GlobeIntroOverlay";
+import { GlobeIntroOverlay } from "@/features/globe/GlobeIntroOverlay";
 
 const INTRO_SEEN_KEY = "bau_intro_seen";
 
