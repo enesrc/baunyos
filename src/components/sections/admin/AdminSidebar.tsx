@@ -25,10 +25,10 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="flex h-screen w-56 flex-col border-r border-border bg-surface1">
-      <div className="border-b border-border px-6 py-4">
-        <p className="text-sm font-semibold">BAUN YÖS</p>
-        <p className="text-xs opacity-50">Admin Panel</p>
+    <aside className="flex h-screen w-56 flex-col border-r border-light-4 bg-light-1 dark:border-dark-1 dark:bg-dark-3">
+      <div className="border-b border-light-4 px-6 py-4 dark:border-dark-1">
+        <p className="text-sm font-semibold text-dark-3 dark:text-light-1">BAUN YÖS</p>
+        <p className="text-xs text-gray-3 dark:text-gray-2">Admin Panel</p>
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 p-3">
@@ -36,20 +36,21 @@ export default function AdminSidebar() {
           <Link
             key={item.href}
             href={item.href}
-            className={`rounded-lg px-3 py-2 text-sm transition hover:bg-surface1 ${pathname === item.href
-                ? "bg-accent/10 font-medium text-accent"
-                : "opacity-70 hover:opacity-100"
-              }`}
+            className={`rounded-md px-3 py-2 text-sm transition-colors ${
+              pathname === item.href
+                ? "bg-teal-1 font-medium text-teal-3 dark:bg-teal-4 dark:text-teal-1"
+                : "text-gray-3 hover:bg-light-2 hover:text-dark-3 dark:text-gray-2 dark:hover:bg-dark-2 dark:hover:text-light-1"
+            }`}
           >
             {item.label}
           </Link>
         ))}
       </nav>
 
-      <div className="border-t border-border p-3">
+      <div className="border-t border-light-4 p-3 dark:border-dark-1">
         <button
           onClick={handleSignOut}
-          className="w-full rounded-lg px-3 py-2 text-left text-sm opacity-70 transition hover:opacity-100"
+          className="w-full rounded-md px-3 py-2 text-left text-sm text-gray-3 transition-colors hover:bg-light-2 hover:text-red-3 dark:text-gray-2 dark:hover:bg-dark-2 dark:hover:text-red-2"
         >
           Çıkış Yap
         </button>

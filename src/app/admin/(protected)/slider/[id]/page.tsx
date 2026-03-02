@@ -14,7 +14,7 @@ export default async function EditSliderPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Slide Düzenle</h1>
+<h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Slide Düzenle</h1>
       <SliderForm slider={slider} />
     </div>
   );

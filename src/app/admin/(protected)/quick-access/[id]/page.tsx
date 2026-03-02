@@ -14,7 +14,7 @@ export default async function EditQuickAccessPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Hızlı Erişim Düzenle</h1>
+      <h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Hızlı Erişim Düzenle</h1>
       <QuickAccessForm item={item} />
     </div>
   );

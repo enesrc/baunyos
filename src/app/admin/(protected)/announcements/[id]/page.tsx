@@ -14,7 +14,7 @@ export default async function EditAnnouncementPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Duyuru Düzenle</h1>
+      <h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Duyuru Düzenle</h1>
       <AnnouncementForm announcement={announcement} />
     </div>
   );

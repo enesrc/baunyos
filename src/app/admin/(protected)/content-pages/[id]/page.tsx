@@ -14,7 +14,7 @@ export default async function EditPagePage({
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Sayfa Düzenle</h1>
+      <h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Sayfa Düzenle</h1>
       <PageForm page={page} />
     </div>
   );

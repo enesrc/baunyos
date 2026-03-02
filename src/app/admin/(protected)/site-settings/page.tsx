@@ -6,7 +6,7 @@ export default async function SiteSettingsPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-xl font-semibold">Site Ayarları</h1>
+      <h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Site Ayarları</h1>
       <SiteSettingsForm settings={settings} />
     </div>
   );
