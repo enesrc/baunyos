@@ -4,13 +4,13 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { GlobeIntroScene } from '@/features/globe/GlobeIntroScene';
 import type { GlobePosition } from '@/features/globe/GlobeIntroScene';
 
-type Phase = 'idle' | 'filling' | 'animating' | 'entering' | 'done';
+type Phase = 'idle' | 'animating' | 'entering' | 'done';
 
 interface GlobeIntroOverlayProps {
   onComplete: () => void;
 }
 
-const BAR_FILL_SCROLL   = 300;
+const AUTO_START_MS     = 2000;
 const ANIM_DURATION_MS  = 2800;
 const ENTER_DURATION_MS = 1400;
 const ANIM_STEPS        = 120;
@@ -20,24 +20,19 @@ const easeInOutCubic = (t: number) =>
 
 export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
   const [phase,         setPhase]         = useState<Phase>('idle');
-  const [barFill,       setBarFill]       = useState(0);
   const [globeProgress, setGlobeProgress] = useState(0);
   const [windowSize,    setWindowSize]    = useState({ w: 1920, h: 1080 });
   const [startPos,      setStartPos]      = useState({ lat: 15.0, lng: 5.0, alt: 2.5 });
+  const [revealRadius,  setRevealRadius]  = useState(0);
 
-  // Scene her idle frame'de buna yazar — trigger anında okuruz
   const positionRef = useRef<GlobePosition>({ lat: 15.0, lng: 5.0, alt: 2.5 });
-
-  const barAccumRef   = useRef(0);
-  const phaseRef      = useRef<Phase>('idle');
-  const lockedRef     = useRef(false);   // animasyon başlayınca true → scroll tamamen engellenir
-  const animRef       = useRef<number>(0);
-  const enteringRef   = useRef(false);
-  const touchStartRef = useRef(0);
+  const phaseRef    = useRef<Phase>('idle');
+  const animRef     = useRef<number>(0);
+  const enteringRef = useRef(false);
 
   const setPhaseSync = (p: Phase) => { phaseRef.current = p; setPhase(p); };
 
-  // ── Window size ──────────────────────────────────────────────
+  /* ── Window size ────────────────────────────────────────────── */
   useEffect(() => {
     const update = () => setWindowSize({ w: window.innerWidth, h: window.innerHeight });
     update();
@@ -45,7 +40,7 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  // ── Body scroll kilidi ───────────────────────────────────────
+  /* ── Body scroll kilidi ─────────────────────────────────────── */
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
@@ -55,27 +50,46 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     };
   }, []);
 
-  // ── Enter animasyonu ─────────────────────────────────────────
+  /* ── Tüm mouse/touch etkileşimini engelle ───────────────────── */
+  useEffect(() => {
+    const block = (e: Event) => e.preventDefault();
+    const opts: AddEventListenerOptions = { passive: false, capture: true };
+    window.addEventListener('wheel',     block, opts);
+    window.addEventListener('touchmove', block, opts);
+    return () => {
+      window.removeEventListener('wheel',     block, opts as EventListenerOptions);
+      window.removeEventListener('touchmove', block, opts as EventListenerOptions);
+    };
+  }, []);
+
+  /* ── Circular reveal → done ─────────────────────────────────── */
   const triggerEnter = useCallback(() => {
     if (enteringRef.current) return;
     enteringRef.current = true;
     setPhaseSync('entering');
-    setTimeout(() => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      setPhaseSync('done');
-      onComplete();
-    }, ENTER_DURATION_MS);
+
+    /* Viewport köşegeninin yarısı + feather payı */
+    const maxR = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 100;
+    const steps = 60;
+    const interval = ENTER_DURATION_MS / steps;
+    let step = 0;
+
+    const id = window.setInterval(() => {
+      step++;
+      const t = easeInOutCubic(Math.min(1, step / steps));
+      setRevealRadius(t * maxR);
+      if (step >= steps) {
+        clearInterval(id);
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        setPhaseSync('done');
+        onComplete();
+      }
+    }, interval);
   }, [onComplete]);
 
-  // ── Globe animasyonu ─────────────────────────────────────────
+  /* ── Globe zoom animasyonu ──────────────────────────────────── */
   const startGlobeAnimation = useCallback(() => {
-    if (lockedRef.current) return;
-
-    // Scroll'u tamamen kilitle
-    lockedRef.current = true;
-
-    // Scene'in yazdığı güncel pozisyonu oku — gerçek idle yeri
     const { lat, lng, alt } = positionRef.current;
     setStartPos({ lat, lng, alt });
     setPhaseSync('animating');
@@ -89,62 +103,37 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
       setGlobeProgress(eased);
       if (step >= ANIM_STEPS) {
         clearInterval(animRef.current);
-        setTimeout(() => triggerEnter(), 600);
+        setTimeout(() => triggerEnter(), 400);
       }
     }, interval);
   }, [triggerEnter]);
 
-  // ── Scroll → bar fill ────────────────────────────────────────
-  const handleWheel = useCallback((e: WheelEvent) => {
-    e.preventDefault();
-    if (lockedRef.current) return;     // animasyon sırasında tamamen yoksay
-    if (e.deltaY <= 0) return;         // scroll up yoksay
-
-    barAccumRef.current = Math.min(BAR_FILL_SCROLL, barAccumRef.current + e.deltaY);
-    const fill = barAccumRef.current / BAR_FILL_SCROLL;
-    setBarFill(fill);
-    if (phaseRef.current === 'idle') setPhaseSync('filling');
-    if (fill >= 1) startGlobeAnimation();
-  }, [startGlobeAnimation]);
-
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    touchStartRef.current = e.touches[0].clientY;
-  }, []);
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    e.preventDefault();
-    if (lockedRef.current) return;
-    const dy = touchStartRef.current - e.touches[0].clientY;
-    touchStartRef.current = e.touches[0].clientY;
-    if (dy <= 0) return;
-
-    barAccumRef.current = Math.min(BAR_FILL_SCROLL, barAccumRef.current + dy * 2.5);
-    const fill = barAccumRef.current / BAR_FILL_SCROLL;
-    setBarFill(fill);
-    if (phaseRef.current === 'idle') setPhaseSync('filling');
-    if (fill >= 1) startGlobeAnimation();
-  }, [startGlobeAnimation]);
-
+  /* ── Otomatik başlat ────────────────────────────────────────── */
   useEffect(() => {
-    window.addEventListener('wheel',      handleWheel,      { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('touchmove',  handleTouchMove,  { passive: false });
-    return () => {
-      window.removeEventListener('wheel',      handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove',  handleTouchMove);
-      clearInterval(animRef.current);
-    };
-  }, [handleWheel, handleTouchStart, handleTouchMove]);
+    const t = setTimeout(() => {
+      if (phaseRef.current === 'idle') startGlobeAnimation();
+    }, AUTO_START_MS);
+    return () => clearTimeout(t);
+  }, [startGlobeAnimation]);
+
+  /* ── Cleanup ────────────────────────────────────────────────── */
+  useEffect(() => {
+    return () => clearInterval(animRef.current);
+  }, []);
 
   if (phase === 'done') return null;
 
   const isAnimating  = phase === 'animating' || phase === 'entering';
   const isEntering   = phase === 'entering';
   const titleOpacity = isAnimating ? 0 : 1;
-  const hintOpacity  = phase === 'idle' ? 1 : 0;
   const bkrOpacity   = isAnimating && globeProgress > 0.82
     ? Math.min(1, (globeProgress - 0.82) / 0.12) : 0;
+
+  /* Circular reveal mask: ortadan dışa doğru büyüyen şeffaf daire */
+  const feather = 80;
+  const maskStyle = isEntering
+    ? `radial-gradient(circle at 50% 50%, transparent ${revealRadius}px, rgba(0,0,0,0.3) ${revealRadius + feather * 0.4}px, black ${revealRadius + feather}px)`
+    : undefined;
 
   return (
     <div style={{
@@ -152,9 +141,9 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden',
       background: 'radial-gradient(ellipse at 50% 60%, #0a2744 0%, #061525 50%, #020d1a 100%)',
-      opacity:       isEntering ? 0 : 1,
-      transition:    isEntering ? `opacity ${ENTER_DURATION_MS}ms cubic-bezier(0.4,0,0.2,1)` : 'none',
       pointerEvents: isEntering ? 'none' : 'auto',
+      WebkitMaskImage: maskStyle,
+      maskImage: maskStyle,
     }}>
 
       {/* Globe */}
@@ -206,7 +195,7 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
           fontSize: 'clamp(0.8rem, 1.4vw, 1rem)', fontWeight: 300,
           letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)', margin: 0,
         }}>
-          Scroll down to explore
+          Welcome
         </p>
       </div>
 
@@ -219,46 +208,48 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         zIndex: 2,
       }}>
         <p style={{
-          fontSize: '0.65rem', letterSpacing: '0.3em',
-          textTransform: 'uppercase', color: '#60b4ff', marginBottom: '0.3rem',
-        }}>● Balıkesir, Türkiye</p>
+          fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
+          letterSpacing: '0.25em',
+          textTransform: 'uppercase',
+          color: '#60b4ff',
+          marginBottom: '0.5rem',
+          textShadow: '0 0 12px rgba(96,180,255,0.6)',
+        }}>
+          ● Balıkesir, Türkiye
+        </p>
         <p style={{
-          fontSize: '1.1rem', fontWeight: 300,
-          color: 'rgba(255,255,255,0.85)', letterSpacing: '0.05em',
-        }}>Balıkesir Üniversitesi</p>
+          fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
+          fontWeight: 600,
+          color: '#ffffff',
+          letterSpacing: '0.06em',
+          textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 40px rgba(96,180,255,0.3)',
+          lineHeight: 1.3,
+        }}>
+          Balıkesir Üniversitesi
+        </p>
       </div>
 
-      {/* Scroll hint */}
-      <div style={{
-        position: 'absolute', bottom: '5.5rem', left: '50%',
-        transform: 'translateX(-50%)',
-        opacity: hintOpacity, transition: 'opacity 0.4s ease',
-        pointerEvents: 'none',
-      }}>
-        <DownArrow />
-      </div>
-
-      {/* Progress bar */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: 'rgba(255,255,255,0.08)' }}>
+      {/* Scroll hint — artık gerekmiyor ama idle'da ufak bir pulse */}
+      {phase === 'idle' && (
         <div style={{
-          height: '100%',
-          width: isAnimating ? '100%' : `${barFill * 100}%`,
-          background: 'linear-gradient(to right, #1e6fb5, #60b4ff, #a8d8ff)',
-          transition: isAnimating ? 'width 0.3s ease' : 'width 0.05s linear',
-          boxShadow: '0 0 10px rgba(96,180,255,0.7)',
-        }} />
-      </div>
-    </div>
-  );
-}
+          position: 'absolute', bottom: '3rem', left: '50%',
+          transform: 'translateX(-50%)',
+          opacity: 0.5, pointerEvents: 'none',
+        }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: 'rgba(96,180,255,0.8)',
+            animation: 'bauPulse 1.6s ease-in-out infinite',
+          }} />
+        </div>
+      )}
 
-function DownArrow() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-      style={{ animation: 'bauBounce 1.8s ease-in-out infinite' }}>
-      <path d="M12 5v14M5 12l7 7 7-7"
-        stroke="rgba(255,255,255,0.4)" strokeWidth="1.5"
-        strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+      <style>{`
+        @keyframes bauPulse {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.8); }
+        }
+      `}</style>
+    </div>
   );
 }

@@ -52,7 +52,6 @@ interface Props {
   startAlt:    number;
   width:       number;
   height:      number;
-  // Overlay bu ref'i geçirir — Scene her idle frame'de buraya yazar
   positionRef: MutableRefObject<GlobePosition>;
 }
 
@@ -69,7 +68,6 @@ export function GlobeIntroScene({
   const isAnimRef    = useRef(false);
   const keyframesRef = useRef(buildKeyframes(startLat, startLng, startAlt));
 
-  // isAnimating değişince ref'i hemen güncelle, keyframe'leri yakala
   useEffect(() => {
     isAnimRef.current = isAnimating;
     if (isAnimating) {
@@ -78,18 +76,15 @@ export function GlobeIntroScene({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAnimating]);
 
-  // Idle rotation — isAnimRef true olunca aynı frame'de durur
+  /* Idle rotation */
   useEffect(() => {
     const tick = () => {
-      if (isAnimRef.current) return; // animasyon başladı, dur
+      if (isAnimRef.current) return;
       if (!globeRef.current) { rafRef.current = requestAnimationFrame(tick); return; }
 
       idleLngRef.current += IDLE_SPD;
-
       const pos = { lat: 15.0, lng: idleLngRef.current, altitude: 2.5 };
       globeRef.current.pointOfView(pos, 0);
-
-      // Overlay'in okuyacağı güncel pozisyonu yaz
       positionRef.current = { lat: 15.0, lng: idleLngRef.current, alt: 2.5 };
 
       rafRef.current = requestAnimationFrame(tick);
@@ -99,32 +94,40 @@ export function GlobeIntroScene({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Progress → camera (animasyon sırasında)
+  /* Progress → camera */
   useEffect(() => {
     if (!isAnimating || !globeRef.current) return;
     globeRef.current.pointOfView(getCam(progress, keyframesRef.current), 0);
   }, [progress, isAnimating]);
 
+  /* Globe hazır olunca: orbit controls'u tamamen devre dışı bırak */
   const onReady = () => {
     if (!globeRef.current) return;
     globeRef.current.pointOfView({ lat: 15.0, lng: startLng, altitude: 2.5 }, 0);
+
+    const controls = globeRef.current.controls?.();
+    if (controls) {
+      controls.enabled    = false;
+      controls.enableZoom = false;
+      controls.enablePan  = false;
+    }
   };
 
   const gW = Math.round(width  * 1.45);
   const gH = Math.round(height * 1.45);
 
   return (
-    <div style={{ width: gW, height: gH }}>
+    <div style={{ width: gW, height: gH, pointerEvents: 'none' }}>
       <Globe
         ref={globeRef}
         onGlobeReady={onReady}
         width={gW}
         height={gH}
         backgroundColor="rgba(0,0,0,0)"
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-day.jpg"
-        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
+        globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg"
+        bumpImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
         atmosphereColor="#4da6ff"
-        atmosphereAltitude={0.22}
+        atmosphereAltitude={0.3}
         pointsData={[{ lat: BAU_LAT, lng: BAU_LNG }]}
         pointColor={() => '#ffffff'}
         pointAltitude={0.0}
