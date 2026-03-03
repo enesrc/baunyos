@@ -15,8 +15,8 @@ model Page {
   slug       String   @unique
   title_tr   String
   title_en   String
-  content_tr String
-  content_en String
+  content_tr String   @db.Text
+  content_en String   @db.Text
   is_active  Boolean  @default(true)
   created_at DateTime @default(now())
 }
@@ -37,8 +37,8 @@ model Announcement {
   id           Int      @id @default(autoincrement())
   title_tr     String
   title_en     String
-  content_tr   String
-  content_en   String
+  content_tr   String   @db.Text
+  content_en   String   @db.Text
   published_at DateTime @default(now())
   is_active    Boolean  @default(true)
 }
@@ -106,7 +106,6 @@ model Verification {
   @@map("verification")
 }
 
-
 model SiteSettings {
   id           Int    @id @default(autoincrement())
   phone        String
@@ -126,13 +125,13 @@ model Slider {
 }
 
 model QuickAccess {
-  id          Int     @id @default(autoincrement())
-  icon        String
-  title_tr    String
-  title_en    String
-  desc_tr     String
-  desc_en     String
-  href        String
-  order       Int     @default(0)
-  is_active   Boolean @default(true)
+  id        Int     @id @default(autoincrement())
+  icon      String
+  title_tr  String
+  title_en  String
+  desc_tr   String  @db.Text
+  desc_en   String  @db.Text
+  href      String
+  order     Int     @default(0)
+  is_active Boolean @default(true)
 }

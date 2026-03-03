@@ -97,109 +97,113 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
   const slideCount = slides.length;
   const trackOffset = (trackIndex / slideCount) * 100;
 
+  /* 1905:720 oran = %37.795... */
   return (
-    <section
-      className="relative h-[min(37.8vw,720px)] w-full select-none overflow-hidden bg-dark-3"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={onLeave}
-      onMouseDown={(e) => onDown(e.clientX)}
-      onMouseUp={(e) => onUp(e.clientX)}
-      onTouchStart={(e) => {
-        setHovered(true);
-        onDown(e.touches[0].clientX);
-      }}
-      onTouchEnd={(e) => {
-        onUp(e.changedTouches[0].clientX);
-        setHovered(false);
-      }}
-    >
-      {/* Slide track */}
+    <section className="w-full select-none bg-dark-3">
       <div
-        ref={trackRef}
-        className={`absolute inset-0 flex ease-in-out ${withTransition ? "duration-500" : "duration-0"}`}
-        style={{
-          width: `${slideCount * 100}%`,
-          transform: `translateX(-${trackOffset}%)`,
+        className="relative mx-auto w-full max-w-7xl overflow-hidden"
+        style={{ aspectRatio: "1905 / 720" }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={onLeave}
+        onMouseDown={(e) => onDown(e.clientX)}
+        onMouseUp={(e) => onUp(e.clientX)}
+        onTouchStart={(e) => {
+          setHovered(true);
+          onDown(e.touches[0].clientX);
         }}
-        onTransitionEnd={onTrackTransitionEnd}
+        onTouchEnd={(e) => {
+          onUp(e.changedTouches[0].clientX);
+          setHovered(false);
+        }}
       >
-        {slides.map((slide, i) => (
-          <div
-            key={`${slide.id}-${i}`}
-            className="relative h-full shrink-0"
-            style={{ width: `${100 / slideCount}%` }}
-          >
-            <Image
-              src={slide.image_url}
-              alt={slide.title_tr}
-              fill
-              className="object-cover object-center"
-              priority={i <= 1}
-              draggable={false}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Scrim */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-dark-4/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-dark-4/20 to-transparent" />
-        <div className="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-dark-4/40 to-transparent" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-dark-4/40 to-transparent" />
-      </div>
-
-      {/* Oklar + Progress: sadece çoklu slaytlarda */}
-      {total > 1 && (
-        <>
-          <button
-            onClick={() => go(-1)}
-            aria-label="Önceki"
-            className={`absolute left-5 top-1/2 flex h-10 w-10 items-center justify-center border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-light-1 hover:bg-light-1 hover:text-amber-3 dark:hover:border-amber-3 dark:hover:bg-amber-3 dark:hover:text-white ${
-              hovered
-                ? "-translate-y-1/2 translate-x-0 opacity-100"
-                : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
-            }`}
-          >
-            <ArrowLeft size={21} strokeWidth={2} />
-          </button>
-
-          <button
-            onClick={() => go(1)}
-            aria-label="Sonraki"
-            className={`absolute right-5 top-1/2 flex h-10 w-10 items-center justify-center border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-light-1 hover:bg-light-1 hover:text-amber-3 dark:hover:border-amber-3 dark:hover:bg-amber-3 dark:hover:text-white ${
-              hovered
-                ? "-translate-y-1/2 translate-x-0 opacity-100"
-                : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"
-            }`}
-          >
-            <ArrowRight size={21} strokeWidth={2} />
-          </button>
-
-          <div
-            className={`absolute bottom-6 left-1/2 h-0.5 w-24 -translate-x-1/2 bg-white/25 transition-all duration-200 ease-out ${
-              hovered
-                ? "translate-y-0 opacity-100"
-                : "translate-y-[calc(100%+24px)] opacity-0"
-            }`}
-          >
+        {/* Slide track */}
+        <div
+          ref={trackRef}
+          className={`absolute inset-0 flex ease-in-out ${withTransition ? "duration-500" : "duration-0"}`}
+          style={{
+            width: `${slideCount * 100}%`,
+            transform: `translateX(-${trackOffset}%)`,
+          }}
+          onTransitionEnd={onTrackTransitionEnd}
+        >
+          {slides.map((slide, i) => (
             <div
-              key={progressKey}
-              className="absolute inset-y-0 left-0 w-0 bg-light-1"
-              style={{
-                animationName: paused ? "none" : "sliderProgress",
-                animationDuration: `${INTERVAL}ms`,
-                animationTimingFunction: "linear",
-                animationFillMode: "forwards",
-              }}
-            />
-          </div>
-        </>
-      )}
+              key={`${slide.id}-${i}`}
+              className="relative h-full shrink-0"
+              style={{ width: `${100 / slideCount}%` }}
+            >
+              <Image
+                src={slide.image_url}
+                alt={slide.title_tr}
+                fill
+                className="object-cover object-center"
+                priority={i <= 1}
+                draggable={false}
+              />
+            </div>
+          ))}
+        </div>
 
-      <style>{`
-        @keyframes sliderProgress { from { width: 0% } to { width: 100% } }
-      `}</style>
+        {/* Scrim */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-dark-4/20 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-dark-4/20 to-transparent" />
+          <div className="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-dark-4/40 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-dark-4/40 to-transparent" />
+        </div>
+
+        {/* Oklar + Progress: sadece çoklu slaytlarda */}
+        {total > 1 && (
+          <>
+            <button
+              onClick={() => go(-1)}
+              aria-label="Önceki"
+              className={`absolute left-5 top-1/2 flex h-10 w-10 items-center justify-center rounded-md border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-teal-2 hover:bg-teal-2 hover:text-white dark:hover:border-teal-2 dark:hover:bg-teal-2 dark:hover:text-white ${
+                hovered
+                  ? "-translate-y-1/2 translate-x-0 opacity-100"
+                  : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
+              }`}
+            >
+              <ArrowLeft size={21} strokeWidth={2} />
+            </button>
+
+            <button
+              onClick={() => go(1)}
+              aria-label="Sonraki"
+              className={`absolute right-5 top-1/2 flex h-10 w-10 items-center justify-center rounded-md border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-teal-2 hover:bg-teal-2 hover:text-white dark:hover:border-teal-2 dark:hover:bg-teal-2 dark:hover:text-white ${
+                hovered
+                  ? "-translate-y-1/2 translate-x-0 opacity-100"
+                  : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"
+              }`}
+            >
+              <ArrowRight size={21} strokeWidth={2} />
+            </button>
+
+            <div
+              className={`absolute bottom-6 left-1/2 h-0.5 w-24 -translate-x-1/2 bg-white/25 transition-all duration-200 ease-out ${
+                hovered
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-[calc(100%+24px)] opacity-0"
+              }`}
+            >
+              <div
+                key={progressKey}
+                className="absolute inset-y-0 left-0 w-0 bg-light-1"
+                style={{
+                  animationName: paused ? "none" : "sliderProgress",
+                  animationDuration: `${INTERVAL}ms`,
+                  animationTimingFunction: "linear",
+                  animationFillMode: "forwards",
+                }}
+              />
+            </div>
+          </>
+        )}
+
+        <style>{`
+          @keyframes sliderProgress { from { width: 0% } to { width: 100% } }
+        `}</style>
+      </div>
     </section>
   );
 }

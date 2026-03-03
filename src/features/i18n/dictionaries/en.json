@@ -1,4 +1,11 @@
 {
+  "common": {
+    "viewAll": "View all",
+    "readMore": "Read more →",
+    "home": "Home",
+    "noContent": "No content available."
+  },
+  "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   "sections": {
     "announcements": "Announcements",
     "quickAccess": "Quick Access"

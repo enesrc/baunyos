@@ -119,6 +119,74 @@ async function main() {
     console.log("NavItem tablosu zaten dolu, atlandı.");
   }
 
+  // ── Announcements ────────────────────────────────────────
+  const announcementCount = await prisma.announcement.count();
+  if (announcementCount === 0) {
+    await prisma.announcement.createMany({
+      data: [
+        {
+          title_tr: "2025-2026 Yabancı Uyruklu Öğrenci Başvuruları TR-YÖS (Tıp Fakültesi)",
+          title_en: "2025-2026 Foreign Student Applications TR-YÖS (Faculty of Medicine)",
+          content_tr:
+            "2025-2026 Uluslararası öğrenci başvurularımız açıklacaktır.\n\nBaşvurmak isteyen adaylarımızın dikkatine!\n\nTR-YÖS puanı ile başvuru için https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx adresini ziyaret ediniz.",
+          content_en:
+            "Our 2025-2026 international student applications will be announced.\n\nAttention to candidates who wish to apply!\n\nTo apply with TR-YÖS score, please visit https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx",
+          published_at: new Date("2025-10-23"),
+          is_active: true,
+        },
+        {
+          title_tr: "Yunus Emre Enstitüsü Türkçe Yeterlilik Sınavı",
+          title_en: "Yunus Emre Institute Turkish Proficiency Exam",
+          content_tr: "Detaylı bilgi için https://www.yee.org.tr adresini ziyaret ediniz.",
+          content_en: "For detailed information, please visit https://www.yee.org.tr",
+          published_at: new Date("2025-12-22"),
+          is_active: true,
+        },
+        {
+          title_tr: "2025-2026 Yabancı Uyruklu Öğrenci Başvuruları (14 Ekim Lise Diploması)",
+          title_en: "2025-2026 Foreign Student Applications (October 14 High School Diploma)",
+          content_tr:
+            "2025-2026 Uluslararası öğrenci başvurularımız 14-15 Ekim 2025 tarihleri arasında açık olacaktır.\n\nBaşvurmak isteyen adaylarımızın dikkatine!\n\nLise diploma puanı ile başvuru için https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx adresini ziyaret ediniz.",
+          content_en:
+            "Our 2025-2026 international student applications will be open between October 14-15, 2025.\n\nAttention to candidates who wish to apply!\n\nTo apply with high school diploma score, please visit https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx",
+          published_at: new Date("2025-10-14"),
+          is_active: true,
+        },
+        {
+          title_tr: "Uluslararası Öğrencilere Yönelik Ücretsiz Dış Ticaret Eğitimleri",
+          title_en: "Free Foreign Trade Training for International Students",
+          content_tr: "İlgili afişe ulaşmak için lütfen ofisimizle iletişime geçiniz.",
+          content_en: "Please contact our office to access the related poster.",
+          published_at: new Date("2025-10-10"),
+          is_active: true,
+        },
+        {
+          title_tr: "Parmak İzi Vermeyen Öğrencilerimizin Dikkatine!!",
+          title_en: "Attention to Our Students Who Have Not Given Fingerprints!!",
+          content_tr:
+            "Uluslararası öğrencilerimizden ikamet süreçleri devam eden öğrencilerimizin parmak izi vermek ve adres kayıt işlemlerini kolaylıkla gerçekleştirmeleri adına mobil göç aracı kampüslerimizde olacaktır. İlgili tarih ve kampüs bilgileri aşağıdaki gibidir:\n\n• 9.10.2025 / 10.10.2025 / 23.10.2025 / 30.10.2025 tarihlerinde saat 10:00 - 16:00 aralığında Necatibey Eğitim Fakültesinde\n• 16.10.2025 tarihinde 10:00 - 16:00 saatleri arasında Çağış kampüsünde parmak izi ve adres kayıt işlemleri gerçekleştirilecektir.\n\nHenüz parmak izi vermemiş ve adres kayıt bilgisi iletmesi gereken öğrencilerin mobil aracı ziyaret etmesi önemle duyurulur.",
+          content_en:
+            "A mobile immigration vehicle will be on our campuses to help international students whose residence processes are ongoing to easily complete fingerprinting and address registration. The relevant dates and campus information are as follows:\n\n• October 9 / 10 / 23 / 30, 2025 between 10:00 - 16:00 at Necatibey Faculty of Education\n• October 16, 2025 between 10:00 - 16:00 at Çağış Campus for fingerprinting and address registration.\n\nStudents who have not yet given their fingerprints and need to submit address registration information are strongly advised to visit the mobile vehicle.",
+          published_at: new Date("2025-10-07"),
+          is_active: true,
+        },
+        {
+          title_tr: "2025-2026 Yabancı Uyruklu Öğrenci Başvuruları (25 Eylül Lise Diploması)",
+          title_en: "2025-2026 Foreign Student Applications (September 25 High School Diploma)",
+          content_tr:
+            "2025-2026 Uluslararası öğrenci başvurularımız 25-26 Eylül 2025 tarihleri arasında açık olacaktır.\n\nBaşvurmak isteyen adaylarımızın dikkatine!\n\nLise diploma puanı ile başvuru için https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx adresini ziyaret ediniz.",
+          content_en:
+            "Our 2025-2026 international student applications will be open between September 25-26, 2025.\n\nAttention to candidates who wish to apply!\n\nTo apply with high school diploma score, please visit https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx",
+          published_at: new Date("2025-09-25"),
+          is_active: true,
+        },
+      ],
+    });
+    console.log("✅ 6 duyuru eklendi.");
+  } else {
+    console.log("Announcement tablosu zaten dolu, atlandı.");
+  }
+
   // ── Admin User ───────────────────────────────────────────
   const ADMIN_EMAIL = "admin@baunyos.com";
   const ADMIN_PASSWORD = "Admin1234!";

@@ -1,4 +1,11 @@
 {
+  "common": {
+    "viewAll": "Tümünü gör",
+    "readMore": "Devam et →",
+    "home": "Anasayfa",
+    "noContent": "İçerik bulunamadı."
+  },
+  "months": ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
   "sections": {
     "announcements": "Duyurular",
     "quickAccess": "Hızlı Erişim"

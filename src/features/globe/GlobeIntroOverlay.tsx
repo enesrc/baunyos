@@ -8,7 +8,7 @@ import LoadingScreen from '@/components/sections/home/LoadingScreen';
 
 type Phase = 'loading' | 'idle' | 'animating' | 'entering' | 'done';
 
-const AUTO_START_MS = 2000;
+const AUTO_START_MS = 3000;
 const ANIM_DURATION_MS = 2800;
 const ANIM_STEPS = 120;
 const ENTER_DURATION_MS = 1400;
@@ -204,14 +204,6 @@ export function GlobeIntroOverlay({ onComplete }: { onComplete: () => void }) {
             filter: 'drop-shadow(0 0 24px rgba(0,148,192,0.5)) drop-shadow(0 2px 12px rgba(0,0,0,0.6))',
           }}
         />
-        <p style={{
-          fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
-          letterSpacing: '0.25em', textTransform: 'uppercase',
-          color: '#0094c0',
-          textShadow: '0 0 12px rgba(0,148,192,0.6)',
-        }}>
-          ● Balıkesir, Türkiye
-        </p>
       </div>
 
       {/* Loading Screen */}
