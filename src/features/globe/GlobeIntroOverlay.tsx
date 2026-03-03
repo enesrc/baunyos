@@ -29,23 +29,20 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
   const [globeReady, setGlobeReady] = useState(false);
 
   const positionRef = useRef<GlobePosition>({ lat: 15.0, lng: 5.0, alt: 2.5 });
-  const phaseRef = useRef<Phase>('loading');   // ← 'idle' değil, 'loading'
+  const phaseRef = useRef<Phase>('loading');
   const animRef = useRef<number>(0);
   const enteringRef = useRef(false);
 
   const setPhaseSync = (p: Phase) => { phaseRef.current = p; setPhase(p); };
 
-  // Globe hazır olduğunda — phase ne olursa olsun sinyali al
   const handleGlobeReady = useCallback(() => {
     setGlobeReady(true);
   }, []);
 
-  // LoadingScreen fade-out bittikten sonra idle'a geç
   const handleLoadingFadeOutDone = useCallback(() => {
     setPhaseSync('idle');
   }, []);
 
-  /* ── Window size ────────────────────────────────────────────── */
   useEffect(() => {
     const update = () => setWindowSize({ w: window.innerWidth, h: window.innerHeight });
     update();
@@ -53,7 +50,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  /* ── Body scroll kilidi ─────────────────────────────────────── */
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
@@ -63,7 +59,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     };
   }, []);
 
-  /* ── Tüm mouse/touch etkileşimini engelle ───────────────────── */
   useEffect(() => {
     const block = (e: Event) => e.preventDefault();
     const opts: AddEventListenerOptions = { passive: false, capture: true };
@@ -75,7 +70,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     };
   }, []);
 
-  /* ── Circular reveal → done ─────────────────────────────────── */
   const triggerEnter = useCallback(() => {
     if (enteringRef.current) return;
     enteringRef.current = true;
@@ -100,7 +94,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     }, interval);
   }, [onComplete]);
 
-  /* ── Globe zoom animasyonu ──────────────────────────────────── */
   const startGlobeAnimation = useCallback(() => {
     const { lat, lng, alt } = positionRef.current;
     setStartPos({ lat, lng, alt });
@@ -120,7 +113,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     }, interval);
   }, [triggerEnter]);
 
-  /* ── Otomatik başlat — sadece idle'a geçince ────────────────── */
   useEffect(() => {
     if (phase !== 'idle') return;
     const t = setTimeout(() => {
@@ -129,7 +121,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     return () => clearTimeout(t);
   }, [phase, startGlobeAnimation]);
 
-  /* ── Cleanup ────────────────────────────────────────────────── */
   useEffect(() => {
     return () => clearInterval(animRef.current);
   }, []);
@@ -146,7 +137,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     ? `radial-gradient(circle at 50% 50%, transparent ${revealRadius}px, rgba(0,0,0,0.3) ${revealRadius + feather * 0.4}px, black ${revealRadius + feather}px)`
     : undefined;
 
-  // Loading sırasında globe+marquee gizli ama DOM'da (yükleniyor)
   const contentVisible = phase !== 'loading';
 
   return (
@@ -159,13 +149,14 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        background: '#000000',
+        /* ★ Loading ile aynı koyu navy arka plan */
+        background: 'radial-gradient(ellipse at 50% 55%, #0d2a42 0%, #081a2e 40%, #040e1a 100%)',
         pointerEvents: isEntering ? 'none' : 'auto',
         WebkitMaskImage: maskStyle,
         maskImage: maskStyle,
       }}
     >
-      {/* Globe + Marquee — loading bitene kadar opacity 0 */}
+      {/* Globe + Marquee */}
       <div style={{
         opacity: contentVisible ? 1 : 0,
         transition: 'opacity 0.6s ease',
@@ -191,7 +182,7 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         {phase !== 'loading' && <ParallelMarquee />}
       </div>
 
-      {/* Balıkesir lokasyon */}
+      {/* Balıkesir lokasyon — teal renk şeması */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -203,9 +194,9 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
           fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
           letterSpacing: '0.25em',
           textTransform: 'uppercase',
-          color: '#60b4ff',
+          color: '#0094c0',
           marginBottom: '0.5rem',
-          textShadow: '0 0 12px rgba(96,180,255,0.6)',
+          textShadow: '0 0 12px rgba(0,148,192,0.6)',
         }}>
           ● Balıkesir, Türkiye
         </p>
@@ -214,14 +205,14 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
           fontWeight: 600,
           color: '#ffffff',
           letterSpacing: '0.06em',
-          textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 40px rgba(96,180,255,0.3)',
+          textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,148,192,0.3)',
           lineHeight: 1.3,
         }}>
           Balıkesir Üniversitesi
         </p>
       </div>
 
-      {/* Loading Screen — her şeyin üstünde */}
+      {/* Loading Screen */}
       {phase === 'loading' && (
         <LoadingScreen
           isReady={globeReady}
@@ -237,7 +228,7 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         }}>
           <div style={{
             width: 6, height: 6, borderRadius: '50%',
-            background: 'rgba(96,180,255,0.8)',
+            background: 'rgba(0,148,192,0.8)',
             animation: 'bauPulse 1.6s ease-in-out infinite',
           }} />
         </div>

@@ -245,8 +245,10 @@ export function GlobeIntroScene({
         backgroundColor="rgba(0,0,0,0)"
         globeImageUrl={EARTH_IMG_URL}
         bumpImageUrl={BUMP_IMG_URL}
+        atmosphereColor="#0094c0"          // ★ teal atmosphere
+        atmosphereAltitude={0.18}          // ★ hafif hale
         pointsData={[{ lat: BAU_LAT, lng: BAU_LNG }]}
-        pointColor={() => 'rgba(255,255,255,0.95)'}
+        pointColor={() => 'rgba(0,200,220,0.95)'}  // ★ teal nokta
         pointAltitude={0.01}
         pointRadius={0.02}
         enablePointerInteraction={false}

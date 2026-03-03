@@ -3,7 +3,7 @@
 import { useState, useEffect, startTransition } from "react";
 import { GlobeIntroOverlay } from "@/features/globe/GlobeIntroOverlay";
 
-const INTRO_SEEN_KEY = "bau_intro_seen";
+const INTRO_SEEN_KEY = "baun_intro_seen";
 
 export default function SiteShell({
   children,
