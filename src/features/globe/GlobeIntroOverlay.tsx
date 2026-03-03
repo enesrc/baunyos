@@ -8,19 +8,20 @@ import LoadingScreen from '@/components/sections/home/LoadingScreen';
 
 type Phase = 'loading' | 'idle' | 'animating' | 'entering' | 'done';
 
-interface GlobeIntroOverlayProps {
-  onComplete: () => void;
-}
-
 const AUTO_START_MS = 2000;
 const ANIM_DURATION_MS = 2800;
-const ENTER_DURATION_MS = 1400;
 const ANIM_STEPS = 120;
+const ENTER_DURATION_MS = 1400;
+const ENTER_STEPS = 60;
+const FEATHER = 80;
+const FALLBACK_MS = 8000;
+
+const BG = 'radial-gradient(ellipse at 50% 55%, #0d2a42 0%, #081a2e 40%, #040e1a 100%)';
 
 const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
+export function GlobeIntroOverlay({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<Phase>('loading');
   const [globeProgress, setGlobeProgress] = useState(0);
   const [windowSize, setWindowSize] = useState({ w: 1920, h: 1080 });
@@ -30,137 +31,140 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
 
   const positionRef = useRef<GlobePosition>({ lat: 15.0, lng: 5.0, alt: 2.5 });
   const phaseRef = useRef<Phase>('loading');
-  const animRef = useRef<number>(0);
+  const animRef = useRef(0);
   const enteringRef = useRef(false);
+  const fallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const setPhaseSync = (p: Phase) => { phaseRef.current = p; setPhase(p); };
+  const setPhaseSync = useCallback((p: Phase) => { phaseRef.current = p; setPhase(p); }, []);
+
+  /* ── Globe ready: callback + fallback timer ─────────────────── */
 
   const handleGlobeReady = useCallback(() => {
+    if (fallbackRef.current) { clearTimeout(fallbackRef.current); fallbackRef.current = null; }
     setGlobeReady(true);
   }, []);
 
-  const handleLoadingFadeOutDone = useCallback(() => {
-    setPhaseSync('idle');
+  // Fallback: globe hiç sinyal göndermezse 8sn sonra zorla geç
+  useEffect(() => {
+    fallbackRef.current = setTimeout(() => {
+      // Globe yüklenemedi — intro'yu tamamen atla, siteye geç
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      setPhaseSync('done');
+      onComplete();
+    }, FALLBACK_MS);
+
+    return () => { if (fallbackRef.current) clearTimeout(fallbackRef.current); };
   }, []);
 
+  const handleLoadingDone = useCallback(() => setPhaseSync('idle'), [setPhaseSync]);
+
+  /* ── Window resize ──────────────────────────────────────────── */
+
   useEffect(() => {
-    const update = () => setWindowSize({ w: window.innerWidth, h: window.innerHeight });
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    const u = () => setWindowSize({ w: innerWidth, h: innerHeight });
+    u();
+    addEventListener('resize', u);
+    return () => removeEventListener('resize', u);
   }, []);
+
+  /* ── Scroll kilidi ──────────────────────────────────────────── */
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; document.documentElement.style.overflow = ''; };
   }, []);
 
   useEffect(() => {
     const block = (e: Event) => e.preventDefault();
-    const opts: AddEventListenerOptions = { passive: false, capture: true };
-    window.addEventListener('wheel', block, opts);
-    window.addEventListener('touchmove', block, opts);
+    const o: AddEventListenerOptions = { passive: false, capture: true };
+    addEventListener('wheel', block, o);
+    addEventListener('touchmove', block, o);
     return () => {
-      window.removeEventListener('wheel', block, opts as EventListenerOptions);
-      window.removeEventListener('touchmove', block, opts as EventListenerOptions);
+      removeEventListener('wheel', block, o as EventListenerOptions);
+      removeEventListener('touchmove', block, o as EventListenerOptions);
     };
   }, []);
+
+  /* ── Circular reveal → done ─────────────────────────────────── */
 
   const triggerEnter = useCallback(() => {
     if (enteringRef.current) return;
     enteringRef.current = true;
     setPhaseSync('entering');
 
-    const maxR = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 100;
-    const steps = 60;
-    const interval = ENTER_DURATION_MS / steps;
+    const maxR = Math.hypot(innerWidth, innerHeight) / 2 + 100;
     let step = 0;
 
-    const id = window.setInterval(() => {
+    const id = setInterval(() => {
       step++;
-      const t = easeInOutCubic(Math.min(1, step / steps));
-      setRevealRadius(t * maxR);
-      if (step >= steps) {
+      setRevealRadius(easeInOutCubic(Math.min(1, step / ENTER_STEPS)) * maxR);
+      if (step >= ENTER_STEPS) {
         clearInterval(id);
         document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
         setPhaseSync('done');
         onComplete();
       }
-    }, interval);
-  }, [onComplete]);
+    }, ENTER_DURATION_MS / ENTER_STEPS);
+  }, [onComplete, setPhaseSync]);
 
-  const startGlobeAnimation = useCallback(() => {
-    const { lat, lng, alt } = positionRef.current;
-    setStartPos({ lat, lng, alt });
+  /* ── Zoom animasyonu ────────────────────────────────────────── */
+
+  const startZoom = useCallback(() => {
+    setStartPos({ ...positionRef.current });
     setPhaseSync('animating');
-
     let step = 0;
-    const interval = ANIM_DURATION_MS / ANIM_STEPS;
 
     animRef.current = window.setInterval(() => {
       step++;
-      const eased = easeInOutCubic(Math.min(1, step / ANIM_STEPS));
-      setGlobeProgress(eased);
+      setGlobeProgress(easeInOutCubic(Math.min(1, step / ANIM_STEPS)));
       if (step >= ANIM_STEPS) {
         clearInterval(animRef.current);
-        setTimeout(() => triggerEnter(), 400);
+        setTimeout(triggerEnter, 400);
       }
-    }, interval);
-  }, [triggerEnter]);
+    }, ANIM_DURATION_MS / ANIM_STEPS);
+  }, [triggerEnter, setPhaseSync]);
+
+  /* ── Auto-start: idle'a geçince sayaç başlat ────────────────── */
 
   useEffect(() => {
     if (phase !== 'idle') return;
-    const t = setTimeout(() => {
-      if (phaseRef.current === 'idle') startGlobeAnimation();
-    }, AUTO_START_MS);
+    const t = setTimeout(() => { if (phaseRef.current === 'idle') startZoom(); }, AUTO_START_MS);
     return () => clearTimeout(t);
-  }, [phase, startGlobeAnimation]);
+  }, [phase, startZoom]);
 
-  useEffect(() => {
-    return () => clearInterval(animRef.current);
-  }, []);
+  /* ── Cleanup ────────────────────────────────────────────────── */
+
+  useEffect(() => () => clearInterval(animRef.current), []);
 
   if (phase === 'done') return null;
 
+  /* ── Türetilmiş değerler ────────────────────────────────────── */
+
   const isAnimating = phase === 'animating' || phase === 'entering';
   const isEntering = phase === 'entering';
-  const bkrOpacity = isAnimating && globeProgress > 0.82
-    ? Math.min(1, (globeProgress - 0.82) / 0.12) : 0;
-
-  const feather = 80;
-  const maskStyle = isEntering
-    ? `radial-gradient(circle at 50% 50%, transparent ${revealRadius}px, rgba(0,0,0,0.3) ${revealRadius + feather * 0.4}px, black ${revealRadius + feather}px)`
-    : undefined;
-
   const contentVisible = phase !== 'loading';
 
+  const logoOpacity = isAnimating && globeProgress > 0.82
+    ? Math.min(1, (globeProgress - 0.82) / 0.12)
+    : 0;
+
+  const mask = isEntering
+    ? `radial-gradient(circle at 50% 50%, transparent ${revealRadius}px, rgba(0,0,0,0.3) ${revealRadius + FEATHER * 0.4}px, black ${revealRadius + FEATHER}px)`
+    : undefined;
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: -1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-        /* ★ Loading ile aynı koyu navy arka plan */
-        background: 'radial-gradient(ellipse at 50% 55%, #0d2a42 0%, #081a2e 40%, #040e1a 100%)',
-        pointerEvents: isEntering ? 'none' : 'auto',
-        WebkitMaskImage: maskStyle,
-        maskImage: maskStyle,
-      }}
-    >
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: -1,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden', background: BG,
+      pointerEvents: isEntering ? 'none' : 'auto',
+      WebkitMaskImage: mask, maskImage: mask,
+    }}>
       {/* Globe + Marquee */}
-      <div style={{
-        opacity: contentVisible ? 1 : 0,
-        transition: 'opacity 0.6s ease',
-      }}>
+      <div style={{ opacity: contentVisible ? 1 : 0, transition: 'opacity 0.6s ease' }}>
         <div style={{
           transform: isEntering ? 'scale(8)' : 'scale(1)',
           transition: isEntering ? `transform ${ENTER_DURATION_MS}ms cubic-bezier(0.4,0,0.2,1)` : 'none',
@@ -178,53 +182,48 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
             onGlobeReady={handleGlobeReady}
           />
         </div>
-
-        {phase !== 'loading' && <ParallelMarquee />}
+        {contentVisible && <ParallelMarquee />}
       </div>
 
-      {/* Balıkesir lokasyon — teal renk şeması */}
+      {/* Lokasyon logosu — zoom sonunda belirir */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
-        textAlign: 'center', pointerEvents: 'none',
-        opacity: bkrOpacity, transition: 'opacity 0.2s ease',
+        pointerEvents: 'none',
+        opacity: logoOpacity, transition: 'opacity 0.3s ease',
         zIndex: 2,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
       }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/baun_logo.png"
+          alt="Balıkesir Üniversitesi"
+          style={{
+            width: 'clamp(48px, 6vw, 80px)', height: 'auto',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 24px rgba(0,148,192,0.5)) drop-shadow(0 2px 12px rgba(0,0,0,0.6))',
+          }}
+        />
         <p style={{
-          fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
-          letterSpacing: '0.25em',
-          textTransform: 'uppercase',
+          fontSize: 'clamp(0.6rem, 0.9vw, 0.75rem)',
+          letterSpacing: '0.25em', textTransform: 'uppercase',
           color: '#0094c0',
-          marginBottom: '0.5rem',
           textShadow: '0 0 12px rgba(0,148,192,0.6)',
         }}>
           ● Balıkesir, Türkiye
-        </p>
-        <p style={{
-          fontSize: 'clamp(1.4rem, 2.8vw, 2.2rem)',
-          fontWeight: 600,
-          color: '#ffffff',
-          letterSpacing: '0.06em',
-          textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,148,192,0.3)',
-          lineHeight: 1.3,
-        }}>
-          Balıkesir Üniversitesi
         </p>
       </div>
 
       {/* Loading Screen */}
       {phase === 'loading' && (
-        <LoadingScreen
-          isReady={globeReady}
-          onFadeOutDone={handleLoadingFadeOutDone}
-        />
+        <LoadingScreen isReady={globeReady} onFadeOutDone={handleLoadingDone} />
       )}
 
+      {/* Idle pulse */}
       {phase === 'idle' && (
         <div style={{
           position: 'absolute', bottom: '3rem', left: '50%',
-          transform: 'translateX(-50%)',
-          opacity: 0.5, pointerEvents: 'none',
+          transform: 'translateX(-50%)', opacity: 0.5, pointerEvents: 'none',
         }}>
           <div style={{
             width: 6, height: 6, borderRadius: '50%',

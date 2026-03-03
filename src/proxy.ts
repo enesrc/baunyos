@@ -10,7 +10,6 @@ function isLocale(s: string): s is Locale {
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  console.log("MIDDLEWARE HIT:", pathname, req.method);
 
   if (
     pathname.startsWith("/_next") ||

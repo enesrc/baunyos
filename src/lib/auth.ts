@@ -12,6 +12,6 @@ export const auth = betterAuth({
   },
   trustedOrigins: ["http://localhost:3000"],
   plugins: [
-    nextCookies(), // Bu plugin Next.js server action'larda cookie yönetimini düzeltir
+    nextCookies(), 
   ],
 });
