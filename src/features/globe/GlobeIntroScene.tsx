@@ -80,6 +80,7 @@ interface Props {
   width: number;
   height: number;
   positionRef: MutableRefObject<GlobePosition>;
+  onGlobeReady?: () => void;  // ← yeni
 }
 
 export function GlobeIntroScene({
@@ -91,6 +92,7 @@ export function GlobeIntroScene({
   width,
   height,
   positionRef,
+  onGlobeReady,  // ← yeni
 }: Props) {
   // react-globe.gl instance type'ı burada geniş tutuluyor
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,6 +104,7 @@ export function GlobeIntroScene({
   const keyframesRef = useRef(buildKeyframes(startLat, startLng, startAlt));
   const cloudsRef = useRef<THREE.Mesh | null>(null);
   const cloudsTextureRef = useRef<THREE.Texture | null>(null);
+  const readyFiredRef = useRef(false);
 
   useEffect(() => {
     isAnimRef.current = isAnimating;
@@ -186,11 +189,15 @@ export function GlobeIntroScene({
           cloudsRef.current.rotation.y +=
             (CLOUDS_ROTATION_SPEED * Math.PI) / 180;
         }
-
         cloudsRafRef.current = window.requestAnimationFrame(rotateClouds);
       };
-
       cloudsRafRef.current = window.requestAnimationFrame(rotateClouds);
+    }
+
+    // ★ Globe hazır sinyali — sadece bir kez
+    if (!readyFiredRef.current) {
+      readyFiredRef.current = true;
+      onGlobeReady?.();
     }
   };
 

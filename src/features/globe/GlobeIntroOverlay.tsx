@@ -4,8 +4,9 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { GlobeIntroScene } from '@/features/globe/GlobeIntroScene';
 import type { GlobePosition } from '@/features/globe/GlobeIntroScene';
 import ParallelMarquee from './ParallelMarquee';
+import LoadingScreen from '@/components/sections/home/LoadingScreen';
 
-type Phase = 'idle' | 'animating' | 'entering' | 'done';
+type Phase = 'loading' | 'idle' | 'animating' | 'entering' | 'done';
 
 interface GlobeIntroOverlayProps {
   onComplete: () => void;
@@ -20,18 +21,29 @@ const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
-  const [phase, setPhase] = useState<Phase>('idle');
+  const [phase, setPhase] = useState<Phase>('loading');
   const [globeProgress, setGlobeProgress] = useState(0);
   const [windowSize, setWindowSize] = useState({ w: 1920, h: 1080 });
   const [startPos, setStartPos] = useState({ lat: 15.0, lng: 5.0, alt: 2.5 });
   const [revealRadius, setRevealRadius] = useState(0);
+  const [globeReady, setGlobeReady] = useState(false);
 
   const positionRef = useRef<GlobePosition>({ lat: 15.0, lng: 5.0, alt: 2.5 });
-  const phaseRef = useRef<Phase>('idle');
+  const phaseRef = useRef<Phase>('loading');   // ← 'idle' değil, 'loading'
   const animRef = useRef<number>(0);
   const enteringRef = useRef(false);
 
   const setPhaseSync = (p: Phase) => { phaseRef.current = p; setPhase(p); };
+
+  // Globe hazır olduğunda — phase ne olursa olsun sinyali al
+  const handleGlobeReady = useCallback(() => {
+    setGlobeReady(true);
+  }, []);
+
+  // LoadingScreen fade-out bittikten sonra idle'a geç
+  const handleLoadingFadeOutDone = useCallback(() => {
+    setPhaseSync('idle');
+  }, []);
 
   /* ── Window size ────────────────────────────────────────────── */
   useEffect(() => {
@@ -69,7 +81,6 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     enteringRef.current = true;
     setPhaseSync('entering');
 
-    /* Viewport köşegeninin yarısı + feather payı */
     const maxR = Math.hypot(window.innerWidth, window.innerHeight) / 2 + 100;
     const steps = 60;
     const interval = ENTER_DURATION_MS / steps;
@@ -109,13 +120,14 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
     }, interval);
   }, [triggerEnter]);
 
-  /* ── Otomatik başlat ────────────────────────────────────────── */
+  /* ── Otomatik başlat — sadece idle'a geçince ────────────────── */
   useEffect(() => {
+    if (phase !== 'idle') return;
     const t = setTimeout(() => {
       if (phaseRef.current === 'idle') startGlobeAnimation();
     }, AUTO_START_MS);
     return () => clearTimeout(t);
-  }, [startGlobeAnimation]);
+  }, [phase, startGlobeAnimation]);
 
   /* ── Cleanup ────────────────────────────────────────────────── */
   useEffect(() => {
@@ -126,15 +138,16 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
 
   const isAnimating = phase === 'animating' || phase === 'entering';
   const isEntering = phase === 'entering';
-  const titleOpacity = isAnimating ? 0 : 1;
   const bkrOpacity = isAnimating && globeProgress > 0.82
     ? Math.min(1, (globeProgress - 0.82) / 0.12) : 0;
 
-  /* Circular reveal mask: ortadan dışa doğru büyüyen şeffaf daire */
   const feather = 80;
   const maskStyle = isEntering
     ? `radial-gradient(circle at 50% 50%, transparent ${revealRadius}px, rgba(0,0,0,0.3) ${revealRadius + feather * 0.4}px, black ${revealRadius + feather}px)`
     : undefined;
+
+  // Loading sırasında globe+marquee gizli ama DOM'da (yükleniyor)
+  const contentVisible = phase !== 'loading';
 
   return (
     <div
@@ -152,28 +165,31 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         maskImage: maskStyle,
       }}
     >
-
-      {/* Globe */}
+      {/* Globe + Marquee — loading bitene kadar opacity 0 */}
       <div style={{
-        transform: isEntering ? 'scale(8)' : 'scale(1)',
-        transition: isEntering ? `transform ${ENTER_DURATION_MS}ms cubic-bezier(0.4,0,0.2,1)` : 'none',
-        willChange: 'transform',
+        opacity: contentVisible ? 1 : 0,
+        transition: 'opacity 0.6s ease',
       }}>
-        <GlobeIntroScene
-          progress={globeProgress}
-          isAnimating={isAnimating}
-          startLat={startPos.lat}
-          startLng={startPos.lng}
-          startAlt={startPos.alt}
-          width={windowSize.w}
-          height={windowSize.h}
-          positionRef={positionRef}
-        />
+        <div style={{
+          transform: isEntering ? 'scale(8)' : 'scale(1)',
+          transition: isEntering ? `transform ${ENTER_DURATION_MS}ms cubic-bezier(0.4,0,0.2,1)` : 'none',
+          willChange: 'transform',
+        }}>
+          <GlobeIntroScene
+            progress={globeProgress}
+            isAnimating={isAnimating}
+            startLat={startPos.lat}
+            startLng={startPos.lng}
+            startAlt={startPos.alt}
+            width={windowSize.w}
+            height={windowSize.h}
+            positionRef={positionRef}
+            onGlobeReady={handleGlobeReady}
+          />
+        </div>
+
+        {phase !== 'loading' && <ParallelMarquee />}
       </div>
-
-
-      <ParallelMarquee />
-
 
       {/* Balıkesir lokasyon */}
       <div style={{
@@ -205,7 +221,14 @@ export function GlobeIntroOverlay({ onComplete }: GlobeIntroOverlayProps) {
         </p>
       </div>
 
-      {/* Scroll hint — artık gerekmiyor ama idle'da ufak bir pulse */}
+      {/* Loading Screen — her şeyin üstünde */}
+      {phase === 'loading' && (
+        <LoadingScreen
+          isReady={globeReady}
+          onFadeOutDone={handleLoadingFadeOutDone}
+        />
+      )}
+
       {phase === 'idle' && (
         <div style={{
           position: 'absolute', bottom: '3rem', left: '50%',
