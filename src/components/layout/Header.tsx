@@ -18,7 +18,7 @@ export default async function Header({ locale }: { locale: Locale }) {
   const logoBar = <LogoBar locale={locale} logoText={logoText} />;
 
   const navBar = (
-    <div className="border-b border-light-4 bg-light-1/95 backdrop-blur-xl dark:border-dark-1 dark:bg-dark-3/95">
+    <div className="border-b border-light-4 bg-light-2/95 backdrop-blur-xl dark:border-dark-1 dark:bg-dark-3/95">
       <div className="flex items-center justify-center px-2 lg:px-0">
         <NavBar items={navItems} />
       </div>

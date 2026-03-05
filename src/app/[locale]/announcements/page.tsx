@@ -4,6 +4,7 @@ import { getDictionary } from "@/features/i18n/getDictionary";
 import { localePath } from "@/lib/links";
 import { isLocale, type Locale } from "@/features/i18n/config";
 import AnnouncementCard from "@/components/ui/AnnouncementCard";
+import { GradientHero } from "@/components/ui/GradientHero"; // Yeni bileşeni import ettik
 
 export default async function AnnouncementsPage({
   params,
@@ -18,58 +19,51 @@ export default async function AnnouncementsPage({
 
   return (
     <main>
-      {/* Hero — detail sayfasıyla aynı stil */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, var(--teal-4) 0%, var(--teal-3) 50%, var(--teal-2) 100%)",
-        }}
-      >
-        <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/5" />
-        <div className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-white/5" />
-        <div className="pointer-events-none absolute right-1/4 top-1/2 h-32 w-32 rounded-full bg-white/5" />
-
-        <div className="relative mx-auto max-w-5xl px-6 pb-14 pt-10">
-          {/* Breadcrumb */}
-          <div className="mb-6">
-            <nav className="flex items-center gap-2 text-sm text-teal-1">
-              <Link
-                href={localePath(locale, "/")}
-                className="font-medium transition-colors hover:text-white"
-              >
-                {dict.common.home}
-              </Link>
-              <span>/</span>
-              <span className="text-white">{dict.sections.announcements}</span>
-            </nav>
-          </div>
-
-          {/* Başlık */}
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white">
-            {dict.sections.announcements}
-          </h1>
+      {/* Artık tek bir component ile tüm o karmaşık div'lerden kurtulduk */}
+      <GradientHero>
+        {/* Breadcrumb */}
+        <div className="mb-6">
+          <nav className="flex items-center gap-2 text-sm text-light-4">
+            <Link
+              href={localePath(locale, "/")}
+              className="font-medium transition-colors hover:text-white hover:underline"
+            >
+              {dict.common.home}
+            </Link>
+            <span>/</span>
+            <span className="font-medium text-white">
+              {dict.sections.announcements}
+            </span>
+          </nav>
         </div>
-      </section>
+
+        {/* Başlık */}
+        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white">
+          {dict.sections.announcements}
+        </h1>
+      </GradientHero>
 
       {/* Duyuru grid */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        {announcements.length === 0 ? (
-          <p className="text-lg text-gray-3 dark:text-gray-2">
-            {dict.common.noContent}
-          </p>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {announcements.map((a) => (
-              <AnnouncementCard
-                key={a.id}
-                announcement={a}
-                locale={locale}
-                months={dict.months}
-              />
-            ))}
-          </div>
-        )}
+      <section className="bg-light-4 dark:bg-dark-3 mx-auto">
+        <div className="mx-auto max-w-5xl px-6 py-12">
+          {announcements.length === 0 ? (
+            <p className="text-lg text-gray-3 dark:text-gray-2">
+              {dict.common.noContent}
+            </p>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {announcements.map((a) => (
+                <AnnouncementCard
+                  key={a.id}
+                  announcement={a}
+                  locale={locale}
+                  months={dict.months}
+                />
+              ))}
+            </div>
+          )}
+
+        </div>
       </section>
     </main>
   );

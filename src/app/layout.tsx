@@ -1,5 +1,13 @@
 import "@/app/globals.css";
 
+export const metadata = {
+  title: {
+    default: 'Balıkesir Üniversitesi Uluslararası Öğrenci Ofisi', // Başlık belirtilmemiş sayfalarda bu görünür
+    template: '%s | BAUNYOS', // Diğer sayfalarda başına eklenir
+  },
+  description: 'Uygulamanın genel açıklaması',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning>

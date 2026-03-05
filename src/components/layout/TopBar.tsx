@@ -22,7 +22,7 @@ export default function TopBar({ phone, email }: TopBarProps) {
   const otherLabel = locale === "tr" ? "English" : "Türkçe";
 
   return (
-    <div className="border-b border-light-4 bg-light-2 dark:border-dark-1 dark:bg-dark-2">
+    <div className="border-b border-light-4 bg-light-3 dark:border-dark-1 dark:bg-dark-2">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5">
         <div className="flex items-center gap-3 sm:gap-5">
           {phone && (
@@ -50,7 +50,7 @@ export default function TopBar({ phone, email }: TopBarProps) {
           {/* Dil butonu */}
           <Link
             href={localePath(otherLocale, restPath)}
-            className="flex h-7 items-center justify-center gap-1.5 rounded-md bg-teal-2 px-2 text-sm text-white transition-colors hover:bg-teal-4 dark:bg-teal-2 dark:hover:bg-teal-3"
+            className="flex h-7 items-center justify-center gap-1.5 rounded-sm bg-teal-1 px-2 text-sm font-medium text-light-2 transition-colors hover:bg-teal-2 dark:bg-teal-2 dark:hover:bg-teal-3"
           >
             <Globe size={15} className="shrink-0 block" />
             <span className="hidden sm:inline leading-none">
@@ -61,8 +61,8 @@ export default function TopBar({ phone, email }: TopBarProps) {
           {/* Tema butonu */}
           <button
             onClick={toggle}
-            className="flex h-7 w-7 items-center justify-center rounded-md transition-colors
-            bg-teal-3 text-white hover:bg-teal-4 dark:bg-amber-2 dark:hover:bg-amber-4"
+            className="flex h-7 w-7 items-center justify-center rounded-sm transition-colors
+            bg-teal-3 text-white hover:bg-teal-4 dark:bg-amber-1 dark:hover:bg-amber-2"
             aria-label="Tema değiştir"
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={15} />}

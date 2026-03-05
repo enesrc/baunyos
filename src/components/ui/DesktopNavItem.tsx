@@ -44,11 +44,14 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
     timeoutRef.current = setTimeout(() => setOpen(false), 150);
   }, []);
 
+  // dropdown olmayan navbar elemanı
   if (!hasChildren) {
     return (
       <Link
         href={item.href ? localePath(locale, item.href) : "#"}
-        className="flex items-center px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-200 text-gray-3 hover:bg-teal-1/40 hover:text-teal-3 dark:text-gray-2 dark:hover:bg-teal-4/15 dark:hover:text-teal-2"
+        className="flex items-center px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-0 
+        text-dark-1 hover:text-teal-3 hover:bg-teal-0/30 
+        dark:text-light-2 dark:hover:text-teal-0 dark:hover:bg-teal-4/15"
       >
         {title}
       </Link>
@@ -59,15 +62,17 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
     <div ref={ref} className="relative flex self-stretch" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-200 text-gray-3 hover:bg-teal-1/40 hover:text-teal-3 dark:text-gray-2 dark:hover:bg-teal-4/15 dark:hover:text-teal-2"
+        className="flex items-center gap-1.5 px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-0 
+        text-dark-1 hover:text-teal-3 hover:bg-teal-0/30
+        dark:text-light-2 dark:hover:text-teal-0 dark:hover:bg-teal-4/15 "
       >
         {title}
-        <ChevronDown size={14} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={14} className={`transition-transform duration-0 ${open ? "rotate-180" : ""}`} />
       </button>
 
       <div
         ref={dropdownRef}
-        className={`absolute top-full z-50 transition-all duration-200 ${open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
+        className={`absolute top-full z-50 transition-all duration-0 ${open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
           }`}
         style={{ left: 0, minWidth: "100%" }}
       >
@@ -80,13 +85,14 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
                 key={child.id}
                 href={child.href ? localePath(locale, child.href) : "#"}
                 onClick={() => setOpen(false)}
-                className="group flex items-center gap-2 px-5 py-3 text-sm text-gray-3 transition-all hover:bg-light-2 hover:text-teal-3 dark:text-gray-2 dark:hover:bg-dark-2 dark:hover:text-teal-2"
+                className="group flex items-center gap-2 px-5 py-3 text-sm transition-all text-dark-1 hover:text-teal-3 hover:bg-light-3
+                dark:text-light-2 dark:hover:text-teal-1 dark:hover:bg-dark-2"
               >
                 <ChevronRight
                   size={11}
-                  className="opacity-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:opacity-100"
+                  className="opacity-0 transition-all duration-0 group-hover:translate-x-0.5 group-hover:opacity-100"
                 />
-                <span className="whitespace-nowrap transition-transform duration-200 group-hover:translate-x-0.5">
+                <span className="whitespace-nowrap transition-transform duration-0 group-hover:translate-x-0.5">
                   {(locale === "tr" ? child.label_tr : child.label_en).toLocaleUpperCase(locale)}
                 </span>
               </Link>

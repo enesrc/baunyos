@@ -36,14 +36,9 @@ export default function Footer({ locale = "tr", settings }: FooterProps) {
         <div className="flex flex-col gap-6 border-b border-white/10 pb-12 sm:flex-row sm:items-center sm:gap-8">
           <Image src="/baun_logo.png" alt="Balikesir Universitesi" width={80} height={80}
             className="h-20 w-20 shrink-0 object-contain opacity-90" />
-          <div className="flex flex-col gap-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-2">
-              Balıkesir Üniversitesi
-            </p>
-            <h2 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
-              {headline}
-            </h2>
-          </div>
+          <h2 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
+            {headline}
+          </h2>
         </div>
 
         {/* Alt: İletişim sol | Sosyal sağ */}

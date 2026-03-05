@@ -29,14 +29,14 @@ export default function AnnouncementCard({
   return (
     <Link
       href={localePath(locale, `/announcements/${announcement.id}`)}
-      className="group flex items-center gap-5 rounded-md border border-light-3 bg-light-2 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-teal-3 hover:shadow-md dark:border-dark-1 dark:bg-dark-2 dark:hover:border-teal-3"
+      className="group flex items-center gap-5 rounded-md border border-light-3 bg-light-2 p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-teal-3 hover:shadow-md dark:border-dark-1 dark:bg-dark-5 dark:hover:border-teal-3"
     >
       {/* Tarih kutusu */}
-      <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-md bg-teal-3/10 dark:bg-teal-2/10">
-        <span className="text-3xl font-bold leading-none text-teal-3 dark:text-teal-2">
+      <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-md bg-teal-3/10 dark:bg-teal-2/20">
+        <span className="text-3xl font-bold leading-none text-teal-3 dark:text-light-4">
           {day}
         </span>
-        <span className="mt-1.5 text-xs font-bold uppercase leading-none text-teal-3 dark:text-teal-2">
+        <span className="mt-1.5 text-xs font-bold uppercase leading-none text-teal-3 dark:text-light-4">
           {month} {year}
         </span>
       </div>
