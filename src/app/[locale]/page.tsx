@@ -4,18 +4,20 @@ import AnnouncementsSection from "@/components/sections/home/AnnouncementsSectio
 import QuickAccessSection from "@/components/sections/home/QuickAccessSection";
 import { getSliders } from "@/features/slider/queries";
 import { getHomeAnnouncements } from "@/features/announcements/queries";
+import { getQuickAccessItems } from "@/features/quick-access/queries";
 
 export default async function HomePage() {
-  const [sliders, announcements] = await Promise.all([
+  const [sliders, announcements, quickAccesses] = await Promise.all([
     getSliders(),
     getHomeAnnouncements(),
+    getQuickAccessItems(),
   ]);
 
   return (
     <main>
       <SliderSection sliders={sliders} />
       <AnnouncementsSection announcements={announcements} />
-      <QuickAccessSection />
+      <QuickAccessSection items={quickAccesses} />
     </main>
   );
 }

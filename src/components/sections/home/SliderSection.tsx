@@ -92,14 +92,13 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
 
   if (!active.length) return null;
 
-  const slides =
-    total > 1 ? [active[total - 1], ...active, active[0]] : active;
+  const slides = total > 1 ? [active[total - 1], ...active, active[0]] : active;
   const slideCount = slides.length;
   const trackOffset = (trackIndex / slideCount) * 100;
 
   /* 1905:720 oran = %37.795... */
   return (
-    <section className="w-full select-none bg-dark-3">
+    <section className="w-full select-none dark:bg-dark-3">
       <div
         className="relative mx-auto w-full max-w-7xl overflow-hidden"
         style={{ aspectRatio: "1905 / 720" }}

@@ -187,6 +187,138 @@ async function main() {
     console.log("Announcement tablosu zaten dolu, atlandı.");
   }
 
+  // ── QuickAccess ──────────────────────────────────────────
+  const quickAccessCount = await prisma.quickAccess.count();
+  if (quickAccessCount === 0) {
+    await prisma.quickAccess.createMany({
+      data: [
+        {
+          icon: "school",
+          title_tr: "Türkçe Eğitimi",
+          title_en: "Turkish Education",
+          desc_tr: "Türkçe Öğretimi Uygulama ve Araştırma Merkezi (TÖMER)",
+          desc_en: "Turkish Language Teaching Application and Research Center (TOMER)",
+          href: "https://tomer.balikesir.edu.tr",
+          order: 1,
+          is_active: true,
+        },
+        {
+          icon: "tablet",
+          title_tr: "TÖMER Başvurusu",
+          title_en: "TOMER Application",
+          desc_tr: "Balıkesir Üniversitesi TÖMER Başvurusu",
+          desc_en: "Balıkesir University TOMER Application",
+          href: "https://tomer.balikesir.edu.tr/basvuru",
+          order: 2,
+          is_active: true,
+        },
+        {
+          icon: "info",
+          title_tr: "BAUNYÖS",
+          title_en: "BAUNYOS",
+          desc_tr: "BAUNYÖS İletişim Bilgileri",
+          desc_en: "BAUNYOS Contact Information",
+          href: "https://uluslararasi.balikesir.edu.tr",
+          order: 3,
+          is_active: true,
+        },
+        {
+          icon: "book-marked",
+          title_tr: "Referans Rehberi",
+          title_en: "Reference Guide",
+          desc_tr: "Uluslararası Öğrenciler için Referans Rehberi",
+          desc_en: "Reference Guide for International Students",
+          href: "https://uluslararasi.balikesir.edu.tr/rehber",
+          order: 4,
+          is_active: true,
+        },
+        {
+          icon: "link",
+          title_tr: "Online Başvuru",
+          title_en: "Online Application Link",
+          desc_tr: "Tüm öğrenciler için Online Başvuru Linki",
+          desc_en: "Online Application Link for all students",
+          href: "https://obs.balikesir.edu.tr/oibs/foa_app/login.aspx",
+          order: 5,
+          is_active: true,
+        },
+        {
+          icon: "download",
+          title_tr: "Online Ödeme",
+          title_en: "Online Payment",
+          desc_tr: "Online Ödeme",
+          desc_en: "Online Payment",
+          href: "https://odeme.balikesir.edu.tr",
+          order: 6,
+          is_active: true,
+        },
+        {
+          icon: "home",
+          title_tr: "Barınma İmkânları",
+          title_en: "Accommodation Opportunities",
+          desc_tr: "Barınma İmkânları",
+          desc_en: "Accommodation Opportunities",
+          href: "https://uluslararasi.balikesir.edu.tr/barinma",
+          order: 7,
+          is_active: true,
+        },
+        {
+          icon: "info",
+          title_tr: "Balıkesir'de Yaşam Standartları",
+          title_en: "Living Standards in Balikesir",
+          desc_tr: "Detay için tıklayınız...",
+          desc_en: "For Detail...",
+          href: "https://uluslararasi.balikesir.edu.tr/yasam",
+          order: 8,
+          is_active: true,
+        },
+        {
+          icon: "clipboard-edit",
+          title_tr: "Başvuru Süreci",
+          title_en: "Application Process",
+          desc_tr: "Tüm süreç detayları linkte.",
+          desc_en: "All process details in the link.",
+          href: "https://uluslararasi.balikesir.edu.tr/basvuru-sureci",
+          order: 9,
+          is_active: true,
+        },
+        {
+          icon: "file",
+          title_tr: "Diploma Eki",
+          title_en: "Diploma Supplement",
+          desc_tr: "BAUNYÖS Diploma Eki",
+          desc_en: "BAUNYOS Diploma Supplement",
+          href: "https://uluslararasi.balikesir.edu.tr/diploma-eki",
+          order: 10,
+          is_active: true,
+        },
+        {
+          icon: "coins",
+          title_tr: "Harçlar",
+          title_en: "Tuition Fees",
+          desc_tr: "BAUNYÖS Öğrenim Harçları",
+          desc_en: "BAUNYOS Tuition Fees",
+          href: "https://uluslararasi.balikesir.edu.tr/harclar",
+          order: 11,
+          is_active: true,
+        },
+        {
+          icon: "question",
+          title_tr: "SSS",
+          title_en: "FAQ",
+          desc_tr: "Sıkça Sorulan Sorular",
+          desc_en: "Frequently Asked Questions",
+          href: "https://uluslararasi.balikesir.edu.tr/sss",
+          order: 12,
+          is_active: true,
+        },
+      ],
+    });
+    console.log("✅ 12 hızlı erişim öğesi eklendi.");
+  } else {
+    console.log("QuickAccess tablosu zaten dolu, atlandı.");
+  }
+
   // ── Admin User ───────────────────────────────────────────
   const ADMIN_EMAIL = "admin@baunyos.com";
   const ADMIN_PASSWORD = "Admin1234!";

@@ -19,7 +19,7 @@ export default function ParallelMarquee({
           style={{
             transformOrigin: 'right center',
             transform:
-              'perspective(100vw) rotateY(60deg) skewX(0.10256deg) skewY(-0.10256deg)',
+              'perspective(100vw) rotateY(50deg) skewX(0.10256deg) skewY(-0.10256deg)',
           }}
         >
           {/* Üst yazı — parlak teal, glow efektli */}

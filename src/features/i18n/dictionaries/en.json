@@ -3,7 +3,8 @@
     "viewAll": "View all",
     "readMore": "Read more →",
     "home": "Home",
-    "noContent": "No content available."
+    "noContent": "No content available.",
+    "universityName": "Balıkesir University"
   },
   "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   "sections": {

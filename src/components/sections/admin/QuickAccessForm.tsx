@@ -3,8 +3,7 @@
 import { useActionState } from "react";
 import { createQuickAccessItem, updateQuickAccessItem } from "@/features/quick-access/actions";
 import type { QuickAccess } from "@/generated/prisma/client";
-
-const ICONS = ["info", "tablet", "question", "book", "link", "download", "home", "file"];
+import IconPicker from "@/components/ui/IconPicker";
 
 export default function QuickAccessForm({ item }: { item?: QuickAccess }) {
   const action = item ? updateQuickAccessItem : createQuickAccessItem;
@@ -19,12 +18,7 @@ export default function QuickAccessForm({ item }: { item?: QuickAccess }) {
 
       <div>
         <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">İkon</label>
-        <select name="icon" defaultValue={item?.icon ?? ""} className={inputClass}>
-          <option value="">Seç</option>
-          {ICONS.map((icon) => (
-            <option key={icon} value={icon}>{icon}</option>
-          ))}
-        </select>
+        <IconPicker defaultValue={item?.icon} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -41,11 +35,11 @@ export default function QuickAccessForm({ item }: { item?: QuickAccess }) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">Açıklama (TR)</label>
-          <input name="desc_tr" defaultValue={item?.desc_tr} className={inputClass} required />
+          <input name="desc_tr" defaultValue={item?.desc_tr ?? ""} className={inputClass} />
         </div>
         <div>
           <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">Açıklama (EN)</label>
-          <input name="desc_en" defaultValue={item?.desc_en} className={inputClass} required />
+          <input name="desc_en" defaultValue={item?.desc_en ?? ""} className={inputClass} />
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CalendarClock, ArrowLeft } from "lucide-react";
+import { CalendarClock } from "lucide-react";
 import { getAnnouncementById } from "@/features/announcements/queries";
 import { getDictionary } from "@/features/i18n/getDictionary";
 import { localePath } from "@/lib/links";

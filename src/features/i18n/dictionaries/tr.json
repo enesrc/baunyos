@@ -1,9 +1,10 @@
 {
   "common": {
     "viewAll": "Tümünü gör",
-    "readMore": "Devam et →",
-    "home": "Anasayfa",
-    "noContent": "İçerik bulunamadı."
+    "readMore": "Devamını oku →",
+    "home": "Ana Sayfa",
+    "noContent": "İçerik bulunamadı.",
+    "universityName": "Balıkesir Üniversitesi"
   },
   "months": ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
   "sections": {

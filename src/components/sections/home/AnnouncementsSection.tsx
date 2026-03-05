@@ -10,6 +10,19 @@ import type { AnnouncementGetPayload } from "@/generated/prisma/models/Announcem
 
 type Announcement = AnnouncementGetPayload<Record<string, never>>;
 
+function ViewAllLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="group relative inline-flex items-center gap-2 text-base font-semibold text-teal-3 transition-colors hover:text-teal-4 dark:text-teal-2 dark:hover:text-teal-1"
+    >
+      {label}
+      <ArrowRight size={17} />
+      <span className="absolute bottom-0 left-0 h-px w-0 bg-teal-3 group-hover:w-full" />
+    </Link>
+  );
+}
+
 export default function AnnouncementsSection({
   announcements,
 }: {
@@ -19,23 +32,36 @@ export default function AnnouncementsSection({
 
   if (!announcements.length) return null;
 
+  const mobileItems = announcements.slice(0, 4);
+  const viewAllHref = localePath(locale, "/announcements");
+
   return (
     <section className="border-t border-light-3 bg-light-1 dark:border-dark-2 dark:bg-dark-4">
       <Container className="py-14">
-        <div className="mb-8 flex items-end justify-between">
-          <h2 className="text-3xl font-bold tracking-tight text-dark-2 dark:text-light-1">
+        {/* Başlık */}
+        <div className="mb-8 flex flex-col items-center gap-3 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
+          <h2 className="text-4xl font-bold tracking-tight text-dark-2 dark:text-light-1">
             {dict.sections.announcements}
           </h2>
-          <Link
-            href={localePath(locale, "/announcements")}
-            className="hidden items-center gap-1 text-sm font-medium text-teal-3 transition-colors hover:text-teal-4 dark:text-teal-2 dark:hover:text-teal-1 sm:flex"
-          >
-            {dict.common.viewAll}
-            <ArrowRight size={14} />
-          </Link>
+          <span className="hidden sm:block">
+            <ViewAllLink href={viewAllHref} label={dict.common.viewAll} />
+          </span>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Mobil: tek kolon, max 4 kart */}
+        <div className="flex flex-col gap-3 sm:hidden">
+          {mobileItems.map((a) => (
+            <AnnouncementCard
+              key={a.id}
+              announcement={a}
+              locale={locale}
+              months={dict.months}
+            />
+          ))}
+        </div>
+
+        {/* sm+: grid */}
+        <div className="hidden gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
           {announcements.map((a) => (
             <AnnouncementCard
               key={a.id}
@@ -46,14 +72,9 @@ export default function AnnouncementsSection({
           ))}
         </div>
 
-        <div className="mt-6 text-center sm:hidden">
-          <Link
-            href={localePath(locale, "/announcements")}
-            className="inline-flex items-center gap-1 text-sm font-medium text-teal-3 dark:text-teal-2"
-          >
-            {dict.common.viewAll}
-            <ArrowRight size={14} />
-          </Link>
+        {/* Mobil: tümünü gör */}
+        <div className="mt-6 flex justify-center sm:hidden">
+          <ViewAllLink href={viewAllHref} label={dict.common.viewAll} />
         </div>
       </Container>
     </section>
