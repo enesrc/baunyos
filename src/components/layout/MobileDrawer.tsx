@@ -2,32 +2,92 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 import { localePath } from "@/lib/links";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
 
 type NavItem = NavItemGetPayload<{ include: { children: true } }>;
 
+/* ─── Accordion item for dropdown nav items ──────────── */
+function MobileAccordion({
+  item,
+  onNavigate,
+}: {
+  item: NavItem;
+  onNavigate: () => void;
+}) {
+  const { locale } = useI18n();
+  const [open, setOpen] = useState(false);
+  const title = locale === "tr" ? item.label_tr : item.label_en;
+  const activeChildren = item.children.filter((c) => c.is_active);
+
+  return (
+    <div className="border-b border-light-3 last:border-b-0 dark:border-dark-2">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between px-5 py-3.5 text-sm font-medium text-dark-1 transition-colors hover:bg-light-2 hover:text-teal-3 dark:text-light-2 dark:hover:bg-dark-2 dark:hover:text-teal-2"
+      >
+        {title}
+        <ChevronDown
+          size={14}
+          className={`text-gray-2 transition-transform duration-200 dark:text-gray-3 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {/* Accordion content */}
+      <div
+        className={`overflow-hidden transition-all duration-200 ease-in-out ${
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        {activeChildren.map((child) => (
+          <Link
+            key={child.id}
+            href={child.href ? localePath(locale, child.href) : "#"}
+            onClick={onNavigate}
+            className="flex items-center gap-2.5 border-t border-light-3 py-3 pl-8 pr-5 text-sm text-gray-3 transition-colors hover:bg-light-2 hover:text-teal-3 dark:border-dark-2 dark:text-gray-2 dark:hover:bg-dark-2 dark:hover:text-teal-2"
+          >
+            <span className="h-1 w-1 shrink-0 rounded-full bg-teal-2/50 dark:bg-teal-3/50" />
+            {locale === "tr" ? child.label_tr : child.label_en}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── MobileDrawer ───────────────────────────────────── */
 export default function MobileDrawer({ items }: { items: NavItem[] }) {
   const { locale } = useI18n();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const activeItems = items.filter((i) => i.is_active);
 
+  /* Close on route change */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOpen(false);
+  }, [pathname]);
+
   /* Lock body scroll */
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
+  const close = () => setOpen(false);
+
   return (
-    <>
+    <div className="md:hidden">
       {/* ── Hamburger ───────────────────────────── */}
       <button
-        className={`relative z-[60] flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-200 md:hidden ${
+        className={`relative z-[60] flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-200 ${
           open
             ? "bg-teal-3 text-light-1 dark:bg-teal-2"
             : "border border-light-4 text-gray-3 hover:border-teal-3 hover:text-teal-3 dark:border-dark-1 dark:text-gray-2 dark:hover:border-teal-2 dark:hover:text-teal-2"
@@ -56,100 +116,40 @@ export default function MobileDrawer({ items }: { items: NavItem[] }) {
 
       {/* ── Backdrop ────────────────────────────── */}
       <div
-        className={`fixed inset-0 z-40 bg-dark-4/40 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 z-40 bg-dark-4/30 transition-opacity duration-200 ${
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
-        onClick={() => setOpen(false)}
+        onClick={close}
       />
 
-      {/* ── Drawer ──────────────────────────────── */}
+      {/* ── Dropdown panel (slides down from navbar) ── */}
       <div
-        className={`fixed right-0 top-0 z-50 flex h-full w-[85vw] max-w-sm flex-col bg-light-1 shadow-2xl transition-transform duration-300 ease-out dark:bg-dark-3 md:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
+        className={`fixed left-0 right-0 z-50 overflow-y-auto border-b border-light-4 bg-light-1 shadow-lg transition-all duration-300 ease-in-out dark:border-dark-1 dark:bg-dark-3 ${
+          open ? "max-h-[75vh] opacity-100" : "max-h-0 opacity-0"
         }`}
+        style={{ top: "var(--mobile-nav-top, 0)" }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-light-4 px-5 py-4 dark:border-dark-1">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/baun_logo.png"
-              alt="Balıkesir Üniversitesi"
-              width={36}
-              height={36}
-              className="h-9 w-9 object-contain"
-            />
-            <div className="flex flex-col leading-none">
-              <span className="text-xs font-extrabold uppercase text-dark-3 dark:text-light-1">
-                {locale === "tr" ? "BALIKESİR ÜNİVERSİTESİ" : "BALIKESİR UNIVERSITY"}
-              </span>
-              <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-teal-3 dark:text-teal-2">
-                International Students
-              </span>
-            </div>
-          </div>
-          <button
-            onClick={() => setOpen(false)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-light-2 text-gray-3 transition-colors hover:bg-light-3 dark:bg-dark-2 dark:text-gray-2 dark:hover:bg-dark-1"
-          >
-            <X size={16} />
-          </button>
-        </div>
+        {activeItems.map((item) => {
+          const hasChildren = item.children.length > 0 && !item.href;
 
-        <div className="h-0.5 bg-gradient-to-r from-teal-3 via-teal-2 to-amber-2" />
-
-        {/* Links */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
-          {activeItems.map((item) => {
-            const title = locale === "tr" ? item.label_tr : item.label_en;
-            const activeChildren = item.children.filter((c) => c.is_active);
-
+          if (hasChildren) {
             return (
-              <div key={item.id} className="mb-1">
-                {item.href ? (
-                  <Link
-                    href={localePath(locale, item.href)}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center rounded-lg px-4 py-3 text-sm font-medium transition-all ${
-                      pathname.startsWith(localePath(locale, item.href))
-                        ? "bg-teal-1/50 text-teal-3 dark:bg-teal-4/20 dark:text-teal-2"
-                        : "text-dark-3 hover:bg-light-2 dark:text-light-2 dark:hover:bg-dark-2"
-                    }`}
-                  >
-                    {title}
-                  </Link>
-                ) : (
-                  <div className="mb-1 mt-3 px-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-2 dark:text-gray-3">
-                    {title}
-                  </div>
-                )}
-
-                {activeChildren.map((child) => (
-                  <Link
-                    key={child.id}
-                    href={child.href ? localePath(locale, child.href) : "#"}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center gap-2.5 rounded-lg py-2.5 pl-8 pr-4 text-sm transition-all ${
-                      child.href && pathname.startsWith(localePath(locale, child.href))
-                        ? "bg-teal-1/30 text-teal-3 dark:bg-teal-4/15 dark:text-teal-2"
-                        : "text-gray-3 hover:bg-light-2 hover:text-dark-3 dark:text-gray-2 dark:hover:bg-dark-2 dark:hover:text-light-1"
-                    }`}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-2/50 dark:bg-teal-3/50" />
-                    {locale === "tr" ? child.label_tr : child.label_en}
-                  </Link>
-                ))}
-              </div>
+              <MobileAccordion key={item.id} item={item} onNavigate={close} />
             );
-          })}
-        </nav>
+          }
 
-        {/* Footer */}
-        <div className="border-t border-light-4 px-5 py-4 dark:border-dark-1">
-          <p className="text-center text-[10px] text-gray-2 dark:text-gray-3">
-            © {new Date().getFullYear()} Balıkesir Üniversitesi
-          </p>
-        </div>
+          return (
+            <Link
+              key={item.id}
+              href={item.href ? localePath(locale, item.href) : "#"}
+              onClick={close}
+              className="block border-b border-light-3 px-5 py-3.5 text-sm font-medium text-dark-1 transition-colors last:border-b-0 hover:bg-light-2 hover:text-teal-3 dark:border-dark-2 dark:text-light-2 dark:hover:bg-dark-2 dark:hover:text-teal-2"
+            >
+              {locale === "tr" ? item.label_tr : item.label_en}
+            </Link>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 }

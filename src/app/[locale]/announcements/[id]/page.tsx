@@ -62,17 +62,19 @@ export default async function AnnouncementDetailPage({
       </GradientHero>
 
       {/* İçerik (Burası aynı kalıyor) */}
-      <section className="mx-auto max-w-5xl px-6 py-12">
-        {content ? (
-          <div
-            className="prose prose-lg max-w-none text-dark-3 prose-headings:text-dark-3 prose-p:leading-relaxed prose-a:text-teal-3 dark:text-light-1 dark:prose-headings:text-light-1 dark:prose-a:text-teal-2"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        ) : (
-          <p className="text-lg text-gray-3 dark:text-gray-2">
-            {dict.common.noContent}
-          </p>
-        )}
+      <section className="bg-light-2 dark:bg-dark-3">
+        <div className="mx-auto max-w-5xl px-6 py-12">
+          {content ? (
+            <div
+              className="prose prose-lg max-w-none text-dark-3 prose-headings:text-dark-3 prose-p:leading-relaxed prose-a:text-teal-3 dark:text-light-1 dark:prose-headings:text-light-1 dark:prose-a:text-teal-2"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ) : (
+            <p className="text-lg text-gray-3 dark:text-gray-2">
+              {dict.common.noContent}
+            </p>
+          )}
+        </div>
       </section>
     </main>
   );

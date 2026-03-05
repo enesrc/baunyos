@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 interface StickyHeaderProps {
   topBar: React.ReactNode;
@@ -9,42 +9,30 @@ interface StickyHeaderProps {
 }
 
 export default function StickyHeader({ topBar, logoBar, navBar }: StickyHeaderProps) {
-  const [scrolled, setScrolled] = useState(false);
-  const topRef = useRef<HTMLDivElement>(null);
+  const topBarRef = useRef<HTMLDivElement>(null);
+  const logoBarRef = useRef<HTMLDivElement>(null);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    const threshold = 10;
-
-    const onScroll = () => {
-      const shouldScroll = window.scrollY > threshold;
-      setScrolled((prev) => (prev !== shouldScroll ? shouldScroll : prev));
+    const measure = () => {
+      const h =
+        (topBarRef.current?.offsetHeight ?? 0) +
+        (logoBarRef.current?.offsetHeight ?? 0);
+      setOffset(h);
     };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   return (
-    <header className="sticky top-0 z-50">
-      {/* TopBar + LogoBar: yüksekliği gerçekten collapse edilir, layout kaymasını önler */}
-      <div
-        ref={topRef}
-        style={{
-          gridTemplateRows: scrolled ? "0fr" : "1fr",
-          transition: "grid-template-rows 150ms ease",
-        }}
-        className="grid"
-      >
-        <div className="overflow-hidden">
-          {topBar}
-          {logoBar}
-        </div>
-      </div>
-
-      {/* NavBar: her zaman görünür */}
-      <div className={scrolled ? "shadow-md shadow-dark-4/10 dark:shadow-dark-4/30" : ""}>
-        {navBar}
-      </div>
+    <header
+      className="sticky z-50"
+      style={{ top: -offset }}
+    >
+      <div ref={topBarRef}>{topBar}</div>
+      <div ref={logoBarRef}>{logoBar}</div>
+      <div>{navBar}</div>
     </header>
   );
 }
