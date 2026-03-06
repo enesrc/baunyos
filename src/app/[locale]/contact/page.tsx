@@ -5,6 +5,8 @@ import { localePath } from "@/lib/links";
 import { isLocale, type Locale } from "@/features/i18n/config";
 import { GradientHero } from "@/components/ui/GradientHero";
 import { getContact } from "@/features/contact/queries";
+import { Instagram, Twitter, Facebook, Youtube, Linkedin } from "lucide-react";
+
 
 export default async function ContactPage({
     params,
@@ -120,6 +122,46 @@ export default async function ContactPage({
                                             <p className="text-sm text-gray-4 dark:text-gray-2">{contact.email}</p>
                                         </div>
                                     </a>
+                                )}
+
+                                {(contact.instagram || contact.twitter || contact.facebook || contact.youtube || contact.linkedin) && (
+                                    <div className="rounded-md border border-light-3 bg-light-1 p-5 dark:border-dark-1 dark:bg-dark-2">
+                                        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-teal-3 dark:text-teal-2">
+                                            {isTr ? "Sosyal Medya" : "Social Media"}
+                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            {contact.instagram && (
+                                                <a href={contact.instagram} target="_blank" rel="noopener noreferrer"
+                                                    className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                                                    <Instagram size={18} />
+                                                </a>
+                                            )}
+                                            {contact.twitter && (
+                                                <a href={contact.twitter} target="_blank" rel="noopener noreferrer"
+                                                    className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                                                    <Twitter size={18} />
+                                                </a>
+                                            )}
+                                            {contact.facebook && (
+                                                <a href={contact.facebook} target="_blank" rel="noopener noreferrer"
+                                                    className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                                                    <Facebook size={18} />
+                                                </a>
+                                            )}
+                                            {contact.youtube && (
+                                                <a href={contact.youtube} target="_blank" rel="noopener noreferrer"
+                                                    className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                                                    <Youtube size={18} />
+                                                </a>
+                                            )}
+                                            {contact.linkedin && (
+                                                <a href={contact.linkedin} target="_blank" rel="noopener noreferrer"
+                                                    className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                                                    <Linkedin size={18} />
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
                                 )}
                             </div>
                         </div>

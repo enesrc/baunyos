@@ -1,102 +1,103 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 
 export default function LogoText({
   line1,
   line2,
+  color,
 }: {
   line1: string;
   line2: string;
+  color: string;
 }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
-  const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {
-    const el = line2Ref.current;
-    if (!el) return;
+    const els = [line1Ref.current, line2Ref.current].filter(Boolean) as HTMLSpanElement[];
+    if (!els.length) return;
 
-    const measure = () => {
-      if (line2Ref.current) {
-        setWidth(line2Ref.current.offsetWidth);
-      }
+    let rafId: number;
+    let timerId: ReturnType<typeof setTimeout>;
+    let destroyed = false;
+
+    const doPass = (onDone: () => void) => {
+      const start = performance.now();
+      const animate = (now: number) => {
+        if (destroyed) return;
+        const t = Math.min((now - start) / 600, 1);
+        const pos = `${250 - t * 300}% 0`;
+        els.forEach(el => (el.style.backgroundPosition = pos));
+        if (t < 1) {
+          rafId = requestAnimationFrame(animate);
+        } else {
+          els.forEach(el => (el.style.backgroundPosition = "250% 0"));
+          onDone();
+        }
+      };
+      rafId = requestAnimationFrame(animate);
     };
 
-    measure();
+    const runCycle = () => {
+      if (destroyed) return;
+      doPass(() => {
+        if (!destroyed) timerId = setTimeout(runCycle, 10000);
+      });
+    };
 
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
+    timerId = setTimeout(runCycle, 500);
+
+    return () => {
+      destroyed = true;
+      cancelAnimationFrame(rafId);
+      clearTimeout(timerId);
+    };
   }, []);
 
   return (
-    <div className="uni-name-wrapper hidden md:flex md:flex-col">
-      <span
-        className="uni-name-line uni-name-spread uni-name-shimmer"
-        aria-label={line1}
-        style={{ width: width > 0 ? `${width}px` : "auto" }}
-      >
+    <div ref={wrapperRef} className="logo-text-wrapper">
+      <span ref={line1Ref} className="logo-line logo-spread logo-shimmer" aria-label={line1}>
         {line1.split("").map((ch, i) => (
           <span key={i}>{ch}</span>
         ))}
       </span>
-
-      <span
-        ref={line2Ref}
-        className="uni-name-line uni-name-shimmer"
-        aria-label={line2}
-      >
+      <span ref={line2Ref} className="logo-line logo-shimmer" aria-label={line2}>
         {line2}
       </span>
 
       <style jsx>{`
-        .uni-name-wrapper {
-          position: relative;
+        .logo-text-wrapper {
+          display: flex;
+          flex-direction: column;
+          max-width: 100%;
+          overflow: hidden;
         }
-
-        .uni-name-line {
+        .logo-line {
           display: block;
-          font-weight: 800;
+          font-weight: 700;
           text-transform: uppercase;
           line-height: 1.15;
-          font-size: clamp(1rem, 1.5vw, 1.5rem);
-          color: #1b706e;
+          font-size: clamp(0.7rem, 1.3vw, 1.4rem);
           white-space: nowrap;
-          letter-spacing: 0.02em;
         }
-
-        .uni-name-spread {
+        .logo-spread {
           display: flex;
           justify-content: space-between;
         }
-
-        .uni-name-shimmer {
+        .logo-shimmer {
           background: linear-gradient(
-            105deg,
-            #1b706e 0%,
-            #1b706e 35%,
-            #3abfb0 45%,
-            #ffffff 50%,
-            #3abfb0 55%,
-            #1b706e 65%,
-            #1b706e 100%
+            150deg,
+            ${color} 0%, ${color} 35%,
+            ${color}99 45%, #fff 50%, ${color}99 55%,
+            ${color} 65%, ${color} 100%
           );
-          background-size: 250% 100%;
-          background-position: 200% 0;
+          background-size: 300% 100%;
+          background-position: 250% 0;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmer-text 4s ease-in-out infinite;
-        }
-
-        @keyframes shimmer-text {
-          0%,
-          100% {
-            background-position: 200% 0;
-          }
-          50% {
-            background-position: -50% 0;
-          }
         }
       `}</style>
     </div>
