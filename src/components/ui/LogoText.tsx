@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 
-export default function UniversityName({
+export default function LogoText({
   line1,
   line2,
 }: {

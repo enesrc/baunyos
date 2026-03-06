@@ -20,6 +20,8 @@ export default {
         "dark-3": "var(--dark-3)",
         "dark-4": "var(--dark-4)",
         "dark-5": "var(--dark-5)",
+        "dark-6": "var(--dark-6)",
+        "dark-7": "var(--dark-7)",
 
         "gray-1": "var(--gray-1)",
         "gray-2": "var(--gray-2)",

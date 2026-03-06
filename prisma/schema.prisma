@@ -107,11 +107,29 @@ model Verification {
 }
 
 model SiteSettings {
-  id           Int    @id @default(autoincrement())
-  phone        String
-  email        String
-  logo_text_tr String
-  logo_text_en String
+  id               Int     @id @default(1)
+  header_title_tr  String  @default("Uluslararası Öğrenci")
+  header_title_en  String  @default("International Students")
+  footer_title_tr  String  @db.Text
+  footer_title_en  String  @db.Text
+}
+
+model Contact {
+  id              Int      @id @default(1)
+  title_tr        String
+  title_en        String
+  desc_tr         String   @db.Text
+  desc_en         String   @db.Text
+  phone           String
+  email           String
+  address_tr      String   @db.Text
+  address_en      String   @db.Text
+  google_maps_url String   @db.Text
+  facebook        String
+  instagram       String
+  youtube         String
+  linkedin        String
+  twitter         String
 }
 
 model Slider {

@@ -7,6 +7,8 @@ import SiteShell from "@/components/layout/SiteShell";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getSiteSettings } from "@/features/site-settings/queries";
+import { getNavItems } from "@/features/navbar/queries";
+import { getContact } from "@/features/contact/queries";
 
 export default async function LocaleLayout({
   children,
@@ -18,17 +20,18 @@ export default async function LocaleLayout({
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "tr";
   const dict = await getDictionary(locale);
-  const settings = await getSiteSettings();
+  const siteSettings = await getSiteSettings();
+  const navItems = await getNavItems();
+  const contact = await getContact();
+
   return (
     <ThemeProvider>
       <LocaleClientSync locale={locale} />
       <I18nProvider dict={dict} locale={locale}>
-        <SiteShell
-          header={<Header locale={locale} />}
-          footer={<Footer locale={locale} settings={settings} />}
-          isHomePage={true}
-        >
+        <SiteShell>
+          <Header siteSettings={siteSettings} navItems={navItems} contact={contact}/>
           {children}
+          <Footer siteSettings={siteSettings} contact={contact} />
         </SiteShell>
       </I18nProvider>
     </ThemeProvider>

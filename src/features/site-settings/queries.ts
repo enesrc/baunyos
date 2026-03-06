@@ -1,17 +1,18 @@
 import { prisma } from "@/lib/prisma";
 
 export async function getSiteSettings() {
-  let settings = await prisma.siteSettings.findFirst();
+  const settings = await prisma.siteSettings.findFirst();
 
   if (!settings) {
-    settings = await prisma.siteSettings.create({
-      data: {
-        phone: "0266 612 1400",
-        email: "yos.ofis@balikesir.edu.tr",
-        logo_text_tr: "ULUSLARARASI ÖĞRENCİ",
-        logo_text_en: "INTERNATIONAL STUDENT",
-      },
-    });
+    return {
+      id: 1,
+      header_title_tr: "Uluslararası Öğrenciler",
+      header_title_en: "International Students",
+      footer_title_tr: "Balıkesir Üniversitesi Uluslararası İlişkiler Merkezi",
+      footer_title_en: "Balikesir University International Relations Center",
+      phone: "0266 612 1400",
+      email: "yos.ofis@balikesir.edu.tr",
+    };
   }
 
   return settings;

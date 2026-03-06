@@ -96,11 +96,10 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
   const slideCount = slides.length;
   const trackOffset = (trackIndex / slideCount) * 100;
 
-  /* 1905:720 oran = %37.795... */
   return (
-    <section className="w-full select-none dark:bg-dark-3">
+    <section className="w-full select-none dark:bg-dark-7">
       <div
-        className="relative mx-auto w-full max-w-7xl overflow-hidden"
+        className="relative w-full overflow-hidden"
         style={{ aspectRatio: "1905 / 720" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={onLeave}
@@ -143,25 +142,27 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
           ))}
         </div>
 
-        {/* Scrim */}
-        <div
-          className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ease-in-out ${hovered && total > 1 ? "opacity-100" : "opacity-0"
-            }`}
-        >
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-dark-4/20 to-transparent" />
-          <div className="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-dark-4/20 to-transparent" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-dark-4/20 to-transparent" />
-        </div>
-        
-        {/* Oklar + Progress: sadece çoklu slaytlarda */}
+
+        {/* Oklar + Progress + Scrim: sadece çoklu slaytlarda */}
         {total > 1 && (
           <>
+            {/* Scrim */}
+            <div
+              className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ease-in-out ${hovered && total > 1 ? "opacity-100" : "opacity-0"}`}
+            >
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-dark-4/40 to-transparent" />
+              <div className="absolute inset-y-0 left-0 w-24 bg-linear-to-r from-dark-4/40 to-transparent" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-dark-4/40 to-transparent" />
+            </div>
+
+
+
             <button
               onClick={() => go(-1)}
               aria-label="Önceki"
               className={`absolute left-5 top-1/2 flex h-10 w-10 items-center justify-center rounded-md border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-teal-2 hover:bg-teal-2 hover:text-white dark:hover:border-teal-2 dark:hover:bg-teal-2 dark:hover:text-white ${hovered
-                  ? "-translate-y-1/2 translate-x-0 opacity-100"
-                  : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
+                ? "-translate-y-1/2 translate-x-0 opacity-100"
+                : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
                 }`}
             >
               <ArrowLeft size={21} strokeWidth={2} />
@@ -171,8 +172,8 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
               onClick={() => go(1)}
               aria-label="Sonraki"
               className={`absolute right-5 top-1/2 flex h-10 w-10 items-center justify-center rounded-md border border-gray-1/50 bg-transparent text-white transition-all duration-200 ease-out hover:border-teal-2 hover:bg-teal-2 hover:text-white dark:hover:border-teal-2 dark:hover:bg-teal-2 dark:hover:text-white ${hovered
-                  ? "-translate-y-1/2 translate-x-0 opacity-100"
-                  : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"
+                ? "-translate-y-1/2 translate-x-0 opacity-100"
+                : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"
                 }`}
             >
               <ArrowRight size={21} strokeWidth={2} />
@@ -180,8 +181,8 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
 
             <div
               className={`absolute bottom-6 left-1/2 h-0.5 w-24 -translate-x-1/2 bg-white/25 transition-all duration-200 ease-out ${hovered
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-[calc(100%+24px)] opacity-0"
+                ? "translate-y-0 opacity-100"
+                : "translate-y-[calc(100%+24px)] opacity-0"
                 }`}
             >
               <div

@@ -1,51 +1,61 @@
 "use client";
 
-import { useState, useEffect, startTransition } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation"; // Dinamik sayfa kontrolü için
 import { GlobeIntroOverlay } from "@/features/globe/GlobeIntroOverlay";
 
 const INTRO_SEEN_KEY = "baun_intro_seen";
 
 export default function SiteShell({
   children,
-  header,
-  footer,
-  isHomePage,
 }: {
   children: React.ReactNode;
-  header: React.ReactNode;
-  footer: React.ReactNode;
-  isHomePage: boolean;
 }) {
-  const [introState, setIntroState] = useState<"pending" | "playing" | "done">("pending");
+  const [mounted, setMounted] = useState(false);
+  const [done, setDone] = useState(false);
+  const pathname = usePathname();
 
+  // Mevcut sayfanın gerçekten ana sayfa olup olmadığını kontrol et
+  // Örn: "/tr", "/en" veya sadece "/" ana sayfadır.
+  let isActualHomePage = pathname === "/" || pathname === "/tr" || pathname === "/en";
+  isActualHomePage = false;
   useEffect(() => {
-    startTransition(() => {
-      if (!isHomePage) { setIntroState("done"); return; }
+    const frame = requestAnimationFrame(() => {
+      setMounted(true);
+
       const alreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
-      setIntroState(alreadySeen ? "done" : "playing");
+
+      // Eğer ana sayfada değilsek veya intro izlendiyse direkt bitir
+      if (!isActualHomePage || alreadySeen) {
+        setDone(true);
+      }
     });
-  }, [isHomePage]);
+
+    return () => cancelAnimationFrame(frame);
+  }, [isActualHomePage]);
 
   const handleIntroComplete = () => {
     sessionStorage.setItem(INTRO_SEEN_KEY, "1");
-    setIntroState("done");
+    setDone(true);
   };
 
-  const isHiding = introState !== "done";
+  // Intro gösterilmeli mi?
+  const showIntro = mounted && isActualHomePage && !done;
 
   return (
     <>
-      {introState === "playing" && <GlobeIntroOverlay onComplete={handleIntroComplete} />}
+      {showIntro && <GlobeIntroOverlay onComplete={handleIntroComplete} />}
+
+      {/* İçerik her zaman DOM'da durur (SEO dostu), 
+          sadece görünürlüğü 'done' durumuna bağlıdır.
+      */}
       <div
-        style={{
-          visibility: isHiding ? "hidden" : "visible",
-          opacity: isHiding ? 0 : 1,
-          transition: introState === "done" ? "opacity 0.6s ease" : "none",
-        }}
+        className={`
+          transition-opacity duration-1000 ease-in-out
+          ${!done ? "opacity-0 invisible" : "opacity-100 visible"}
+        `}
       >
-        {header}
         {children}
-        {footer}
       </div>
     </>
   );

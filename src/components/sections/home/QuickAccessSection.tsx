@@ -1,10 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { useI18n } from "@/features/i18n/I18nContextValue";
-import { localePath } from "@/lib/links";
 import QuickAccessCard from "@/components/ui/QuickAccessCard";
 import type { QuickAccessGetPayload } from "@/generated/prisma/models/QuickAccess";
 
@@ -20,7 +17,7 @@ export default function QuickAccessSection({
   if (!items.length) return null;
 
   return (
-    <section className="border-t border-light-3 bg-white dark:border-dark-2 dark:bg-dark-3">
+    <section className="border-t border-light-3 bg-white dark:border-dark-2 dark:bg-dark-6">
       <Container className="py-14">
         <div className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <h2 className="text-3xl font-bold tracking-tight text-dark-2 dark:text-light-1">
