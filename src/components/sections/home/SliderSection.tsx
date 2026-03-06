@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react/ssr";
 import type { SliderGetPayload } from "@/generated/prisma/models/Slider";
 
 type Slider = SliderGetPayload<Record<string, never>>;
@@ -165,7 +165,7 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
                 : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
                 }`}
             >
-              <ArrowLeft size={21} strokeWidth={2} />
+              <ArrowLeftIcon size={21} strokeWidth={2} />
             </button>
 
             <button
@@ -176,7 +176,7 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
                 : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"
                 }`}
             >
-              <ArrowRight size={21} strokeWidth={2} />
+              <ArrowRightIcon size={21} strokeWidth={2} />
             </button>
 
             <div

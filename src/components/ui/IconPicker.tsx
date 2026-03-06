@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
+import { XIcon } from "@phosphor-icons/react/ssr";
 import { ICON_ENTRIES, ICON_MAP } from "@/lib/iconMap";
 
 interface IconPickerProps {
@@ -55,7 +55,7 @@ export default function IconPicker({ defaultValue }: IconPickerProps) {
             onClick={(e) => { e.stopPropagation(); setSelected(""); }}
             className="rounded p-0.5 text-gray-3 hover:text-dark-3 dark:text-gray-2 dark:hover:text-light-1"
           >
-            <X size={13} />
+            <XIcon size={13} />
           </span>
         )}
       </button>

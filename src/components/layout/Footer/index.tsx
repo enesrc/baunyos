@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
+import { PhoneIcon, EnvelopeIcon, MapPinIcon, } from "@phosphor-icons/react/ssr";
+import { FaInstagram, FaFacebookF, FaLinkedinIn, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import { localePath } from "@/lib/links";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 import { SiteSettings, Contact} from "@/generated/prisma/client";
@@ -15,11 +16,11 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
   const address = locale === "tr" ? contact.address_tr : contact.address_en;
 
   const SOCIAL_LINKS = [
-    { icon: Facebook, href: contact.facebook, label: "Facebook" },
-    { icon: Instagram, href: contact.instagram, label: "Instagram" },
-    { icon: Linkedin, href: contact.linkedin, label: "Linkedin" },
-    { icon: Youtube, href: contact.youtube, label: "Youtube" },
-    { icon: Twitter, href: contact.twitter, label: "Twitter" },
+    { icon: FaFacebookF, href: contact.facebook, label: "Facebook" },
+    { icon: FaInstagram, href: contact.instagram, label: "Instagram" },
+    { icon: FaLinkedinIn, href: contact.linkedin, label: "Linkedin" },
+    { icon: FaYoutube, href: contact.youtube, label: "Youtube" },
+    { icon: FaXTwitter, href: contact.twitter, label: "Twitter" },
   ].filter(link => link.href);
 
   return (
@@ -46,14 +47,14 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
           {/* İletişim Bilgileri */}
           <ul className="flex flex-col gap-4">
             <li className="flex items-start gap-3 text-sm text-gray-2">
-              <MapPin size={18} className="mt-0.5 shrink-0 text-teal-2" />
+              <MapPinIcon size={18} className="mt-0.5 shrink-0 text-teal-2" />
               <span className="max-w-sm leading-relaxed">{address}</span>
             </li>
             {contact.email && (
               <li>
                 <a href={`mailto:${contact.email}`}
                   className="flex items-center gap-3 text-sm text-gray-2 transition-colors hover:text-teal-2">
-                  <Mail size={18} className="shrink-0 text-teal-2" />
+                  <EnvelopeIcon size={18} className="shrink-0 text-teal-2" />
                   {contact.email}
                 </a>
               </li>
@@ -62,7 +63,7 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
               <li>
                 <a href={`tel:${contact.phone.replace(/\s/g, "")}`}
                   className="flex items-center gap-3 text-sm text-gray-2 transition-colors hover:text-teal-2">
-                  <Phone size={18} className="shrink-0 text-teal-2" />
+                  <PhoneIcon size={18} className="shrink-0 text-teal-2" />
                   {contact.phone}
                 </a>
               </li>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon } from "@phosphor-icons/react/ssr";
 import Container from "@/components/ui/Container";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 import { localePath } from "@/lib/links";
@@ -17,7 +17,7 @@ function ViewAllLink({ href, label }: { href: string; label: string }) {
       className="group relative inline-flex items-center gap-2 text-base font-semibold text-teal-3 transition-colors hover:text-teal-4 dark:text-teal-2 dark:hover:text-teal-1"
     >
       {label}
-      <ArrowRight size={17} />
+      <ArrowRightIcon size={17} />
       <span className="absolute bottom-0 left-0 h-px w-0 bg-teal-3 group-hover:w-full" />
     </Link>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { CaretDownIcon, CaretRightIcon } from "@phosphor-icons/react/ssr";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 import { localePath } from "@/lib/links";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
@@ -67,7 +67,7 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
         dark:text-light-2 dark:hover:text-teal-0 dark:hover:bg-teal-4/15 "
       >
         {title}
-        <ChevronDown size={14} className={`transition-transform duration-0 ${open ? "rotate-180" : ""}`} />
+        <CaretDownIcon size={14} className={`transition-transform duration-0 ${open ? "rotate-180" : ""}`} />
       </button>
 
       <div
@@ -88,7 +88,7 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
                 className="group flex items-center gap-2 px-5 py-3 text-sm transition-all text-dark-1 hover:text-teal-3 hover:bg-light-3
                 dark:text-light-2 dark:hover:text-teal-1 dark:hover:bg-dark-2"
               >
-                <ChevronRight
+                <CaretRightIcon
                   size={11}
                   className="opacity-0 transition-all duration-0 group-hover:translate-x-0.5 group-hover:opacity-100"
                 />

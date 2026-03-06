@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRightIcon } from "@phosphor-icons/react/ssr";
 import { ICON_MAP, FallbackIcon } from "@/lib/iconMap";
 import type { QuickAccessGetPayload } from "@/generated/prisma/models/QuickAccess";
 import type { Locale } from "@/features/i18n/config";
@@ -50,7 +50,7 @@ export default function QuickAccessCard({ item, locale }: QuickAccessCardProps) 
         )}
       </div>
 
-      <ArrowUpRight
+      <ArrowUpRightIcon
         size={16}
         className="hidden sm:block mt-1 shrink-0 text-light-3 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-teal-3 dark:text-dark-1 dark:group-hover:text-teal-2"
       />

@@ -3,7 +3,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
+import { ListIcon, XIcon, CaretDownIcon, CaretUpIcon } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { useI18n } from "@/features/i18n/I18nContextValue";
 import { localePath } from "@/lib/links";
@@ -28,7 +28,7 @@ export default function MobileDrawer({ items = [] }: { items: NavItemWithChildre
         className="p-2 text-teal-3 dark:text-white transition-transform active:scale-90"
         aria-label="Toggle Menu"
       >
-        {isOpen ? <X size={28} /> : <Menu size={28} />}
+        {isOpen ? <XIcon size={28} /> : <ListIcon size={28} />}
       </button>
 
       {/* Yenilikler:
@@ -65,7 +65,7 @@ export default function MobileDrawer({ items = [] }: { items: NavItemWithChildre
                         isSubOpen ? "bg-teal-3 text-white" : "text-teal-3"
                       }`}
                     >
-                      {isSubOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                      {isSubOpen ? <CaretDownIcon size={18} /> : <CaretUpIcon size={18} />}
                     </button>
                   )}
                 </div>

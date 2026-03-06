@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CalendarClock } from "lucide-react";
+import { CalendarDots } from "@phosphor-icons/react/ssr";
 import { getAnnouncementById } from "@/features/announcements/queries";
 import { getDictionary } from "@/features/i18n/getDictionary";
 import { localePath } from "@/lib/links";
@@ -50,7 +50,7 @@ export default async function AnnouncementDetailPage({
           </div>
 
           <div className="flex items-center gap-2 text-sm font-semibold text-white">
-            <CalendarClock size={15} className="text-teal-1 " />
+            <CalendarDots size={15} className="text-teal-1 " />
             <span>{day} {month} {year}</span>
           </div>
         </div>
