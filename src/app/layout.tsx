@@ -3,7 +3,7 @@ import "@/app/globals.css";
 export const metadata = {
   title: {
     default: 'Balıkesir Üniversitesi Uluslararası Öğrenci Ofisi',
-    template: '%s | BAUNYOS', // Diğer sayfalarda başına eklenir
+    template: '%s | BAUNYOS', 
   },
   description: 'Uygulamanın genel açıklaması',
 };

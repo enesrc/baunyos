@@ -45,7 +45,9 @@ export default function TopBar({ contact }: { contact: Contact }) {
         <div className="flex items-center gap-2">
           <Link
             href={localePath(otherLocale, restPath)}
-            className="flex h-7 items-center justify-center gap-1.5 rounded-sm bg-teal-1 px-2 text-sm font-medium text-light-2 transition-colors hover:bg-teal-2 dark:bg-teal-2 dark:hover:bg-teal-3"
+            className="flex h-7 items-center justify-center gap-1.5 rounded-full font-medium transition-colors  text-sm   px-2
+            bg-cyan text-white hover:bg-cyan-dull 
+            dark:bg-cyan-dull dark:hover:bg-cyan"
           >
             <GlobeIcon size={15} className="shrink-0 block" />
             <span className="hidden sm:inline leading-none">
@@ -55,11 +57,12 @@ export default function TopBar({ contact }: { contact: Contact }) {
 
           <button
             onClick={toggle}
-            className="flex h-7 w-7 items-center justify-center rounded-sm transition-colors
-            bg-teal-3 text-white hover:bg-teal-4 dark:bg-amber-1 dark:hover:bg-amber-2"
+            className="flex h-7 w-7 items-center justify-center rounded-full transition-colors 
+                       bg-indigo hover:bg-indigo-dull text-white
+                       dark:bg-yellow dark:hover:bg-yellow-bright dark:text-dark-4"
             aria-label="Tema değiştir"
           >
-            {theme === "dark" ? <SunIcon size={16} /> : <MoonIcon size={15} />}
+            {theme === "dark" ? <SunIcon size={16} /> : <MoonIcon size={16} />}
           </button>
         </div>
       </div>
