@@ -56,8 +56,6 @@ export default async function AnnouncementsPage({
                 <AnnouncementCard
                   key={a.id}
                   announcement={a}
-                  locale={locale}
-                  months={dict.months}
                 />
               ))}
             </div>

@@ -1,13 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { createQuickAccessItem, updateQuickAccessItem } from "@/features/quick-access/actions";
-import type { QuickAccess } from "@/generated/prisma/client";
+import type { QuickAccess, Page } from "@/generated/prisma/client";
 import IconPicker from "@/components/ui/IconPicker";
 
 const inputClass = "w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors";
 
-export default function QuickAccessForm({ item }: { item?: QuickAccess }) {
+export default function QuickAccessForm({ item, pages }: { item?: QuickAccess; pages: Page[] }) {
+  const [href, setHref] = useState(item?.href ?? "");
   const [error, formAction, pending] = useActionState(
     item ? updateQuickAccessItem : createQuickAccessItem,
     null
@@ -46,8 +47,22 @@ export default function QuickAccessForm({ item }: { item?: QuickAccess }) {
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">Link</label>
-        <input name="href" defaultValue={item?.href} className={inputClass} required />
+        <input name="href" value={href} onChange={(e) => setHref(e.target.value)} className={inputClass} required />
       </div>
+
+      {pages.length > 0 && (
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">veya mevcut sayfadan seç</label>
+          <select className={inputClass} onChange={(e) => setHref(e.target.value)} defaultValue="">
+            <option value="">— Seç —</option>
+            {pages.map((p) => (
+              <option key={p.id} value={`/content/${p.id}`}>
+                {p.title_tr} (/content/{p.id})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">Sıra</label>

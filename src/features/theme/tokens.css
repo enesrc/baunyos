@@ -2,10 +2,17 @@
 
 :root {
   /* ─── Light Katmanlar ──────────────────────────────── */
-  --light-1: rgb(255, 255, 255);
-  --light-2: rgb(247, 249, 252);
-  --light-3: rgb(237, 241, 248);
-  --light-4: rgb(220, 226, 238);
+  --light-1: rgb(255, 255, 255);        /* Saf beyaz */
+  --light-2: rgb(251, 252, 254);        /* Neredeyse beyaz */
+  --light-3: rgb(246, 249, 252);        /* Çok hafif gri */
+  --light-4: rgb(239, 243, 249);        /* Hafif gri */
+  --light-5: rgb(228, 234, 244);        /* Kart bg */
+  --light-6: rgb(214, 222, 236);        /* Border, divider */
+  --light-7: rgb(197, 208, 226);        /* Input bg, disabled */
+
+  /* ─── Light Aksanlar ────────────────────────────────── */
+  --light-cyan:   rgb(224, 247, 250);   /* Çok açık cyan bg */
+  --light-amber:  rgb(238, 237, 234);   /* Çok açık amber bg */
 
   /* ─── Dark Katmanlar (Derin Lacivert) ───────────────── */
   --dark-1: #2c3e50; 

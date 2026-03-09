@@ -28,10 +28,9 @@ export default function ContentPageForm({ page }: { page?: Page }) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-xs text-gray-500 mb-1">Slug (örn: basvuru-sureci)</label>
-        <input name="slug" defaultValue={page?.slug} className={inputClass} required />
-      </div>
+      {page && (
+        <p className="text-xs text-gray-400">Sayfa URL: /content/{page.id}</p>
+      )}
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">İçerik (TR)</label>

@@ -1,18 +1,20 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { createNavItem, updateNavItem } from "@/features/navbar/actions";
-import type { NavItem } from "@/generated/prisma/client";
+import type { NavItem, Page } from "@/generated/prisma/client";
 
 type NavItemWithChildren = NavItem & { children: NavItem[] };
 
 const inputClass = "w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors";
 
-export default function NavItemForm({ navItem, topLevelItems, parentId }: {
+export default function NavItemForm({ navItem, topLevelItems, parentId, pages }: {
   navItem?: NavItem;
   topLevelItems: NavItemWithChildren[];
   parentId?: number;
+  pages: Page[];
 }) {
+  const [href, setHref] = useState(navItem?.href ?? "");
   const [error, formAction, pending] = useActionState(
     navItem ? updateNavItem : createNavItem,
     null
@@ -35,8 +37,22 @@ export default function NavItemForm({ navItem, topLevelItems, parentId }: {
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">Link (dropdown ise boş bırak)</label>
-        <input name="href" defaultValue={navItem?.href ?? ""} className={inputClass} />
+        <input name="href" value={href} onChange={(e) => setHref(e.target.value)} className={inputClass} />
       </div>
+
+      {pages.length > 0 && (
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">veya mevcut sayfadan seç</label>
+          <select className={inputClass} onChange={(e) => setHref(e.target.value)} defaultValue="">
+            <option value="">— Seç —</option>
+            {pages.map((p) => (
+              <option key={p.id} value={`/content/${p.id}`}>
+                {p.title_tr} (/content/{p.id})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">Üst Öğe</label>

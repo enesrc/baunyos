@@ -11,7 +11,7 @@ export default function QuickAccessSection({ items = [] }: { items?: QuickAccess
   if (!items.length) return null;
 
   return (
-    <section className="border-t border-light-3 bg-white dark:border-dark-2 dark:bg-dark-5">
+    <section className="border-t border-light-3 bg-light-amber dark:border-dark-2 dark:bg-dark-5">
       <Container className="py-14">
         <div className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <h2 className="text-4xl font-bold tracking-tight text-dark-2 dark:text-light-1">

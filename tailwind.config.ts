@@ -14,6 +14,12 @@ export default {
         "light-2": "var(--light-2)",
         "light-3": "var(--light-3)",
         "light-4": "var(--light-4)",
+        "light-5": "var(--light-5)",
+        "light-6": "var(--light-6)",
+        "light-7": "var(--light-7)",
+
+        "light-cyan": "var(--light-cyan)",
+        "light-amber": "var(--light-amber)",
 
         "dark-1": "var(--dark-1)",
         "dark-2": "var(--dark-2)",

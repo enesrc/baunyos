@@ -22,7 +22,7 @@ export default async function ContentPagesPage() {
             <div>
               <p className="text-sm font-medium text-gray-900">{page.title_tr}</p>
               <p className="text-xs text-gray-400">
-                /{page.slug} ·{" "}
+                /content/{page.id} ·{" "}
                 <span className={page.is_active ? "text-green-600" : "text-gray-400"}>
                   {page.is_active ? "Aktif" : "Pasif"}
                 </span>

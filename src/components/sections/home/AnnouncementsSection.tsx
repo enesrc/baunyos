@@ -27,7 +27,7 @@ export default function AnnouncementsSection({ announcements }: { announcements:
   const viewAllHref = localePath(locale, "/announcements");
 
   return (
-    <section className="border-t border-light-3 bg-light-2 dark:border-dark-2 dark:bg-dark-6">
+    <section className="border-t border-light-4 bg-light-4 dark:border-dark-2 dark:bg-dark-6">
       <Container className="py-14">
         <div className="mb-8 flex flex-col items-center justify-center sm:flex-row sm:items-end sm:justify-between">
           <Link
