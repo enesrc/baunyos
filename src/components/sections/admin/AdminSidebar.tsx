@@ -22,7 +22,7 @@ export default function AdminSidebar() {
 
   return (
     <aside className="flex w-48 flex-col bg-gray-900">
-      <div className="px-4 py-3 border-b border-gray-700">
+      <div className="px-4 py-3 border-b border-r border-gray-700">
         <p className="text-sm font-bold text-white">BAUN YÖS</p>
       </div>
 
