@@ -167,24 +167,24 @@ export default async function ContactPage({
                         </div>
 
                         {/* Sağ: Harita */}
-                        <div className="lg:col-span-3">
+                        <div className="lg:col-span-3 flex flex-col">
                             <h2 className="mb-6 text-xl font-bold tracking-tight text-dark-2 dark:text-light-1">
                                 {content.mapTitle}
                             </h2>
-                            <div className="overflow-hidden rounded-md border border-light-3 dark:border-dark-1">
+                            <div className="flex-1 overflow-hidden rounded-md border border-light-3 dark:border-dark-1 min-h-80">
                                 {contact.google_maps_url ? (
                                     <iframe
                                         title={content.mapTitle}
                                         width="100%"
-                                        height="380"
-                                        style={{ border: 0 }}
+                                        height="100%"
+                                        style={{ border: 0, display: "block" }}
                                         loading="lazy"
                                         allowFullScreen
                                         referrerPolicy="no-referrer-when-downgrade"
                                         src={contact.google_maps_url}
                                     />
                                 ) : (
-                                    <div className="flex h-95 items-center justify-center bg-gray-100 text-gray-400">
+                                    <div className="flex h-full items-center justify-center bg-gray-100 text-gray-400">
                                         Harita henüz eklenmedi.
                                     </div>
                                 )}

@@ -5,20 +5,20 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 const settingsSchema = z.object({
-  phone: z.string().min(1, "Telefon gerekli."),
-  email: z.string().email("Geçerli bir email girin."),
-  logo_text_tr: z.string().min(1, "Türkçe logo yazısı gerekli."),
-  logo_text_en: z.string().min(1, "İngilizce logo yazısı gerekli."),
+  header_title_tr: z.string().min(1, "Türkçe header başlık gerekli."),
+  header_title_en: z.string().min(1, "İngilizce header başlık gerekli."),
+  footer_title_tr: z.string().min(1, "Türkçe footer başlık gerekli."),
+  footer_title_en: z.string().min(1, "İngilizce footer başlık gerekli."),
 });
 
 export async function updateSiteSettings(_: unknown, formData: FormData) {
   const id = Number(formData.get("id"));
 
   const parsed = settingsSchema.safeParse({
-    phone: formData.get("phone"),
-    email: formData.get("email"),
-    logo_text_tr: formData.get("logo_text_tr"),
-    logo_text_en: formData.get("logo_text_en"),
+    header_title_tr: formData.get("header_title_tr"),
+    header_title_en: formData.get("header_title_en"),
+    footer_title_tr: formData.get("footer_title_tr"),
+    footer_title_en: formData.get("footer_title_en"),
   });
 
   if (!parsed.success) return parsed.error.issues[0].message;

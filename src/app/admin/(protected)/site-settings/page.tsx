@@ -4,10 +4,5 @@ import SiteSettingsForm from "@/components/sections/admin/SiteSettingsForm";
 export default async function SiteSettingsPage() {
   const settings = await getSiteSettings();
 
-  return (
-    <div>
-      <h1 className="mb-6 text-xl font-semibold text-dark-3 dark:text-light-1">Site Ayarları</h1>
-      <SiteSettingsForm settings={settings} />
-    </div>
-  );
+  return <SiteSettingsForm settings={settings} />;
 }

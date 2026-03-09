@@ -1,51 +1,47 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateSiteSettings } from "@/features/site-settings/actions";
 import type { SiteSettings } from "@/generated/prisma/client";
 
+const inputClass = "w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors";
+
 export default function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
+  const [submitted, setSubmitted] = useState(false);
   const [error, formAction, pending] = useActionState(updateSiteSettings, null);
 
-  const inputClass =
-    "w-full rounded-md border border-light-4 bg-light-1 px-3 py-2 text-sm text-dark-3 outline-none transition-colors focus:border-teal-3 dark:border-dark-1 dark:bg-dark-3 dark:text-light-1 dark:focus:border-teal-2";
-
   return (
-    <form action={formAction} className="flex max-w-lg flex-col gap-5">
+    <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex max-w-lg flex-col gap-4">
       <input type="hidden" name="id" value={settings.id} />
 
-      <div>
-        <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">Telefon</label>
-        <input name="phone" defaultValue={settings.phone} className={inputClass} required />
-      </div>
-
-      <div>
-        <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">E-posta</label>
-        <input type="email" name="email" defaultValue={settings.email} className={inputClass} required />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">Header Başlık (TR)</label>
+          <input name="header_title_tr" defaultValue={settings.header_title_tr} className={inputClass} required />
+        </div>
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">Header Başlık (EN)</label>
+          <input name="header_title_en" defaultValue={settings.header_title_en} className={inputClass} required />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">Logo Yazısı (TR)</label>
-          <input name="logo_text_tr" defaultValue={settings.logo_text_tr} className={inputClass} required />
+          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (TR)</label>
+          <input name="footer_title_tr" defaultValue={settings.footer_title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="mb-1 block text-sm text-gray-3 dark:text-gray-2">Logo Yazısı (EN)</label>
-          <input name="logo_text_en" defaultValue={settings.logo_text_en} className={inputClass} required />
+          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (EN)</label>
+          <input name="footer_title_en" defaultValue={settings.footer_title_en} className={inputClass} required />
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-3 dark:text-red-2">{error}</p>}
-
-      {pending === false && error === null && (
-        <p className="text-sm text-green-3 dark:text-green-2">Kaydedildi.</p>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {submitted && !pending && !error && (
+        <p className="text-sm text-green-600">Kaydedildi.</p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-md bg-teal-3 px-4 py-2 text-sm font-semibold text-light-1 transition-colors hover:bg-teal-4 disabled:opacity-60 dark:bg-teal-2 dark:hover:bg-teal-3"
-      >
+      <button type="submit" disabled={pending} className="w-fit bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50 transition-colors">
         {pending ? "Kaydediliyor..." : "Kaydet"}
       </button>
     </form>

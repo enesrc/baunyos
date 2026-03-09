@@ -10,8 +10,6 @@ export async function getSiteSettings() {
       header_title_en: "International Students",
       footer_title_tr: "Balıkesir Üniversitesi Uluslararası İlişkiler Merkezi",
       footer_title_en: "Balikesir University International Relations Center",
-      phone: "0266 612 1400",
-      email: "yos.ofis@balikesir.edu.tr",
     };
   }
 
