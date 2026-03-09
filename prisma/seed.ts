@@ -218,7 +218,7 @@ async function main() {
         email: "yos@balikesir.edu.tr",
         address_tr: "Çağış Yerleşkesi, Balıkesir Üniversitesi, Rektörlük Binası, Balıkesir",
         address_en: "Cagis Campus, Balikesir University, Rectorship Building, Balikesir",
-        google_maps_url: "https://maps.app.goo.gl/xxx",
+        google_maps_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1293.6433946789875!2d28.00678266646363!3d39.54111763388622!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b7a938119cd519%3A0x1aada3bfd36ee91d!2zQmFsxLFrZXNpciDDnG5pdmVyc2l0ZXNpIFJla3TDtnJsw7xrIEJpbmFzxLE!5e0!3m2!1str!2str!4v1773043173688!5m2!1str!2str%22%20width=%22600%22%20height=%22450%22%20style=%22border:0;%22%20allowfullscreen=%22%22%20loading=%22lazy%22%20referrerpolicy=%22no-referrer-when-downgrade%22",
         facebook: "https://facebook.com/balikesiruni",
         instagram: "https://instagram.com/balikesiruni",
         youtube: "https://youtube.com/balikesiruni",
@@ -232,7 +232,7 @@ async function main() {
   }
 
   // ── Admin User ───────────────────────────────────────────
-  const ADMIN_EMAIL = "admin@baunyos.com";
+  const ADMIN_EMAIL = "eneshsarac@gmail.com";
   const ADMIN_PASSWORD = "Admin1234!";
 
   const existingUser = await prisma.user.findUnique({
