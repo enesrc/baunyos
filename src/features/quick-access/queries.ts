@@ -1,12 +1,22 @@
 import { prisma } from "@/lib/prisma";
+import { cacheTag } from "next/cache";
 
 export async function getQuickAccessItems() {
+  "use cache";
+
+  cacheTag("quick-access");
+
   return prisma.quickAccess.findMany({
-    where: { is_active: true },
     orderBy: { order: "asc" },
   });
 }
 
 export async function getQuickAccessItemById(id: number) {
-  return prisma.quickAccess.findUnique({ where: { id } });
+  "use cache";
+
+  cacheTag("quick-access");
+
+  return prisma.quickAccess.findUnique({
+    where: { id },
+  });
 }

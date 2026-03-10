@@ -1,14 +1,20 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "@/features/auth/actions";
 import { authClient } from "@/lib/auth-client";
+
+const inputClass = "w-full border border-gray-300 p-3 text-sm text-black outline-none focus:border-blue-600 transition-colors";
 
 export default function LoginForm() {
   const [error, formAction, pending] = useActionState(loginAction, null);
   const [resetMode, setResetMode] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
+
+  const searchParams = useSearchParams();
+  const sessionExpired = searchParams.get("reason") === "session_expired";
 
   const handleReset = async () => {
     if (!resetEmail) return;
@@ -31,12 +37,9 @@ export default function LoginForm() {
               placeholder="E-posta"
               value={resetEmail}
               onChange={(e) => setResetEmail(e.target.value)}
-              className="w-full border border-gray-300 p-3 text-sm outline-none focus:border-blue-600 transition-colors"
+              className={inputClass}
             />
-            <button
-              onClick={handleReset}
-              className="bg-blue-600 p-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
-            >
+            <button onClick={handleReset} className="bg-blue-600 p-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors">
               Sıfırlama Bağlantısı Gönder
             </button>
           </>
@@ -50,28 +53,18 @@ export default function LoginForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
-      <input
-        type="email"
-        name="email"
-        placeholder="E-posta"
-        required
-        className="w-full border border-gray-300 p-3 text-sm text-black outline-none focus:border-blue-600 transition-colors"
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Şifre"
-        required
-        className="w-full border border-gray-300 p-3 text-sm text-black outline-none focus:border-blue-600 transition-colors"
-      />
+      {sessionExpired && (
+        <p className="border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-700">
+          Oturumunuz sona erdi. Lütfen tekrar giriş yapın.
+        </p>
+      )}
 
-      {error && <p className="text-red-600 text-xs">{error}</p>}
+      <input type="email" name="email" placeholder="E-posta" required className={inputClass} />
+      <input type="password" name="password" placeholder="Şifre" required className={inputClass} />
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="bg-blue-600 p-3 text-white text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors"
-      >
+      {error && <p className="text-xs text-red-600">{error}</p>}
+
+      <button type="submit" disabled={pending} className="bg-blue-600 p-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition-colors">
         {pending ? "Giriş yapılıyor..." : "Giriş Yap"}
       </button>
 

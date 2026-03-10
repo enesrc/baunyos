@@ -50,6 +50,10 @@ export const auth = betterAuth({
       }
     }),
   },
+  session: {
+    expiresIn: 60 * 60,      // 1 saat
+    updateAge: 30 * 10,      // 15 dakikada bir güncelle (45. dakikada işlem yapınca yenilenir)
+  },
   trustedOrigins: ["http://localhost:3000"],
   plugins: [nextCookies()],
 });

@@ -1,9 +1,20 @@
+import { cacheTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 export async function getPages() {
-  return prisma.page.findMany({ orderBy: { created_at: "desc" } });
+  "use cache";
+  cacheTag("pages");
+
+  return prisma.page.findMany({
+    orderBy: { created_at: "desc" },
+  });
 }
 
 export async function getPageById(id: number) {
-  return prisma.page.findUnique({ where: { id } });
+  "use cache";
+  cacheTag("pages");
+
+  return prisma.page.findUnique({
+    where: { id },
+  });
 }

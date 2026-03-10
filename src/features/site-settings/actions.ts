@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 const settingsSchema = z.object({
@@ -12,7 +13,7 @@ const settingsSchema = z.object({
 });
 
 export async function updateSiteSettings(_: unknown, formData: FormData) {
-  const id = Number(formData.get("id"));
+  await requireAuth();
 
   const parsed = settingsSchema.safeParse({
     header_title_tr: formData.get("header_title_tr"),
@@ -21,12 +22,23 @@ export async function updateSiteSettings(_: unknown, formData: FormData) {
     footer_title_en: formData.get("footer_title_en"),
   });
 
-  if (!parsed.success) return parsed.error.issues[0].message;
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
 
-  await prisma.siteSettings.update({ where: { id }, data: parsed.data });
+  const existing = await prisma.siteSettings.findFirst();
 
-  revalidatePath("/");
-  revalidatePath("/admin/site-settings");
+  if (existing) {
+    await prisma.siteSettings.update({
+      where: { id: existing.id },
+      data: parsed.data,
+    });
+  } else {
+    await prisma.siteSettings.create({
+      data: parsed.data,
+    });
+  }
 
+  revalidateTag("site-settings", "max");
   return null;
 }

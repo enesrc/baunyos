@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -21,8 +22,8 @@ const contactSchema = z.object({
   twitter: z.string().default(""),
 });
 
-export async function updateContact(_: unknown, formData: FormData) {
-  const id = Number(formData.get("id"));
+export async function saveContact(_: unknown, formData: FormData) {
+  await requireAuth();
 
   const parsed = contactSchema.safeParse({
     title_tr: formData.get("title_tr"),
@@ -41,10 +42,23 @@ export async function updateContact(_: unknown, formData: FormData) {
     twitter: formData.get("twitter"),
   });
 
-  if (!parsed.success) return parsed.error.issues[0].message;
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
 
-  await prisma.contact.update({ where: { id }, data: parsed.data });
+  const existing = await prisma.contact.findFirst();
 
-  revalidatePath("/admin/contact");
+  if (existing) {
+    await prisma.contact.update({
+      where: { id: existing.id },
+      data: parsed.data,
+    });
+  } else {
+    await prisma.contact.create({
+      data: parsed.data,
+    });
+  }
+
+  revalidateTag("contact", "max");
   return null;
 }

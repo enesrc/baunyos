@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -14,31 +15,10 @@ const navItemSchema = z.object({
   parent_id: z.number().nullable().default(null),
 });
 
-export async function createNavItem(_: unknown, formData: FormData) {
+function parseNavItemFormData(formData: FormData) {
   const parentId = formData.get("parent_id");
 
-  const parsed = navItemSchema.safeParse({
-    label_tr: formData.get("label_tr"),
-    label_en: formData.get("label_en"),
-    href: formData.get("href") || undefined,
-    order: Number(formData.get("order") ?? 0),
-    is_active: formData.get("is_active") === "on",
-    parent_id: parentId ? Number(parentId) : null,
-  });
-
-  if (!parsed.success) return parsed.error.issues[0].message;
-
-  await prisma.navItem.create({ data: parsed.data });
-
-  revalidatePath("/admin/navbar");
-  redirect("/admin/navbar");
-}
-
-export async function updateNavItem(_: unknown, formData: FormData) {
-  const id = Number(formData.get("id"));
-  const parentId = formData.get("parent_id");
-
-  const parsed = navItemSchema.safeParse({
+  return navItemSchema.safeParse({
     label_tr: formData.get("label_tr"),
     label_en: formData.get("label_en"),
     href: formData.get("href") || null,
@@ -46,16 +26,59 @@ export async function updateNavItem(_: unknown, formData: FormData) {
     is_active: formData.get("is_active") === "on",
     parent_id: parentId ? Number(parentId) : null,
   });
+}
 
-  if (!parsed.success) return parsed.error.issues[0].message;
+export async function createNavItem(_: unknown, formData: FormData) {
+  await requireAuth();
 
-  await prisma.navItem.update({ where: { id }, data: parsed.data });
+  const parsed = parseNavItemFormData(formData);
 
-  revalidatePath("/admin/navbar");
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.navItem.create({
+    data: parsed.data,
+  });
+
+  revalidateTag("nav-items", "max");
+  redirect("/admin/navbar");
+}
+
+export async function updateNavItem(_: unknown, formData: FormData) {
+  await requireAuth();
+
+  const id = Number(formData.get("id"));
+
+  if (!Number.isFinite(id) || id <= 0) {
+    return "Geçersiz navbar öğesi ID.";
+  }
+
+  const parsed = parseNavItemFormData(formData);
+
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.navItem.update({
+    where: { id },
+    data: parsed.data,
+  });
+
+  revalidateTag("nav-items", "max");
   redirect("/admin/navbar");
 }
 
 export async function deleteNavItem(id: number) {
-  await prisma.navItem.delete({ where: { id } });
-  revalidatePath("/admin/navbar");
+  await requireAuth();
+
+  if (!Number.isFinite(id) || id <= 0) {
+    throw new Error("Geçersiz navbar öğesi ID.");
+  }
+
+  await prisma.navItem.delete({
+    where: { id },
+  });
+
+  revalidateTag("nav-items", "max");
 }

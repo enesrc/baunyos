@@ -1,14 +1,14 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { updateContact } from "@/features/contact/actions";
+import { saveContact } from "@/features/contact/actions";
 import type { Contact } from "@/generated/prisma/client";
 
 const inputClass = "w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors";
 
 export default function ContactForm({ contact }: { contact: Contact }) {
   const [submitted, setSubmitted] = useState(false);
-  const [error, formAction, pending] = useActionState(updateContact, null);
+  const [error, formAction, pending] = useActionState(saveContact, null);
 
   return (
     <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex max-w-lg flex-col gap-4">

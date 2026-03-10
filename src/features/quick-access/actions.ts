@@ -1,11 +1,12 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-const schema = z.object({
+const quickAccessItemSchema = z.object({
   icon: z.string().min(1, "İkon gerekli."),
   title_tr: z.string().min(1, "Türkçe başlık gerekli."),
   title_en: z.string().min(1, "İngilizce başlık gerekli."),
@@ -16,8 +17,8 @@ const schema = z.object({
   is_active: z.boolean().default(true),
 });
 
-export async function createQuickAccessItem(_: unknown, formData: FormData) {
-  const parsed = schema.safeParse({
+function parseQuickAccessItemFormData(formData: FormData) {
+  return quickAccessItemSchema.safeParse({
     icon: formData.get("icon"),
     title_tr: formData.get("title_tr"),
     title_en: formData.get("title_en"),
@@ -27,38 +28,59 @@ export async function createQuickAccessItem(_: unknown, formData: FormData) {
     order: Number(formData.get("order") ?? 0),
     is_active: formData.get("is_active") === "on",
   });
+}
 
-  if (!parsed.success) return parsed.error.issues[0].message;
+export async function createQuickAccessItem(_: unknown, formData: FormData) {
+  await requireAuth();
 
-  await prisma.quickAccess.create({ data: parsed.data });
+  const parsed = parseQuickAccessItemFormData(formData);
 
-  revalidatePath("/admin/quick-access");
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.quickAccess.create({
+    data: parsed.data,
+  });
+
+  revalidateTag("quick-access", "max");
   redirect("/admin/quick-access");
 }
 
 export async function updateQuickAccessItem(_: unknown, formData: FormData) {
+  await requireAuth();
+
   const id = Number(formData.get("id"));
 
-  const parsed = schema.safeParse({
-    icon: formData.get("icon"),
-    title_tr: formData.get("title_tr"),
-    title_en: formData.get("title_en"),
-    desc_tr: formData.get("desc_tr"),
-    desc_en: formData.get("desc_en"),
-    href: formData.get("href"),
-    order: Number(formData.get("order") ?? 0),
-    is_active: formData.get("is_active") === "on",
+  if (!Number.isFinite(id) || id <= 0) {
+    return "Geçersiz hızlı erişim ID.";
+  }
+
+  const parsed = parseQuickAccessItemFormData(formData);
+
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.quickAccess.update({
+    where: { id },
+    data: parsed.data,
   });
 
-  if (!parsed.success) return parsed.error.issues[0].message;
-
-  await prisma.quickAccess.update({ where: { id }, data: parsed.data });
-
-  revalidatePath("/admin/quick-access");
+  revalidateTag("quick-access", "max");
   redirect("/admin/quick-access");
 }
 
 export async function deleteQuickAccessItem(id: number) {
-  await prisma.quickAccess.delete({ where: { id } });
-  revalidatePath("/admin/quick-access");
+  await requireAuth();
+
+  if (!Number.isFinite(id) || id <= 0) {
+    throw new Error("Geçersiz hızlı erişim ID.");
+  }
+
+  await prisma.quickAccess.delete({
+    where: { id },
+  });
+
+  revalidateTag("quick-access", "max");
 }

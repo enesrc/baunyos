@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -13,44 +14,67 @@ const pageSchema = z.object({
   is_active: z.boolean().default(true),
 });
 
-export async function createPage(_: unknown, formData: FormData) {
-  const parsed = pageSchema.safeParse({
+function parsePageFormData(formData: FormData) {
+  return pageSchema.safeParse({
     title_tr: formData.get("title_tr"),
     title_en: formData.get("title_en"),
     content_tr: formData.get("content_tr"),
     content_en: formData.get("content_en"),
     is_active: formData.get("is_active") === "on",
   });
+}
 
-  if (!parsed.success) return parsed.error.issues[0].message;
+export async function createPage(_: unknown, formData: FormData) {
+  await requireAuth();
 
-  await prisma.page.create({ data: parsed.data });
+  const parsed = parsePageFormData(formData);
 
-  revalidatePath("/admin/content-pages");
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.page.create({
+    data: parsed.data,
+  });
+
+  revalidateTag("pages", "max");
   redirect("/admin/content-pages");
 }
 
 export async function updatePage(_: unknown, formData: FormData) {
+  await requireAuth();
+
   const id = Number(formData.get("id"));
 
-  const parsed = pageSchema.safeParse({
-    title_tr: formData.get("title_tr"),
-    title_en: formData.get("title_en"),
-    content_tr: formData.get("content_tr"),
-    content_en: formData.get("content_en"),
-    is_active: formData.get("is_active") === "on",
+  if (!Number.isFinite(id) || id <= 0) {
+    return "Geçersiz sayfa ID.";
+  }
+
+  const parsed = parsePageFormData(formData);
+
+  if (!parsed.success) {
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
+  }
+
+  await prisma.page.update({
+    where: { id },
+    data: parsed.data,
   });
 
-  if (!parsed.success) return parsed.error.issues[0].message;
-
-  await prisma.page.update({ where: { id }, data: parsed.data });
-
-  revalidatePath("/admin/content-pages");
-  revalidatePath(`/content/${id}`);
+  revalidateTag("pages", "max");
   redirect("/admin/content-pages");
 }
 
 export async function deletePage(id: number) {
-  await prisma.page.delete({ where: { id } });
-  revalidatePath("/admin/content-pages");
+  await requireAuth();
+
+  if (!Number.isFinite(id) || id <= 0) {
+    throw new Error("Geçersiz sayfa ID.");
+  }
+
+  await prisma.page.delete({
+    where: { id },
+  });
+
+  revalidateTag("pages", "max");
 }

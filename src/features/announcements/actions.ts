@@ -1,7 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { requireAuth } from "@/lib/require-auth";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -13,43 +14,46 @@ const announcementSchema = z.object({
   is_active: z.boolean().default(true),
 });
 
-export async function createAnnouncement(_: unknown, formData: FormData) {
-  const parsed = announcementSchema.safeParse({
+function parseAnnouncementFormData(formData: FormData) {
+  return announcementSchema.safeParse({
     title_tr: formData.get("title_tr"),
     title_en: formData.get("title_en"),
     content_tr: formData.get("content_tr"),
     content_en: formData.get("content_en"),
     is_active: formData.get("is_active") === "on",
   });
+}
+
+export async function createAnnouncement(_: unknown, formData: FormData) {
+  await requireAuth();
+
+  const parsed = parseAnnouncementFormData(formData);
 
   if (!parsed.success) {
-    return parsed.error.issues[0].message;
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
   }
 
-  await prisma.announcement.create({ data: parsed.data });
+  await prisma.announcement.create({
+    data: parsed.data,
+  });
 
-  // Admin sayfasını + her iki dildeki public sayfaları revalidate et
-  revalidatePath("/admin/announcements");
-  revalidatePath("/en/announcements");
-  revalidatePath("/tr/announcements");
-
-  // Admin locale dışında → prefix'siz redirect
+  revalidateTag("announcements", "max");
   redirect("/admin/announcements");
 }
 
 export async function updateAnnouncement(_: unknown, formData: FormData) {
+  await requireAuth();
+
   const id = Number(formData.get("id"));
 
-  const parsed = announcementSchema.safeParse({
-    title_tr: formData.get("title_tr"),
-    title_en: formData.get("title_en"),
-    content_tr: formData.get("content_tr"),
-    content_en: formData.get("content_en"),
-    is_active: formData.get("is_active") === "on",
-  });
+  if (!Number.isFinite(id) || id <= 0) {
+    return "Geçersiz duyuru ID.";
+  }
+
+  const parsed = parseAnnouncementFormData(formData);
 
   if (!parsed.success) {
-    return parsed.error.issues[0].message;
+    return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
   }
 
   await prisma.announcement.update({
@@ -57,16 +61,20 @@ export async function updateAnnouncement(_: unknown, formData: FormData) {
     data: parsed.data,
   });
 
-  revalidatePath("/admin/announcements");
-  revalidatePath("/en/announcements");
-  revalidatePath("/tr/announcements");
-
+  revalidateTag("announcements", "max");
   redirect("/admin/announcements");
 }
 
 export async function deleteAnnouncement(id: number) {
-  await prisma.announcement.delete({ where: { id } });
-  revalidatePath("/admin/announcements");
-  revalidatePath("/en/announcements");
-  revalidatePath("/tr/announcements");
+  await requireAuth();
+
+  if (!Number.isFinite(id) || id <= 0) {
+    throw new Error("Geçersiz duyuru ID.");
+  }
+
+  await prisma.announcement.delete({
+    where: { id },
+  });
+
+  revalidateTag("announcements", "max");
 }
