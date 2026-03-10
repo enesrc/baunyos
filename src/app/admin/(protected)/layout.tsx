@@ -12,7 +12,9 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
           <div className="flex flex-1 flex-col overflow-hidden">
             <AdminHeader />
             <main className="flex-1 overflow-y-auto bg-white p-6">
-              {children}
+              <Suspense fallback={null}>
+                {children}
+              </Suspense>
             </main>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
 import { getDictionary } from "@/features/i18n/getDictionary";
 import { I18nProvider } from "@/features/i18n/I18nContextValue";
@@ -20,9 +21,9 @@ export default async function LocaleLayout({
   const { locale: raw } = await params;
   const locale: Locale = isLocale(raw) ? raw : "tr";
   const dict = await getDictionary(locale);
-  const siteSettings = await getSiteSettings();
+  const siteSettings = (await getSiteSettings())!;
   const navItems = await getNavItems();
-  const contact = await getContact();
+  const contact = (await getContact())!;
 
   return (
     <ThemeProvider>
@@ -30,7 +31,9 @@ export default async function LocaleLayout({
       <I18nProvider dict={dict} locale={locale}>
         <SiteShell>
           <Header siteSettings={siteSettings} navItems={navItems} contact={contact}/>
-          {children}
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
           <Footer siteSettings={siteSettings} contact={contact} />
         </SiteShell>
       </I18nProvider>

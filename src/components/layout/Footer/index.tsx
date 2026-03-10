@@ -30,7 +30,7 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
           <Image src="/baun_logo.png" alt="Balikesir Universitesi" width={60} height={60}
             className="h-12 w-12 shrink-0 object-contain opacity-90 sm:h-20 sm:w-20" />
           <h2 className="text-xl font-bold leading-tight text-white sm:text-4xl">
-            {headline}
+            {headline ?? null}
           </h2>
         </div>
 
