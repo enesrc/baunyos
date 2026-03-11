@@ -28,36 +28,35 @@ export default function LogoBar({
 
   return (
     <div className="sticky top-0 z-30 w-full border-b border-light-3 bg-white dark:border-dark-1 dark:bg-dark-2 md:static md:z-auto">
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center px-4 py-3 md:py-4">
+      <div className="relative mx-auto max-w-7xl flex items-center justify-between px-4 py-4 md:px-4 md:py-4">
 
+        {/* LEFT */}
         <Link
           href={langPath(lang, "/")}
-          className="flex items-center gap-2 transition-opacity hover:opacity-80 min-w-0"
+          className="flex items-center gap-2 min-w-0"
         >
           <Image
             src="/logos/baun_logo.png"
             alt={universityName}
             width={52}
             height={52}
-            className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 object-contain md:h-12 md:w-12"
+            className="h-10 w-10 md:h-12 md:w-12 shrink-0"
             priority
           />
-          <div className="hidden sm:block min-w-0">
+          <div className="hidden sm:block">
             <LogoText line1={line1} line2={line2} color="#33B7BC" />
           </div>
         </Link>
 
-        <Link
-          href={langPath(lang, "/")}
-          className="flex justify-center text-center transition-opacity hover:opacity-80 min-w-0 px-2"
-        >
-
-          <span className="font-bold uppercase sm:tracking-[0.04em] text-teal-3 dark:text-white text-lg @lg:text-2xl sm:text-[27px] md:text-3xl lg:text-4xl md:tracking-[0.12em] line-clamp-2">
+        {/* CENTER */}
+        <div className="absolute left-1/2 -translate-x-1/2 text-center px-2 max-w-[calc(100%-10rem)]">
+          <span className="font-bold uppercase text-xl leading-none sm:text-2xl md:text-3xl lg:text-4xl sm:whitespace-nowrap align-middle">
             {header_title}
           </span>
-        </Link>
+        </div>
 
-        <div className="flex justify-end">
+        {/* RIGHT */}
+        <div className="flex items-end">
           <div className="hidden md:block">
             <Image
               src="/logos/turkiye_logo.png"
@@ -68,10 +67,11 @@ export default function LogoBar({
               priority
             />
           </div>
-          <div className="md:hidden">
+          <div className="block md:hidden">
             <MobileDrawer items={navItems} isOpen={menuOpen} onToggle={onMenuToggle} />
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export default function MobileDrawer({
     <>
       <button
         onClick={onToggle}
-        className="p-2 text-teal-3 dark:text-white transition-transform active:scale-90"
+        className="text-teal-3 dark:text-white transition-transform active:scale-90"
         aria-label="Toggle Menu"
       >
         {isOpen ? <XIcon size={28} /> : <ListIcon size={28} />}
@@ -86,7 +86,7 @@ export default function MobileDrawer({
                   className={`transition-all duration-300 ease-in-out overflow-hidden ${isSubOpen ? "max-h-150" : "max-h-0"
                     }`}
                 >
-                  <div className="bg-light-3 dark:bg-dark-3 divide-y divide-light-4 dark:divide-dark-2">
+                  <div className="bg-light-2 dark:bg-dark-3 divide-y divide-light-4 dark:divide-dark-2">
                     {item.children.map((child) => (
                       <Link
                         key={child.id}
