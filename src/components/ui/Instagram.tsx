@@ -4,7 +4,6 @@ export default function InstagramButton({ href }: { href: string }) {
 
   return (
     <a
-      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Instagram"
@@ -16,14 +15,12 @@ export default function InstagramButton({ href }: { href: string }) {
         
         transition-all duration-300 
 
-        /* HOVER: Instagram'ın gerçek renk geçişi (Vibrant Gradient) */
         /* background-clip: border-box ile tüm alanı kaplar */
-        hover:bg-[radial-gradient(circle_at_bottom_left,#feda3e_0%,#f97316_30%,#d62976_60%,#962fbf_85%,#4f5bd5_100%)]
-        hover:text-white 
+        hover:bg-[radial-gradient(circle_at_bottom_left,#feda3e_0%,#f97316_30%,#d62976_60%,#962fbf_85%,#4f5bd5_100%)] hover:text-white 
         hover:shadow-lg
       "
     >
-      <FaInstagram size={24} />
+      <FaInstagram size={22} />
     </a>
   );
 }

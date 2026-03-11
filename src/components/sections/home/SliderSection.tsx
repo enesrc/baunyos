@@ -259,7 +259,6 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
                 fill
                 sizes="(max-width: 639px) 1vw, 100vw"
                 className="object-cover object-center"
-                priority={i <= 1}
                 draggable={false}
               />
             </div>
@@ -373,7 +372,6 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
                   animationFillMode: "forwards",
                   animationPlayState: paused ? "paused" : "running",
                 } : undefined}
-                priority={i === 0}
                 draggable={false}
               />
             </div>
@@ -382,10 +380,10 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
 
         {/* Süre çubuğu — tam genişlik, alt kenar */}
         {total > 1 && (
-          <div className="absolute bottom-0 left-0 right-0 z-20 h-1 bg-dark-7/30">
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-1 bg-transparent">
             <div
               key={progressKey}
-              className="absolute inset-y-0 left-0 w-0 bg-white/80"
+              className="absolute inset-y-0 left-0 w-0 bg-cyan-bright"
               style={{
                 animationName: "sliderProgress",
                 animationDuration: `${CYCLE}ms`,
