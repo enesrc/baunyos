@@ -1,4 +1,3 @@
-// app/[locale]/page.tsx
 import SliderSection from "@/components/sections/home/SliderSection";
 import AnnouncementsSection from "@/components/sections/home/AnnouncementsSection";
 import QuickAccessSection from "@/components/sections/home/QuickAccessSection";

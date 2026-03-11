@@ -41,6 +41,7 @@ export default {
         "cyan-bright": "var(--cyan-bright)",
         "cyan-brighter": "var(--cyan-brighter)",
         "cyan-dull": "var(--cyan-dull)",
+        "cyan-deep": "var(--cyan-deep)",
 
         "amber": "var(--amber)",
         "amber-bright": "var(--amber-bright)",

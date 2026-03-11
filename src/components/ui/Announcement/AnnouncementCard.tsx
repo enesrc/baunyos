@@ -2,21 +2,22 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { localePath } from "@/lib/links";
+import { langPath } from "@/lib/langPath";
 import type { Announcement } from "@/generated/prisma/client";
-import { useI18n } from "@/features/i18n/I18nContextValue";
+import { useLanguage } from "@/features/Language/LanguageContext";
 
 export default function AnnouncementCard({ announcement }: { announcement: Announcement }) {
-  const { locale, dict } = useI18n();
-  const [isTouched, setIsTouched] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null); // Zamanlayıcıyı tutmak için
-  
-  const title = locale === "tr" ? announcement.title_tr : announcement.title_en;
+  const { lang, translate } = useLanguage();
 
-  const d = new Date(announcement.published_at);
-  const day = d.getDate();
-  const month = dict.months[d.getMonth()];
-  const year = d.getFullYear();
+  const [isTouched, setIsTouched] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const title = translate(announcement.title_en, announcement.title_tr)
+
+  const date = new Date(announcement.published_at);
+  const day = date.getDate();
+  const month = new Intl.DateTimeFormat(lang, { month: "short" }).format(date);
+  const year = date.getFullYear();
 
   const handleTouchStart = () => {
     // Eğer çalışan bir zamanlayıcı varsa (hızlı hızlı basarsan) temizle
@@ -28,7 +29,7 @@ export default function AnnouncementCard({ announcement }: { announcement: Annou
     // Parmağı çekince hemen kapatma, 200ms bekle ki efekt görünsün
     timeoutRef.current = setTimeout(() => {
       setIsTouched(false);
-    }, 200); 
+    }, 200);
   };
 
   const handleTouchMove = () => {
@@ -39,20 +40,20 @@ export default function AnnouncementCard({ announcement }: { announcement: Annou
 
   return (
     <Link
-      href={localePath(locale, `/announcements/${announcement.id}`)}
+      href={langPath(lang, `/announcements/${announcement.id}`)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove} // Scroll desteği
       onTouchCancel={handleTouchEnd}
       className={`group flex items-center gap-5 border p-5 shadow-sm transition-all duration-200 
-        ${isTouched 
-          ? "border-cyan bg-cyan/5 scale-[0.98] -translate-y-0.5" 
-          : "border-light-3 bg-light-2 hover:-translate-y-0.5 hover:border-cyan dark:border-dark-1 dark:bg-dark-3 dark:hover:border-cyan-bright"
+        ${isTouched
+          ? "border-cyan bg-cyan/5 scale-[0.98] -translate-y-0.5"
+          : "border-light-4 bg-light-1 hover:-translate-y-0.5 hover:border-cyan dark:border-dark-1 dark:bg-dark-2 dark:hover:border-cyan-bright"
         }
       `}
     >
       {/* Tarih Kutusu */}
-      <div className={`flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-md transition-colors
+      <div className={`flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-md transition-colors 
         ${isTouched ? "bg-cyan/20" : "bg-cyan/10 dark:bg-cyan-bright/10"}`}
       >
         <span className={`text-3xl font-bold leading-none transition-colors 
@@ -60,8 +61,13 @@ export default function AnnouncementCard({ announcement }: { announcement: Annou
         >
           {day}
         </span>
-        <span className="mt-1.5 text-xs font-bold uppercase leading-none text-cyan-dull dark:text-cyan-bright">
-          {month} {year}
+        <span className={`text-sm font-bold leading-none uppercase transition-colors mt-1 
+          ${isTouched ? "text-cyan" : "text-cyan-dull dark:text-cyan-brighter"}`}
+        >
+          {month}
+        </span>
+        <span className="mt-1 text-xs font-bold leading-none text-cyan-dull dark:text-cyan-bright">
+          {year}
         </span>
       </div>
 

@@ -1,0 +1,38 @@
+{
+  "common": {
+    "readMore": "Read more →",
+    "home": "Home",
+    "noContent": "No content available.",
+    "universityName": "Balıkesir University"
+  },
+  "months": {
+    "long": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "short": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ]
+  }
+}

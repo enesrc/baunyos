@@ -1,9 +1,8 @@
 import { Suspense } from "react";
 import { ThemeProvider } from "@/features/theme/ThemeProvider";
-import { getDictionary } from "@/features/i18n/getDictionary";
-import { I18nProvider } from "@/features/i18n/I18nContextValue";
-import { isLocale, type Locale } from "@/features/i18n/config";
-import LocaleClientSync from "@/features/i18n/LocaleClientSync";
+import { LanguageProvider } from "@/features/Language/LanguageContext";
+import { parseLang, type Lang } from "@/features/Language/config";
+import LangClientSync from "@/features/Language/LangClientSync";
 import SiteShell from "@/components/layout/SiteShell";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -11,32 +10,32 @@ import { getSiteSettings } from "@/features/site-settings/queries";
 import { getNavItems } from "@/features/navbar/queries";
 import { getContact } from "@/features/contact/queries";
 
-export default async function LocaleLayout({
+export default async function LangLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: Promise<{ lang: string }>;
 }) {
-  const { locale: raw } = await params;
-  const locale: Locale = isLocale(raw) ? raw : "tr";
-  const dict = await getDictionary(locale);
+  const { lang: raw } = await params;
+  const lang: Lang = parseLang(raw);
+
   const siteSettings = (await getSiteSettings())!;
   const navItems = await getNavItems();
   const contact = (await getContact())!;
 
   return (
     <ThemeProvider>
-      <LocaleClientSync locale={locale} />
-      <I18nProvider dict={dict} locale={locale}>
+      <LangClientSync lang={lang} />
+      <LanguageProvider lang={lang}>
         <SiteShell>
-          <Header siteSettings={siteSettings} navItems={navItems} contact={contact}/>
+          <Header siteSettings={siteSettings} navItems={navItems} />
           <Suspense fallback={null}>
             {children}
           </Suspense>
           <Footer siteSettings={siteSettings} contact={contact} />
         </SiteShell>
-      </I18nProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

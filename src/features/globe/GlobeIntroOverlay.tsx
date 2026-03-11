@@ -196,7 +196,7 @@ export function GlobeIntroOverlay({ onComplete }: { onComplete: () => void }) {
       }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/baun_logo.png"
+          src="/logos/baun_logo.png"
           alt="Balıkesir Üniversitesi"
           style={{
             width: 'clamp(48px, 6vw, 80px)', height: 'auto',

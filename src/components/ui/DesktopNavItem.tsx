@@ -1,22 +1,39 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { CaretDownIcon, CaretRightIcon } from "@phosphor-icons/react/ssr";
-import { useI18n } from "@/features/i18n/I18nContextValue";
-import { localePath } from "@/lib/links";
+import { useLanguage } from "@/features/Language/LanguageContext";
+import { langPath } from "@/lib/langPath";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
+import { Lang } from "@/features/Language/config";
 
+// Tip Tanımlamaları
 type NavItem = NavItemGetPayload<{ include: { children: true } }>;
+type NavChild = NavItem["children"][number]; // NavItem içindeki çocukların tipi
+
+interface ChildLinkProps {
+  child: NavChild;
+  lang: Lang;
+  translate: (en: string, tr: string) => string;
+  onClose: () => void;
+}
+
+const STYLES = {
+  navItem: "flex items-center px-5 py-4 text-[15px] transition-all border",
+  simpleLink: "font-semibold tracking-wide text-dark-1 hover:text-cyan-deep hover:bg-light-2 dark:text-light-4 dark:hover:text-white dark:hover:bg-dark-4 border-transparent",
+  buttonActive: "text-cyan-deep bg-light-1 border-cyan-dull border-b-transparent rounded-t-none z-[51] dark:text-white dark:bg-dark-5 dark:border-dark-1",
+  buttonInactive: "text-dark-1 border-transparent dark:text-light-4 hover:text-cyan-deep hover:bg-light-2 dark:hover:text-white dark:hover:bg-dark-4",
+  dropdownLink: "group flex items-center gap-2 px-5 py-3 text-sm transition-colors text-dark-1 hover:text-teal-3 hover:bg-teal-0/30 dark:text-light-2 dark:hover:text-teal-1 dark:hover:bg-teal-4/20"
+};
 
 export default function DesktopNavItem({ item }: { item: NavItem }) {
-  const { locale } = useI18n();
+  const { lang, translate } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const title = (locale === "tr" ? item.label_tr : item.label_en).toLocaleUpperCase(locale);
+  const title = translate(item.label_en, item.label_tr).toLocaleUpperCase(lang);
   const hasChildren = item.children.length > 0 && !item.href;
 
   useEffect(() => {
@@ -35,70 +52,67 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
     if (overflow > 0) dd.style.left = `${-overflow}px`;
   }, [open]);
 
-  const handleEnter = useCallback(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setOpen(true);
-  }, []);
-
-  const handleLeave = useCallback(() => {
-    timeoutRef.current = setTimeout(() => setOpen(false), 150);
-  }, []);
-
-  // dropdown olmayan navbar elemanı
   if (!hasChildren) {
     return (
-      <Link
-        href={item.href ? localePath(locale, item.href) : "#"}
-        className="flex items-center px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-0 
-        text-dark-1 hover:text-teal-3 hover:bg-teal-0/30 
-        dark:text-light-2 dark:hover:text-teal-0 dark:hover:bg-teal-4/15"
-      >
+      <Link href={item.href ? langPath(lang, item.href) : "#"} className={`${STYLES.navItem} ${STYLES.simpleLink}`}>
         {title}
       </Link>
     );
   }
 
   return (
-    <div ref={ref} className="relative flex self-stretch" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+    <div
+      ref={ref}
+      className="relative flex self-stretch"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-5 py-4 text-[15px] font-semibold tracking-wide transition-all duration-0 
-        text-dark-1 hover:text-teal-3 hover:bg-teal-0/30
-        dark:text-light-2 dark:hover:text-teal-0 dark:hover:bg-teal-4/15 "
+        className={`${STYLES.navItem} font-medium tracking-wide ${open ? STYLES.buttonActive : STYLES.buttonInactive}`}
       >
         {title}
-        <CaretDownIcon size={14} className={`transition-transform duration-0 ${open ? "rotate-180" : ""}`} />
+        <CaretDownIcon size={17} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       <div
         ref={dropdownRef}
-        className={`absolute top-full z-50 transition-all duration-0 ${open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
-          }`}
+        className={`absolute top-full z-50 transition-all duration-150 -mt-px 
+          ${open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
         style={{ left: 0, minWidth: "100%" }}
       >
-        <div className="overflow-hidden rounded-b-md border border-t-0 border-light-4 bg-light-1 shadow-lg shadow-dark-4/5 dark:border-dark-1 dark:bg-dark-3 dark:shadow-dark-4/30">
-          <div className="h-0.5 bg-linear-to-r from-teal-3 to-teal-2" />
+        <div className="overflow-hidden rounded-b-md border border-cyan-dull bg-light-1 shadow-lg dark:border-dark-1 dark:bg-dark-5">
           {item.children
             .filter((c) => c.is_active)
             .map((child) => (
-              <Link
+              <ChildLink
                 key={child.id}
-                href={child.href ? localePath(locale, child.href) : "#"}
-                onClick={() => setOpen(false)}
-                className="group flex items-center gap-2 px-5 py-3 text-sm transition-all text-dark-1 hover:text-teal-3 hover:bg-light-3
-                dark:text-light-2 dark:hover:text-teal-1 dark:hover:bg-dark-2"
-              >
-                <CaretRightIcon
-                  size={11}
-                  className="opacity-0 transition-all duration-0 group-hover:translate-x-0.5 group-hover:opacity-100"
-                />
-                <span className="whitespace-nowrap transition-transform duration-0 group-hover:translate-x-0.5">
-                  {(locale === "tr" ? child.label_tr : child.label_en).toLocaleUpperCase(locale)}
-                </span>
-              </Link>
+                child={child}
+                lang={lang}
+                translate={translate}
+                onClose={() => setOpen(false)}
+              />
             ))}
         </div>
       </div>
     </div>
+  );
+}
+
+function ChildLink({ child, lang, translate, onClose }: ChildLinkProps) {
+  return (
+    <Link
+      href={child.href ? langPath(lang, child.href) : "#"}
+      onClick={onClose}
+      className={STYLES.dropdownLink}
+    >
+      <CaretRightIcon
+        size={11}
+        className="opacity-0 transition-all duration-150 group-hover:translate-x-0.5 group-hover:opacity-100 text-teal-3 dark:text-teal-1"
+      />
+      <span className="whitespace-nowrap transition-transform duration-150 group-hover:translate-x-0.5">
+        {translate(child.label_en, child.label_tr).toLocaleUpperCase(lang)}
+      </span>
+    </Link>
   );
 }

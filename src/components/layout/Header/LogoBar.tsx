@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { localePath } from "@/lib/links";
+import { langPath } from "@/lib/langPath";
 import LogoText from "@/components/ui/LogoText";
-import { useI18n } from "@/features/i18n/I18nContextValue";
+import { useLanguage } from "@/features/Language/LanguageContext";
 import MobileDrawer from "./MobileDrawer";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
 import { SiteSettings } from "@/generated/prisma/client";
@@ -12,26 +12,31 @@ type NavItem = NavItemGetPayload<{ include: { children: true } }>;
 export default function LogoBar({
   siteSettings,
   navItems,
+  menuOpen,
+  onMenuToggle,
 }: {
   siteSettings: SiteSettings;
   navItems: NavItem[];
+  menuOpen: boolean;
+  onMenuToggle: () => void;
 }) {
-  const { dict, locale } = useI18n();
-  const [line1, ...rest] = dict.common.universityName.split(" ");
+  const { lang, translate } = useLanguage();
+  const universityName = translate("Balıkesir University", "Balıkesir Üniversitesi");
+  const [line1, ...rest] = universityName.split(" ");
   const line2 = rest.join(" ");
-  const header_title = locale === "tr" ? siteSettings.header_title_tr : siteSettings.header_title_en;
+  const header_title = translate(siteSettings.header_title_en, siteSettings.header_title_tr);
 
   return (
-    <div className="sticky top-0 z-30 w-full border-b border-light-4 bg-light-1 dark:border-dark-1 dark:bg-dark-2 md:static md:z-auto">
+    <div className="sticky top-0 z-30 w-full border-b border-light-3 bg-white dark:border-dark-1 dark:bg-dark-2 md:static md:z-auto">
       <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center px-4 py-3 md:py-4">
 
         <Link
-          href={localePath(locale, "/")}
+          href={langPath(lang, "/")}
           className="flex items-center gap-2 transition-opacity hover:opacity-80 min-w-0"
         >
           <Image
-            src="/baun_logo.png"
-            alt={dict.common.universityName}
+            src="/logos/baun_logo.png"
+            alt={universityName}
             width={52}
             height={52}
             className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 object-contain md:h-12 md:w-12"
@@ -43,7 +48,7 @@ export default function LogoBar({
         </Link>
 
         <Link
-          href={localePath(locale, "/")}
+          href={langPath(lang, "/")}
           className="flex justify-center text-center transition-opacity hover:opacity-80 min-w-0 px-2"
         >
 
@@ -64,7 +69,7 @@ export default function LogoBar({
             />
           </div>
           <div className="md:hidden">
-            <MobileDrawer items={navItems} />
+            <MobileDrawer items={navItems} isOpen={menuOpen} onToggle={onMenuToggle} />
           </div>
         </div>
       </div>

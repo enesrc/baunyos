@@ -3,12 +3,12 @@
 :root {
   /* ─── Light Katmanlar ──────────────────────────────── */
   --light-1: rgb(255, 255, 255);        /* Saf beyaz */
-  --light-2: rgb(251, 252, 254);        /* Neredeyse beyaz */
-  --light-3: rgb(246, 249, 252);        /* Çok hafif gri */
-  --light-4: rgb(239, 243, 249);        /* Hafif gri */
-  --light-5: rgb(228, 234, 244);        /* Kart bg */
-  --light-6: rgb(214, 222, 236);        /* Border, divider */
-  --light-7: rgb(197, 208, 226);        /* Input bg, disabled */
+  --light-2: rgb(238, 246, 247);        /* Hafif soğuk gri  — adım ≈ %28.7 */
+  --light-3: rgb(227, 237, 241);        /* Açık gri         — adım ≈ %19   */
+  --light-4: rgb(219, 230, 237);        /* Orta-açık gri    — adım ≈ %14.4 */
+  --light-5: rgb(211, 224, 233);        /* Kart bg          — adım ≈ %13.3 */
+  --light-6: rgb(203, 218, 229);        /* Border, divider  — adım ≈ %13.3 */
+  --light-7: rgb(197, 212, 226);        /* Input bg, disabled — adım ≈ %11.3 */
 
   /* ─── Light Aksanlar ────────────────────────────────── */
   --light-cyan:   rgb(224, 247, 250);   /* Çok açık cyan bg */
@@ -38,6 +38,7 @@
   --cyan-bright: rgb(34, 211, 238);   /* Patlayan neon [cite: 2026-03-03] */
   --cyan-brighter: rgb(99, 234, 255);   /* Patlayan neon [cite: 2026-03-03] */
   --cyan-dull: rgb(8, 145, 178);      /* Ağır mat [cite: 2026-03-03] */
+  --cyan-deep: #0e7490;
 
   --amber: rgb(245, 158, 11);
   --amber-bright: rgb(251, 191, 36);
