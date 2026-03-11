@@ -27,7 +27,7 @@ export default function LogoBar({
   const header_title = translate(siteSettings.header_title_en, siteSettings.header_title_tr);
 
   return (
-    <div className="sticky top-0 z-30 w-full border-b border-light-3 bg-white dark:border-dark-1 dark:bg-dark-2 md:static md:z-auto">
+    <div className="sticky top-0 z-30 w-full border-b border-light-3 text-cyan-deep dark:text-white bg-white dark:border-dark-1 dark:bg-dark-2 md:static md:z-auto">
       <div className="relative mx-auto max-w-7xl flex items-center justify-between px-4 py-4 md:px-4 md:py-4">
 
         {/* LEFT */}
