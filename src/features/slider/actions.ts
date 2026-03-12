@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireAuth } from "@/lib/require-auth";
+import { requireAuth } from "@/lib/auth/require-auth";
 import { uploadImage, deleteImage } from "@/lib/upload";
 import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";

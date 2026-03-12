@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import LogoText from "@/components/ui/LogoText";
 import { useLanguage } from "@/features/Language/LanguageContext";
 import MobileDrawer from "./MobileDrawer";
@@ -36,7 +36,7 @@ export default function LogoBar({
           className="flex items-center gap-2 min-w-0"
         >
           <Image
-            src="/logos/baun_logo.png"
+            src="/logos/baun-logo.png"
             alt={universityName}
             width={52}
             height={52}
@@ -59,7 +59,7 @@ export default function LogoBar({
         <div className="flex items-end">
           <div className="hidden md:block">
             <Image
-              src="/logos/turkiye_logo.png"
+              src="/logos/turkiye-logo.png"
               alt="Türkiye"
               width={52}
               height={52}

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { EnvelopeSimpleIcon, SunIcon, MoonIcon, GlobeIcon } from "@phosphor-icons/react/ssr";
 import { useTheme } from "@/features/theme/ThemeProvider";
 import { useLanguage } from "@/features/Language/LanguageContext";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 
 export default function TopBar() {
   const { lang, translate } = useLanguage();

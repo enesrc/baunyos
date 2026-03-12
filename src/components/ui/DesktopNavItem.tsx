@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { CaretDownIcon, CaretRightIcon } from "@phosphor-icons/react/ssr";
 import { useLanguage } from "@/features/Language/LanguageContext";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
 import { Lang } from "@/features/Language/config";
 

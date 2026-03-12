@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getAnnouncements } from "@/features/announcements/queries";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import { parseLang, type Lang } from "@/features/Language/config";
 import AnnouncementCard from "@/components/ui/Announcement/AnnouncementCard";
 import { translate } from "@/features/Language/translate";

@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { createQuickAccessItem, updateQuickAccessItem } from "@/features/quick-access/actions";
 import type { QuickAccess, Page } from "@/generated/prisma/client";
-import IconPicker from "@/components/ui/IconPicker";
+import IconPicker from "@/components/ui/icon-picker/IconPicker";
 
 const inputClass = "w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors";
 

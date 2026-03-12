@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { loginAction } from "@/features/auth/actions";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth/auth-client";
 
 const inputClass = "w-full border border-gray-300 p-3 text-sm text-black outline-none focus:border-blue-600 transition-colors";
 

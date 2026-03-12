@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CalendarDotsIcon, ArrowLeftIcon } from "@phosphor-icons/react/ssr";
 import { getAnnouncementById } from "@/features/announcements/queries";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import { parseLang, type Lang } from "@/features/Language/config";
 import { translate } from "@/features/Language/translate";
 

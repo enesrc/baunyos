@@ -49,7 +49,7 @@ export default function LoadingScreen({ isReady, onFadeOutDone }: LoadingScreenP
 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                    src="/logos/baun_logo.png"
+                    src="/logos/baun-logo.png"
                     alt="BAÜ"
                     className="relative w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,148,192,0.3)]"
                     onError={(e) => {

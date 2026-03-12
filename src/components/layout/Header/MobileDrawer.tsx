@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ListIcon, XIcon, CaretDownIcon } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { useLanguage } from "@/features/Language/LanguageContext";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import type { NavItemGetPayload } from "@/generated/prisma/models/NavItem";
 
 type NavItemWithChildren = NavItemGetPayload<{ include: { children: true } }>;

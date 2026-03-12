@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MapPinIcon, PhoneIcon, EnvelopeIcon } from "@phosphor-icons/react/ssr";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import { parseLang, type Lang } from "@/features/Language/config";
 import { GradientHero } from "@/components/ui/GradientHero";
 import { getContact } from "@/features/contact/queries";

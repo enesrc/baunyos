@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { XIcon } from "@phosphor-icons/react/ssr";
-import { ICON_ENTRIES, ICON_MAP } from "@/lib/iconMap";
+import { ICON_ENTRIES, ICON_MAP } from "@/components/ui/icon-picker/icon-map";
 
 interface IconPickerProps {
   defaultValue?: string | null;

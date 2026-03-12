@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRightIcon } from "@phosphor-icons/react/ssr";
-import { ICON_MAP, FallbackIcon } from "@/lib/iconMap";
+import { ICON_MAP, FallbackIcon } from "@/components/ui/icon-picker/icon-map";
 import type { QuickAccess } from "@/generated/prisma/client";
 import { useLanguage } from "@/features/Language/LanguageContext";
 

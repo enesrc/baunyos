@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import type { Announcement } from "@/generated/prisma/client";
 import { useLanguage } from "@/features/Language/LanguageContext";
 

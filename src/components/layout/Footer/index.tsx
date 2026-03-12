@@ -24,7 +24,7 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
         <div className="flex flex-col sm:flex-row sm:justify-between gap-4 border-b border-white/20 pb-4 sm:gap-8">
           <div className="flex items-center gap-4">
             <Image
-              src="/logos/baun_logo.png"
+              src="/logos/baun-logo.png"
               alt="Balikesir Universitesi"
               width={60}
               height={60}

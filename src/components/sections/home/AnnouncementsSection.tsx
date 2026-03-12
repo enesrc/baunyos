@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { useLanguage } from "@/features/Language/LanguageContext";
-import { langPath } from "@/lib/langPath";
+import { langPath } from "@/features/Language/lang-path";
 import { AnnouncementCard, ViewAll } from "@/components/ui/Announcement";
 import type { Announcement } from "@/generated/prisma/client";
 
