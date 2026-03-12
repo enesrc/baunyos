@@ -4,7 +4,7 @@ import type { Contact } from "@/generated/prisma/client";
 export default function SocialMediaButtons({ contact }: { contact: Contact }) {
 
   const SOCIAL_LINKS = [
-    { icon: FaFacebookF, href: contact.facebook, label: "Facebook", hoverClass: "hover:bg-[#1877F2] hover:text-white" },
+    { icon: FaFacebookF, href: contact.facebook, label: "Facebook", hoverClass: "hover:bg-[#0064E0] hover:text-white" },
     { icon: FaInstagram, href: contact.instagram, label: "Instagram", hoverClass: "hover:bg-[radial-gradient(circle_at_bottom_left,#feda3e_0%,#f97316_30%,#d62976_60%,#962fbf_85%,#4f5bd5_100%)] hover:text-white" },
     { icon: FaLinkedinIn, href: contact.linkedin, label: "Linkedin", hoverClass: "hover:bg-[#0A66C2] hover:text-white" },
     { icon: FaYoutube, href: contact.youtube, label: "Youtube", hoverClass: "hover:bg-[#FF0033] hover:text-white" },
