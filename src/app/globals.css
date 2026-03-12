@@ -2,6 +2,32 @@
 @config "../../tailwind.config.ts";
 @import "tailwindcss";
 
+/* ── Mobile-friendly hover variant ───────────────────────
+   :hover sadece fare olan cihazlarda çalışır (yapışkan hover önlenir).
+   Mobilde [data-touched] ile TouchableProvider 150ms efekt sağlar.
+──────────────────────────────────────────────────────── */
+@custom-variant myhover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+  &[data-touched] {
+    @slot;
+  }
+}
+
+@custom-variant group-myhover {
+  @media (hover: hover) {
+    .group:hover & {
+      @slot;
+    }
+  }
+  .group[data-touched] & {
+    @slot;
+  }
+}
+
 /* Base */
 html,
 body {

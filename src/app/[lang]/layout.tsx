@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import { getSiteSettings } from "@/features/site-settings/queries";
 import { getNavItems } from "@/features/navbar/queries";
 import { getContact } from "@/features/contact/queries";
+import TouchableProvider from "@/components/ui/TouchableProvider";
 
 export default async function LangLayout({
   children,
@@ -26,6 +27,7 @@ export default async function LangLayout({
 
   return (
     <ThemeProvider>
+      <TouchableProvider />
       <LangClientSync lang={lang} />
       <LanguageProvider lang={lang}>
         <SiteShell>

@@ -55,7 +55,8 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
             <div className="flex flex-wrap items-center gap-4 sm:gap-8">
               {contact.email && (
                 <a href={`mailto:${contact.email}`}
-                  className="flex items-center gap-3 text-sm text-white/90 transition-colors hover:text-white dark:text-white dark:hover:text-cyan-bright">
+                  data-touchable
+                  className="flex items-center gap-3 text-sm text-white/90 transition-colors myhover:text-white dark:text-white dark:myhover:text-cyan-bright">
                   <EnvelopeIcon size={18} className="shrink-0 text-white/70" />
                   {contact.email}
                 </a>
@@ -63,7 +64,8 @@ export default function Footer({ siteSettings, contact }: { siteSettings: SiteSe
 
               {contact.phone && (
                 <a href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-3 text-sm text-white/90 transition-colors hover:text-white dark:text-white/60 dark:hover:text-cyan-bright">
+                  data-touchable
+                  className="flex items-center gap-3 text-sm text-white/90 transition-colors myhover:text-white dark:text-white/60 dark:myhover:text-cyan-bright">
                   <PhoneIcon size={18} className="shrink-0 text-white/70" />
                   {contact.phone}
                 </a>

@@ -21,7 +21,8 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
           <nav className="flex items-center gap-2 text-sm text-light-4">
             <Link
               href={langPath(lang, "/")}
-              className="font-medium transition-colors hover:text-white hover:underline"
+              data-touchable
+              className="font-medium transition-colors myhover:text-white myhover:underline"
             >
               {translate(lang, "Home", "Ana Sayfa")}
             </Link>
@@ -69,7 +70,8 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                 {contact.phone && (
                   <a
                     href={`tel:${contact.phone.replace(/\s/g, "")}`}
-                    className="flex gap-4 rounded-md border border-light-3 bg-light-1 p-5 transition-colors hover:border-teal-3 dark:border-dark-1 dark:bg-dark-2 dark:hover:border-teal-2"
+                    data-touchable
+                    className="flex gap-4 rounded-md border border-light-3 bg-light-1 p-5 transition-colors myhover:border-teal-3 dark:border-dark-1 dark:bg-dark-2 dark:myhover:border-teal-2"
                   >
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-teal-1 text-teal-3 dark:bg-teal-4 dark:text-teal-1">
                       <PhoneIcon size={18} />
@@ -87,7 +89,8 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                 {contact.email && (
                   <a
                     href={`mailto:${contact.email}`}
-                    className="flex gap-4 rounded-md border border-light-3 bg-light-1 p-5 transition-colors hover:border-teal-3 dark:border-dark-1 dark:bg-dark-2 dark:hover:border-teal-2"
+                    data-touchable
+                    className="flex gap-4 rounded-md border border-light-3 bg-light-1 p-5 transition-colors myhover:border-teal-3 dark:border-dark-1 dark:bg-dark-2 dark:myhover:border-teal-2"
                   >
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-teal-1 text-teal-3 dark:bg-teal-4 dark:text-teal-1">
                       <EnvelopeIcon size={18} />
@@ -106,31 +109,36 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
                     <div className="flex items-center gap-3">
                       {contact.instagram && (
                         <a href={contact.instagram} target="_blank" rel="noopener noreferrer"
-                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                          data-touchable
+                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors myhover:bg-teal-3 myhover:text-white dark:bg-teal-4 dark:text-teal-1 dark:myhover:bg-teal-2 dark:myhover:text-white">
                           <FaInstagram size={18} />
                         </a>
                       )}
                       {contact.twitter && (
                         <a href={contact.twitter} target="_blank" rel="noopener noreferrer"
-                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                          data-touchable
+                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors myhover:bg-teal-3 myhover:text-white dark:bg-teal-4 dark:text-teal-1 dark:myhover:bg-teal-2 dark:myhover:text-white">
                           <FaXTwitter size={18} />
                         </a>
                       )}
                       {contact.facebook && (
                         <a href={contact.facebook} target="_blank" rel="noopener noreferrer"
-                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                          data-touchable
+                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors myhover:bg-teal-3 myhover:text-white dark:bg-teal-4 dark:text-teal-1 dark:myhover:bg-teal-2 dark:myhover:text-white">
                           <FaFacebookF size={18} />
                         </a>
                       )}
                       {contact.youtube && (
                         <a href={contact.youtube} target="_blank" rel="noopener noreferrer"
-                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                          data-touchable
+                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors myhover:bg-teal-3 myhover:text-white dark:bg-teal-4 dark:text-teal-1 dark:myhover:bg-teal-2 dark:myhover:text-white">
                           <FaYoutube size={18} />
                         </a>
                       )}
                       {contact.linkedin && (
                         <a href={contact.linkedin} target="_blank" rel="noopener noreferrer"
-                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors hover:bg-teal-3 hover:text-white dark:bg-teal-4 dark:text-teal-1 dark:hover:bg-teal-2 dark:hover:text-white">
+                          data-touchable
+                          className="flex h-9 w-9 items-center justify-center rounded-md bg-teal-1 text-teal-3 transition-colors myhover:bg-teal-3 myhover:text-white dark:bg-teal-4 dark:text-teal-1 dark:myhover:bg-teal-2 dark:myhover:text-white">
                           <FaLinkedinIn size={18} />
                         </a>
                       )}

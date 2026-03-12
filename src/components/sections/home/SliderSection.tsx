@@ -285,8 +285,8 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
               className={`absolute left-5 top-1/2 flex h-10 w-10 items-center justify-center
                 rounded-full border border-white/40 bg-white/10 text-white backdrop-blur-sm
                 transition-all duration-200 ease-out
-                hover:border-cyan-dull hover:bg-cyan-dull
-                dark:hover:border-cyan dark:hover:bg-cyan
+                myhover:border-cyan-dull myhover:bg-cyan-dull
+                dark:myhover:border-cyan dark:myhover:bg-cyan
                 ${hovered
                   ? "-translate-y-1/2 translate-x-0 opacity-100"
                   : "-translate-y-1/2 -translate-x-[calc(100%+20px)] opacity-0"
@@ -302,8 +302,8 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
               className={`absolute right-5 top-1/2 flex h-10 w-10 items-center justify-center
                 rounded-full border border-white/40 bg-white/10 text-white backdrop-blur-sm
                 transition-all duration-200 ease-out
-                hover:border-cyan-dull hover:bg-cyan-dull
-                dark:hover:border-cyan dark:hover:bg-cyan
+                myhover:border-cyan-dull myhover:bg-cyan-dull
+                dark:myhover:border-cyan dark:myhover:bg-cyan
                 ${hovered
                   ? "-translate-y-1/2 translate-x-0 opacity-100"
                   : "-translate-y-1/2 translate-x-[calc(100%+20px)] opacity-0"

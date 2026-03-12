@@ -32,14 +32,16 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
           <nav className="mb-5 flex items-center gap-2 text-sm">
             <Link
               href={langPath(lang, "/")}
-              className="text-dark-4/50 transition-colors hover:text-cyan-dull dark:text-light-5 dark:hover:text-cyan"
+              data-touchable
+              className="text-dark-4/50 transition-colors myhover:text-cyan-dull dark:text-light-5 dark:myhover:text-cyan"
             >
               {translate(lang, "Home", "Anasayfa")}
             </Link>
             <span className="text-dark-4/30 dark:text-light-6">/</span>
             <Link
               href={langPath(lang, "/announcements")}
-              className="text-dark-4/50 transition-colors hover:text-cyan-dull dark:text-light-5 dark:hover:text-cyan"
+              data-touchable
+              className="text-dark-4/50 transition-colors myhover:text-cyan-dull dark:text-light-5 dark:myhover:text-cyan"
             >
               {translate(lang, "Announcements", "Duyurular")}
             </Link>
@@ -86,9 +88,10 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
         <div className="mt-12 border-t border-light-4 pt-8 dark:border-dark-1">
           <Link
             href={langPath(lang, "/announcements")}
+            data-touchable
             className="inline-flex items-center gap-2 text-sm font-medium
-              text-cyan-dull transition-colors hover:text-cyan
-              dark:text-cyan-bright dark:hover:text-cyan"
+              text-cyan-dull transition-colors myhover:text-cyan
+              dark:text-cyan-bright dark:myhover:text-cyan"
           >
             <ArrowLeftIcon size={15} />
             {translate(lang, "Back to Announcements", "Tüm Duyurulara Dön")}

@@ -20,11 +20,12 @@ export default function AnnouncementsSection({ announcements }: { announcements:
         <div className="mb-8 flex flex-col items-center justify-center sm:flex-row sm:items-end sm:justify-between">
           <Link
             href={viewAllHref}
+            data-touchable
             className="group block"
           >
-            <h2 className="text-4xl font-bold tracking-tight transition-colors 
-              text-dark-2 group-hover:text-cyan 
-            dark:text-white dark:group-hover:text-cyan text-center sm:text-left">
+            <h2 className="text-4xl font-bold tracking-tight transition-colors
+              text-dark-2 group-myhover:text-cyan
+            dark:text-white dark:group-myhover:text-cyan text-center sm:text-left">
               # {translate("Announcements", "Duyurular")}
             </h2>
           </Link>

@@ -20,7 +20,8 @@ export default async function AnnouncementsPage({ params, }: { params: Promise<{
           <nav className="mb-5 flex items-center gap-2 text-sm">
             <Link
               href={langPath(lang, "/")}
-              className="text-dark-4/50 transition-colors hover:text-cyan-dull dark:text-light-5 dark:hover:text-cyan"
+              data-touchable
+              className="text-dark-4/50 transition-colors myhover:text-cyan-dull dark:text-light-5 dark:myhover:text-cyan"
             >
               {translate(lang, "Home", "Ana Sayfa")}
             </Link>

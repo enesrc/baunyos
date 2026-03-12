@@ -8,9 +8,9 @@ import { useRouter } from "next/navigation";
 const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/announcements", label: "Duyurular" },
-  { href: "/admin/slider", label: "Slider" },
-  { href: "/admin/quick-access", label: "Hızlı Erişim" },
-  { href: "/admin/navbar", label: "Navbar" },
+  { href: "/admin/slider", label: "Slider Görselleri" },
+  { href: "/admin/quick-access", label: "Hızlı Erişim Butonları" },
+  { href: "/admin/navbar", label: "Navbar Butonları" },
   { href: "/admin/content-pages", label: "Sayfalar" },
   { href: "/admin/contact", label: "İletişim" },
   { href: "/admin/site-settings", label: "Site Ayarları" },
