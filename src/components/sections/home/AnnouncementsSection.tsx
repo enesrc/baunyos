@@ -26,7 +26,7 @@ export default function AnnouncementsSection({ announcements }: { announcements:
             <h2 className="text-4xl font-bold tracking-tight transition-colors
               text-dark-2 group-myhover:text-cyan
             dark:text-white dark:group-myhover:text-cyan text-center sm:text-left">
-              # {translate("Announcements", "Duyurular")}
+              {translate("Announcements", "Duyurular")}
             </h2>
           </Link>
 

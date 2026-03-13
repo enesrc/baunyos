@@ -16,7 +16,7 @@ export default function QuickAccessSection({ items = [] }: { items?: QuickAccess
       <Container className="py-14">
         <div className="mb-8 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <h2 className="text-4xl font-bold tracking-tight text-dark-2 dark:text-light-1">
-            # {translate("Quick Access", "Hızlı Erişim")}
+            {translate("Quick Access", "Hızlı Erişim")}
           </h2>
         </div>
 

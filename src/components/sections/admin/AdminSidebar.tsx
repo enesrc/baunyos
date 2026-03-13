@@ -22,16 +22,16 @@ export default function AdminSidebar() {
 
   return (
     <aside className="flex w-48 flex-col bg-gray-900">
-      <div className="px-4 py-3 border-b border-r border-gray-700">
+      <div className="px-4 py-4 border border-gray-700">
         <p className="text-sm font-bold text-white">BAUN YÖS</p>
       </div>
 
-      <nav className="flex flex-1 flex-col py-2">
+      <nav className="flex flex-1 flex-col">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`px-4 py-2 text-sm ${
+            className={`px-4 py-2 text-sm border-b border-x border-gray-700 ${
               pathname === item.href
                 ? "bg-blue-700 text-white"
                 : "text-gray-400 hover:text-white"

@@ -31,7 +31,7 @@ export default function AdminHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-gray-900 px-6 py-3">
+    <header className="flex items-center justify-between bg-gray-900 px-6 py-4 border border-gray-700 border-l-0">
       <p className="text-sm font-medium text-white">{getTitle(pathname)}</p>
     </header>
   );
