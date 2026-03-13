@@ -84,7 +84,7 @@ export default function LinkPicker({
       <input type="hidden" name="href" value={value} />
 
       {/* Seçili öğe çubuğu — her zaman görünür */}
-      <div className="flex w-full items-center border border-gray-300 text-sm mb-0 min-h-9.5">
+      <div className="flex w-full items-center border border-gray-300 text-xs mb-0 min-h-9.5">
         {info ? (
           <>
             <span className="shrink-0 border-r border-gray-300 bg-gray-100 px-3 py-2 text-gray-500">
@@ -126,7 +126,7 @@ export default function LinkPicker({
               onClick={() => setActiveTab(tab.key)}
               className={`px-3 py-1.5 text-xs transition-colors ${
                 activeTab === tab.key
-                  ? "text-blue-600 bg-white border-b-2 border-blue-600"
+                  ? "text-blue-600 bg-white border border-blue-600"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -146,7 +146,7 @@ export default function LinkPicker({
                   <div
                     key={p.id}
                     onClick={() => handleSelect(`/content/${p.id}`)}
-                    className={`flex items-center justify-between px-3 py-2 text-sm cursor-pointer transition-colors ${
+                    className={`flex items-center justify-between px-3 py-2 text-xs cursor-pointer transition-colors ${
                       value === `/content/${p.id}` ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50 text-gray-700"
                     }`}
                   >
@@ -182,7 +182,7 @@ export default function LinkPicker({
                     <div className="relative shrink-0 w-10 h-10 border border-gray-200 overflow-hidden">
                       <Image src={m.url} alt={m.filename} fill className="object-cover" />
                     </div>
-                    <span className="truncate text-sm text-gray-700">{m.filename}</span>
+                    <span className="truncate text-xs text-gray-700">{m.filename}</span>
                     <a
                       href={m.url}
                       target="_blank"
@@ -207,7 +207,7 @@ export default function LinkPicker({
                   <div
                     key={m.id}
                     onClick={() => handleSelect(m.url)}
-                    className={`flex items-center gap-2 px-3 py-2 text-sm cursor-pointer transition-colors ${
+                    className={`flex items-center gap-2 px-3 py-2 text-xs cursor-pointer transition-colors ${
                       value === m.url ? "bg-blue-50" : "hover:bg-gray-50"
                     }`}
                   >
@@ -232,7 +232,7 @@ export default function LinkPicker({
             <input
               type="url"
               placeholder="https://ornek.com"
-              className="w-full border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-600 transition-colors"
+              className="w-full border border-gray-300 px-3 py-2 text-xs outline-none focus:border-blue-600 transition-colors"
               defaultValue={detectTab() === "external" ? value : ""}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {

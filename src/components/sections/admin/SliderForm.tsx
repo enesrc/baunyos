@@ -34,8 +34,8 @@ export default function SliderForm({ slider }: { slider?: Slider }) {
           required={!slider}
         />
         {preview && (
-          <div className="relative mt-3 w-full overflow-hidden border border-gray-200" style={{ aspectRatio: "1905/720" }}>
-            <Image src={preview} alt="Önizleme" fill className="object-contain" />
+          <div className="relative mt-3 w-full overflow-hidden border border-gray-200 aspect-1905/720">
+            <Image src={preview} alt="Önizleme" fill className="object-cover" />
           </div>
         )}
       </div>
