@@ -6,6 +6,30 @@ import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+async function reindexQuickAccess(priorityId?: number) {
+  const items = await prisma.quickAccess.findMany({
+    orderBy: { order: "asc" },
+  });
+
+  if (priorityId) {
+    items.sort((a, b) => {
+      if (a.order !== b.order) return a.order - b.order;
+      if (a.id === priorityId) return -1;
+      if (b.id === priorityId) return 1;
+      return 0;
+    });
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].order !== i) {
+      await prisma.quickAccess.update({
+        where: { id: items[i].id },
+        data: { order: i },
+      });
+    }
+  }
+}
+
 const quickAccessItemSchema = z.object({
   icon: z.string().min(1, "İkon gerekli."),
   title_tr: z.string().min(1, "Türkçe başlık gerekli."),
@@ -14,7 +38,6 @@ const quickAccessItemSchema = z.object({
   desc_en: z.string().min(1, "İngilizce açıklama gerekli."),
   href: z.string().min(1, "Link gerekli."),
   order: z.number().default(0),
-  is_active: z.boolean().default(true),
 });
 
 function parseQuickAccessItemFormData(formData: FormData) {
@@ -26,7 +49,6 @@ function parseQuickAccessItemFormData(formData: FormData) {
     desc_en: formData.get("desc_en"),
     href: formData.get("href"),
     order: Number(formData.get("order") ?? 0),
-    is_active: formData.get("is_active") === "on",
   });
 }
 
@@ -39,10 +61,11 @@ export async function createQuickAccessItem(_: unknown, formData: FormData) {
     return parsed.error.issues[0]?.message ?? "Form doğrulanamadı.";
   }
 
-  await prisma.quickAccess.create({
+  const item = await prisma.quickAccess.create({
     data: parsed.data,
   });
 
+  await reindexQuickAccess(item.id);
   revalidateTag("quick-access", "max");
   redirect("/admin/quick-access");
 }
@@ -67,6 +90,7 @@ export async function updateQuickAccessItem(_: unknown, formData: FormData) {
     data: parsed.data,
   });
 
+  await reindexQuickAccess(id);
   revalidateTag("quick-access", "max");
   redirect("/admin/quick-access");
 }
@@ -82,5 +106,6 @@ export async function deleteQuickAccessItem(id: number) {
     where: { id },
   });
 
+  await reindexQuickAccess();
   revalidateTag("quick-access", "max");
 }

@@ -11,7 +11,6 @@ const announcementSchema = z.object({
   title_en: z.string().min(1, "İngilizce başlık gerekli."),
   content_tr: z.string().min(1, "Türkçe içerik gerekli."),
   content_en: z.string().min(1, "İngilizce içerik gerekli."),
-  is_active: z.boolean().default(true),
 });
 
 function parseAnnouncementFormData(formData: FormData) {
@@ -20,7 +19,6 @@ function parseAnnouncementFormData(formData: FormData) {
     title_en: formData.get("title_en"),
     content_tr: formData.get("content_tr"),
     content_en: formData.get("content_en"),
-    is_active: formData.get("is_active") === "on",
   });
 }
 

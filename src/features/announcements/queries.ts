@@ -6,7 +6,6 @@ export async function getAnnouncements() {
   cacheTag("announcements");
 
   return prisma.announcement.findMany({
-    where: { is_active: true },
     orderBy: { published_at: "desc" },
   });
 }
@@ -15,8 +14,8 @@ export async function getAnnouncementById(id: number) {
   "use cache";
   cacheTag("announcements");
 
-  return prisma.announcement.findFirst({
-    where: { id, is_active: true },
+  return prisma.announcement.findUnique({
+    where: { id },
   });
 }
 
@@ -25,7 +24,6 @@ export async function getHomeAnnouncements() {
   cacheTag("announcements");
 
   return prisma.announcement.findMany({
-    where: { is_active: true },
     orderBy: { published_at: "desc" },
     take: 6,
   });

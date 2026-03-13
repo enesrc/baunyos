@@ -13,8 +13,7 @@ const CYCLE = INTERVAL + PAUSE; // toplam slayt süresi
 
 
 export default function SliderSection({ sliders }: { sliders: Slider[] }) {
-  const active = sliders.filter((s) => s.is_active);
-  const total = active.length;
+  const total = sliders.length;
 
   // ── Mobile: yığın tabanlı, basit 0-tabanlı indeks ─────────────
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -215,10 +214,10 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
     resumeTimer();
   };
 
-  if (!active.length) return null;
+  if (!sliders.length) return null;
 
   // Desktop: sonsuz döngü için baş ve sona klon eklenir
-  const slides = total > 1 ? [active[total - 1], ...active, active[0]] : active;
+  const slides = total > 1 ? [sliders[total - 1], ...sliders, sliders[0]] : sliders;
   const slideCount = slides.length;
   const trackOffset = (trackIndex / slideCount) * 100;
 
@@ -349,7 +348,7 @@ export default function SliderSection({ sliders }: { sliders: Slider[] }) {
         onTouchCancel={onMobileTouchCancel}
         onContextMenu={(e) => e.preventDefault()}
       >
-        {active.map((slide, i) => {
+        {sliders.map((slide, i) => {
           const isActive = i === currentIndex;
 
           return (

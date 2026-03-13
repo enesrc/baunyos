@@ -4,5 +4,5 @@ import SiteSettingsForm from "@/components/sections/admin/SiteSettingsForm";
 export default async function SiteSettingsPage() {
   const settings = await getSiteSettings();
 
-  return <SiteSettingsForm settings={settings} />;
+  return <SiteSettingsForm settings={settings!} />;
 }

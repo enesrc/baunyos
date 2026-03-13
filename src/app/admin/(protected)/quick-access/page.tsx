@@ -22,10 +22,7 @@ export default async function QuickAccessPage() {
             <div>
               <p className="text-sm font-medium text-gray-900">{item.title_tr}</p>
               <p className="text-xs text-gray-400">
-                {item.href} · sıra: {item.order} ·{" "}
-                <span className={item.is_active ? "text-green-600" : "text-gray-400"}>
-                  {item.is_active ? "Aktif" : "Pasif"}
-                </span>
+                {item.href} · sıra: {item.order}
               </p>
             </div>
             <div className="flex items-center gap-2">

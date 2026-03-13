@@ -42,11 +42,11 @@ export default function SliderForm({ slider }: { slider?: Slider }) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (Türkçe)</label>
           <input name="title_tr" defaultValue={slider?.title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (İngilizce)</label>
           <input name="title_en" defaultValue={slider?.title_en} className={inputClass} required />
         </div>
       </div>
@@ -54,11 +54,6 @@ export default function SliderForm({ slider }: { slider?: Slider }) {
       <div>
         <label className="block text-xs text-gray-500 mb-1">Sıra</label>
         <input type="number" name="order" defaultValue={slider?.order ?? 0} className={inputClass} />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input type="checkbox" name="is_active" id="is_active" defaultChecked={slider?.is_active ?? true} className="accent-blue-600" />
-        <label htmlFor="is_active" className="text-sm text-gray-700">Aktif</label>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

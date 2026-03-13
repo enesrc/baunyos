@@ -27,10 +27,7 @@ export default async function SliderPage() {
               <div>
                 <p className="text-sm font-medium text-gray-900">{slider.title_tr}</p>
                 <p className="text-xs text-gray-400">
-                  sıra: {slider.order} ·{" "}
-                  <span className={slider.is_active ? "text-green-600" : "text-gray-400"}>
-                    {slider.is_active ? "Aktif" : "Pasif"}
-                  </span>
+                  sıra: {slider.order}
                 </p>
               </div>
             </div>

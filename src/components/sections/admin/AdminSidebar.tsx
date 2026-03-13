@@ -12,6 +12,7 @@ const navItems = [
   { href: "/admin/quick-access", label: "Hızlı Erişim Butonları" },
   { href: "/admin/navbar", label: "Navbar Butonları" },
   { href: "/admin/content-pages", label: "Sayfalar" },
+  { href: "/admin/media", label: "Medya" },
   { href: "/admin/contact", label: "İletişim" },
   { href: "/admin/site-settings", label: "Site Ayarları" },
 ];
@@ -21,8 +22,8 @@ export default function AdminSidebar() {
   const router = useRouter();
 
   return (
-    <aside className="flex w-48 flex-col bg-gray-900">
-      <div className="px-4 py-4 border border-gray-700">
+    <aside className="flex w-48 flex-col bg-gray-900 border border-gray-700">
+      <div className="px-4 py-4 border-b border-gray-700">
         <p className="text-sm font-bold text-white">BAUN YÖS</p>
       </div>
 
@@ -31,10 +32,10 @@ export default function AdminSidebar() {
           <Link
             key={item.href}
             href={item.href}
-            className={`px-4 py-2 text-sm border-b border-x border-gray-700 ${
+            className={`px-4 py-2 text-sm border-b border-gray-700 ${
               pathname === item.href
                 ? "bg-blue-700 text-white"
-                : "text-gray-400 hover:text-white"
+                : "text-gray-300 hover:text-white"
             }`}
           >
             {item.label}

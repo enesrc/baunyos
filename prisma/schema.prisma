@@ -16,7 +16,6 @@ model Page {
   title_en   String
   content_tr String   @db.Text
   content_en String   @db.Text
-  is_active  Boolean  @default(true)
   created_at DateTime @default(now())
 }
 
@@ -27,7 +26,6 @@ model NavItem {
   href      String?
   parent_id Int?
   order     Int       @default(0)
-  is_active Boolean   @default(true)
   parent    NavItem?  @relation("children", fields: [parent_id], references: [id])
   children  NavItem[] @relation("children")
 }
@@ -39,7 +37,6 @@ model Announcement {
   content_tr   String   @db.Text
   content_en   String   @db.Text
   published_at DateTime @default(now())
-  is_active    Boolean  @default(true)
 }
 
 model User {
@@ -137,7 +134,6 @@ model Slider {
   title_tr   String
   title_en   String
   order      Int      @default(0)
-  is_active  Boolean  @default(true)
   created_at DateTime @default(now())
 }
 
@@ -150,5 +146,13 @@ model QuickAccess {
   desc_en   String  @db.Text
   href      String
   order     Int     @default(0)
-  is_active Boolean @default(true)
+}
+
+model Media {
+  id         Int      @id @default(autoincrement())
+  url        String
+  filename   String
+  type       String
+  size       Int
+  created_at DateTime @default(now())
 }

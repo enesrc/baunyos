@@ -11,27 +11,27 @@ export default function SiteSettingsForm({ settings }: { settings: SiteSettings 
   const [error, formAction, pending] = useActionState(updateSiteSettings, null);
 
   return (
-    <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex max-w-lg flex-col gap-4">
+    <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex flex-col gap-4">
       <input type="hidden" name="id" value={settings.id} />
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Header Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Header Başlık (Türkçe)</label>
           <input name="header_title_tr" defaultValue={settings.header_title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Header Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Header Başlık (İngilizce)</label>
           <input name="header_title_en" defaultValue={settings.header_title_en} className={inputClass} required />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (Türkçe)</label>
           <input name="footer_title_tr" defaultValue={settings.footer_title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Footer Başlık (İngilizce)</label>
           <input name="footer_title_en" defaultValue={settings.footer_title_en} className={inputClass} required />
         </div>
       </div>

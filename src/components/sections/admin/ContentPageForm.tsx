@@ -19,11 +19,11 @@ export default function ContentPageForm({ page }: { page?: Page }) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (Türkçe)</label>
           <input name="title_tr" defaultValue={page?.title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (İngilizce)</label>
           <input name="title_en" defaultValue={page?.title_en} className={inputClass} required />
         </div>
       </div>
@@ -33,18 +33,13 @@ export default function ContentPageForm({ page }: { page?: Page }) {
       )}
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">İçerik (TR)</label>
+        <label className="block text-xs text-gray-500 mb-1">İçerik (Türkçe)</label>
         <RichTextEditor name="content_tr" defaultValue={page?.content_tr} />
       </div>
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">İçerik (EN)</label>
+        <label className="block text-xs text-gray-500 mb-1">İçerik (İngilizce)</label>
         <RichTextEditor name="content_en" defaultValue={page?.content_en} />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input type="checkbox" name="is_active" id="is_active" defaultChecked={page?.is_active ?? true} className="accent-blue-600" />
-        <label htmlFor="is_active" className="text-sm text-gray-700">Aktif</label>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

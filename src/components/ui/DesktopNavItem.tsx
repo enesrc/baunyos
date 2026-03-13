@@ -87,7 +87,6 @@ export default function DesktopNavItem({ item }: { item: NavItem }) {
         >
           <div className="overflow-hidden rounded-b-md border border-cyan-dull bg-light-1 shadow-lg dark:border-dark-1 dark:bg-dark-5">
             {item.children
-              .filter((c) => c.is_active)
               .map((child) => (
                 <ChildLink
                   key={child.id}

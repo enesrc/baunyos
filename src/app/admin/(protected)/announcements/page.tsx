@@ -22,10 +22,7 @@ export default async function AnnouncementsPage() {
             <div>
               <p className="text-sm font-medium text-gray-900">{a.title_tr}</p>
               <p className="text-xs text-gray-400">
-                {a.published_at.toLocaleDateString("tr-TR")} ·{" "}
-                <span className={a.is_active ? "text-green-600" : "text-gray-400"}>
-                  {a.is_active ? "Aktif" : "Pasif"}
-                </span>
+                {a.published_at.toLocaleDateString("tr-TR")}
               </p>
             </div>
             <div className="flex items-center gap-2">

@@ -11,27 +11,27 @@ export default function ContactForm({ contact }: { contact: Contact }) {
   const [error, formAction, pending] = useActionState(saveContact, null);
 
   return (
-    <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex max-w-lg flex-col gap-4">
+    <form action={formAction} onSubmit={() => setSubmitted(true)} className="flex flex-col gap-4">
       <input type="hidden" name="id" value={contact.id} />
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (Türkçe)</label>
           <input name="title_tr" defaultValue={contact.title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (İngilizce)</label>
           <input name="title_en" defaultValue={contact.title_en} className={inputClass} required />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Açıklama (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Açıklama (Türkçe)</label>
           <textarea name="desc_tr" defaultValue={contact.desc_tr} rows={3} className={inputClass} />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Açıklama (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Açıklama (İngilizce)</label>
           <textarea name="desc_en" defaultValue={contact.desc_en} rows={3} className={inputClass} />
         </div>
       </div>
@@ -48,18 +48,18 @@ export default function ContactForm({ contact }: { contact: Contact }) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Adres (TR)</label>
-          <textarea name="address_tr" defaultValue={contact.address_tr} rows={3} className={inputClass} />
+          <label className="block text-xs text-gray-500 mb-1">Adres (Türkçe)</label>
+          <textarea name="address_tr" defaultValue={contact.address_tr} rows={2} className={inputClass} />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Adres (EN)</label>
-          <textarea name="address_en" defaultValue={contact.address_en} rows={3} className={inputClass} />
+          <label className="block text-xs text-gray-500 mb-1">Adres (İngilizce)</label>
+          <textarea name="address_en" defaultValue={contact.address_en} rows={2} className={inputClass} />
         </div>
       </div>
 
       <div>
         <label className="block text-xs text-gray-500 mb-1">Google Maps URL</label>
-        <input name="google_maps_url" defaultValue={contact.google_maps_url} className={inputClass} />
+        <textarea name="google_maps_url" defaultValue={contact.google_maps_url} rows={4} className={inputClass} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">

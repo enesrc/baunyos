@@ -23,10 +23,7 @@ export default async function NavbarPage() {
               <div>
                 <p className="text-sm font-medium text-gray-900">{item.label_tr}</p>
                 <p className="text-xs text-gray-400">
-                  {item.href ?? "dropdown"} · sıra: {item.order} ·{" "}
-                  <span className={item.is_active ? "text-green-600" : "text-gray-400"}>
-                    {item.is_active ? "Aktif" : "Pasif"}
-                  </span>
+                  {item.href ?? "dropdown"} · sıra: {item.order}
                 </p>
               </div>
               <div className="flex items-center gap-2">

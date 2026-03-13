@@ -11,7 +11,6 @@ const sliderSchema = z.object({
   title_tr: z.string().min(1, "Türkçe başlık gerekli."),
   title_en: z.string().min(1, "İngilizce başlık gerekli."),
   order: z.number().default(0),
-  is_active: z.boolean().default(true),
 });
 
 function parseSliderFormData(formData: FormData) {
@@ -19,7 +18,6 @@ function parseSliderFormData(formData: FormData) {
     title_tr: formData.get("title_tr"),
     title_en: formData.get("title_en"),
     order: Number(formData.get("order") ?? 0),
-    is_active: formData.get("is_active") === "on",
   });
 }
 

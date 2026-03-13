@@ -20,6 +20,8 @@ export async function getNavItemById(id: number) {
   "use cache";
   cacheTag("nav-items");
 
+  if (!id || isNaN(id)) return null;
+
   return prisma.navItem.findUnique({
     where: { id },
     include: { children: true },

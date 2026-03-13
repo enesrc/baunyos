@@ -42,8 +42,8 @@ export const auth = betterAuth({
     }),
   },
   session: {
-    expiresIn: 60,   // 1 dakika
-    updateAge: 20   // 20 saniyede bir refresh kontrolü
+    expiresIn: 60 * 60 * 3,   // 3 saat
+    updateAge: 60 * 60   // 1 saat
   },
   trustedOrigins: [
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",

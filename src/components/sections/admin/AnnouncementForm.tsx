@@ -13,33 +13,28 @@ export default function AnnouncementForm({ announcement }: { announcement?: Anno
   );
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-4">
+    <form action={formAction} className="flex flex-col gap-4">
       {announcement && <input type="hidden" name="id" value={announcement.id} />}
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (TR)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (Türkçe)</label>
           <input name="title_tr" defaultValue={announcement?.title_tr} className={inputClass} required />
         </div>
         <div>
-          <label className="block text-xs text-gray-500 mb-1">Başlık (EN)</label>
+          <label className="block text-xs text-gray-500 mb-1">Başlık (İngilizce)</label>
           <input name="title_en" defaultValue={announcement?.title_en} className={inputClass} required />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">İçerik (TR)</label>
+        <label className="block text-xs text-gray-500 mb-1">İçerik (Türkçe)</label>
         <textarea name="content_tr" defaultValue={announcement?.content_tr} rows={5} className={inputClass} required />
       </div>
 
       <div>
-        <label className="block text-xs text-gray-500 mb-1">İçerik (EN)</label>
+        <label className="block text-xs text-gray-500 mb-1">İçerik (İngilizce)</label>
         <textarea name="content_en" defaultValue={announcement?.content_en} rows={5} className={inputClass} required />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input type="checkbox" name="is_active" id="is_active" defaultChecked={announcement?.is_active ?? true} className="accent-blue-600" />
-        <label htmlFor="is_active" className="text-sm text-gray-700">Aktif</label>
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
